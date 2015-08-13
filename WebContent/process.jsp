@@ -13,11 +13,14 @@
 	if (x == 1)
 	{
 		HttpSession s = request.getSession();
+
 		out.println("<center><h1>Welcome: " + name + "</h1>");
-		out.println("<br/><b>You are successfully login........ ");
-	}
+%>
+		<p><b>You are successfully login........</b></p>
+<%	}
 	else
 	{
-		out.println("<center>" + "<b>Either You Enter Wrong UserName or Password</b>");
-	}
+%>
+		<p><center><b>Either You Enter Wrong UserName or Password</b></center></p>
+<%	}
 %>
