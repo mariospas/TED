@@ -19,5 +19,8 @@
                 </table>
             </center>
         </form>
+        <p align="center"><b><a href="after_login/general_homepage.jsp">Επισκέπτης</a></b></p>
+        <p align="center"><b><a href="registration.jsp">Εγραφή</a></b></p>
+
 </body>
 </html>
