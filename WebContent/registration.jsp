@@ -5,6 +5,35 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Registration Form</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+<script src="scripts/checkTwoPass.js"></script>
+<script src="scripts/saveDataAndFill.js"></script>
+
+
+<script type="text/javascript">
+
+function checkPassword(str)
+{
+	var re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
+	return re.test(str);
+}
+
+function checkForm(form)
+{
+
+	if(form.password.value != "" && form.password.value == form.passwordconf.value)
+	{
+		if(!checkPassword(form.password.value))
+		{
+			alert("The password you have entered is not valid!");
+			form.password.focus();
+			return false;
+		}
+	}
+	return true;
+}
+</script>
+
 </head>
 <body>
      <div id="all_form">
@@ -13,7 +42,7 @@
         </div>
 
         <div id="main_form">
-        	<form method="post" action="registration_process.jsp">
+        	<form method="post" action="registration_process.jsp" onsubmit="return checkForm(this);">
             	<p><label>Όνομα :</label>
 				<input type="text" id="onoma" name="onoma" required/></p>
                 <br/>
@@ -21,10 +50,10 @@
 				<input type="text" id="epitheto" name="epitheto" required/></p>
                 <br/>
                 <p><label>Όνομα Χρήστη :<b>(με λατινικούς χαρακτήρες)</b>:</p></label></p>
-           		<input type="text" name="uname"/><span class="status"></span>
+           		<input type="text" id="uname" name="uname" required/><span class="status" ></span>
                 <br/>
                  <p><label>e-mail :</label>
-				<input type="text" id="taxudromio" name="taxudromio"  required/></p>
+				<input type="email" id="taxudromio" name="taxudromio"  required/></p>
                 <br/>
                 <p><label>Κωδικός πρόσβασης :</label>
 				<input type="password" id="password" name="password" required/></p>
@@ -33,20 +62,30 @@
 				<input type="password" id="passwordconf" name="passwordconf" oninput="check(this)"  required/></p>
                 <br/>
                 <p><label>Τηλέφωνο :</label>
-				<input type="text" id="thl" name="thl"  /></p>
+				<input type="number" id="thl" name="thl" required /></p>
                 <br/>
                 <p><label>Διεύθυνση  :</label>
-				<input type="text" id="address" name="address"  /></p>
+				<input type="text" id="address" name="address" required /></p>
                 <br/>
                 <p><label>T.K  :</label>
-				<input type="text" id="tk" name="tk"  /></p>
+				<input type="number" id="tk" name="tk" required /></p>
                 <br/>
                 <p><label>Α.Φ.Μ  :</label>
-				<input type="text" id="afm" name="afm"  /></p>
+				<input type="number" id="afm" name="afm" required /></p>
                 <br/>
                  <input TYPE="submit" name="upload" id="sub_button" title="Add data to the Database" value="Εγγραφή"/>
             </form>
        </div>
     </div>
+
+
+
+
+    <script type="text/javascript">
+
+			rescuefieldvalues(['onoma', 'epitheto', 'uname', 'taxudromio', 'thl', 'address', 'tk', 'afm']);
+
+	</script>
+
 </body>
 </html>
