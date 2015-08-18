@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.dbcp.DriverManagerConnectionFactory;
 
+import connection.*;
 
 
 
@@ -21,10 +22,7 @@ import org.apache.commons.dbcp.DriverManagerConnectionFactory;
 
 public class LoginSession {
 
-	String URL = "jdbc:mysql://localhost:3306/ted";
-    String dbuser = "root";
-    String dbpass = "134711Kk";
-    Connection con = null;
+
     PreparedStatement state = null;
     ResultSet set = null;
     String name = null;
@@ -37,10 +35,9 @@ public class LoginSession {
 	    System.out.println("*****Start Login Session Constr name = "+name+" pass = "+pass);
 	    try
 	    {
-	        Class.forName("com.mysql.jdbc.Driver");
-
-	        con = DriverManager.getConnection(URL, dbuser, dbpass);
-	        state = con.prepareStatement(
+	        ConnectionDB link = new ConnectionDB();
+	        state = link.GetState();
+	        state = (link.GetCon()).prepareStatement(
 	        		"SELECT username ,password "
 	        		+"FROM ted.users "
 	        		+"WHERE username = ? "
@@ -52,10 +49,6 @@ public class LoginSession {
 
 	    }
 	    catch(SQLException ex)
-	    {
-	    	ex.printStackTrace();
-	    }
-	    catch(ClassNotFoundException ex)
 	    {
 	    	ex.printStackTrace();
 	    }
@@ -91,6 +84,16 @@ public class LoginSession {
 
 		return x;
 
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public String getPass()
+	{
+		return pass;
 	}
 
 }
