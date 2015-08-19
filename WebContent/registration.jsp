@@ -25,7 +25,7 @@ function checkForm(form)
 	{
 		if(!checkPassword(form.password.value))
 		{
-			alert("The password you have entered is not valid!");
+			alert("Ο κωδικός που έχει εισαχθεί δεν είναι σωστός!");
 			form.password.focus();
 			return false;
 		}
@@ -55,7 +55,7 @@ function checkForm(form)
                  <p><label>e-mail :</label>
 				<input type="email" id="taxudromio" name="taxudromio"  required/></p>
                 <br/>
-                <p><label>Κωδικός πρόσβασης :</label>
+                <p><label>Κωδικός πρόσβασης :<b>(από 6-20 χαρακτήρες και να περιέχει αριθμούς, πεζά και κεφαλαία καθώς και ειδικούς χαρακτήρες!)</b>:</p></label></p>
 				<input type="password" id="password" name="password" required/></p>
                 <br/>
                 <p><label>Επιβεβαίωση κωδικού πρόσβασης :</label>
@@ -63,6 +63,12 @@ function checkForm(form)
                 <br/>
                 <p><label>Τηλέφωνο :</label>
 				<input type="number" id="thl" name="thl" required /></p>
+				<br/>
+                <p><label>Χώρα  :</label>
+				<input type="text" id="country" name="country" required /></p>
+				<br/>
+                <p><label>Πόλη  :</label>
+				<input type="text" id="city" name="city" required /></p>
                 <br/>
                 <p><label>Διεύθυνση  :</label>
 				<input type="text" id="address" name="address" required /></p>

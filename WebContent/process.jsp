@@ -21,7 +21,7 @@
 
 		out.println("<center><h1>Welcome: " + name + "</h1>");
 %>
-		<p><b>You are successfully login........</b></p>
+		<p><b>Επιτυχής σύνδεση ....!</b></p>
 <%
 
 		String site = new String("after_login/general_homepage.jsp");
@@ -29,10 +29,16 @@
 		response.setHeader("Location", site);
 
 	}
+	else if(x == 3)
+	{
+%>
+		<p><b>Αναμένεται έγκρειση από τον Διαχειριστή</b></p>
+<%
+	}
 	else
 	{
 %>
-		<p><center><b>Either You Enter Wrong UserName or Password</b></center></p>
+		<p><center><b>Έχετε εισάγει είτε λάθος όνομα χρήστη είτε λάθος κωδικό !!!</b></center></p>
 <%	}
 %>
 </body>

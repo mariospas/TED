@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 public class ConnectionDB {
 
-	String URL = "jdbc:mysql://localhost:3306/ted";
+	String URL = "jdbc:mysql://localhost:3306/ted?useUnicode=yes&characterEncoding=UTF-8";
     String dbuser = "root";
     String dbpass = "134711Kk";
     Connection con = null;

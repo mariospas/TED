@@ -4,18 +4,18 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>WELCOME</title>
+<title>Καλώς Ήρθατε</title>
 </head>
 <body>
 		<form method="post" action="process.jsp">
             <center>
-                <h1 style="color:blue">Welcome To Demo Web-Page</h1>
-                <b style="color:blue">Login Here</b><br>
+                <h1 style="color:blue">Welcome Page</h1>
+                <b style="color:blue">Σύνδεση Στην Σελίδα</b><br>
                 <table border="1" width="2" bgcolor="khaki" style="color:red">
-                    <tr><td><b>UserName</b></td> <td><input type="text" name="uname"></td></tr>
-                    <tr><td><b>Password</b></td> <td><INPUT type="password" name="upass"></td></tr>
-                    <tr><td><input type="submit" value="Login"></td>
-                        <td><input type="reset" value="Reset"></td>
+                    <tr><td><b>Όνομα Χρήστη</b></td> <td><input type="text" name="uname"></td></tr>
+                    <tr><td><b>Κωδικός</b></td> <td><INPUT type="password" name="upass"></td></tr>
+                    <tr><td><input type="submit" value="Σύνδεση"></td>
+                        <td><input type="reset" value="Επαναφορά"></td>
                 </table>
             </center>
         </form>
