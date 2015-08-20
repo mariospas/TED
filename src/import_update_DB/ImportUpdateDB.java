@@ -33,7 +33,7 @@ public class ImportUpdateDB
 		try
         {
 			System.out.println("***** Start Import " +firstname+ " ******");
-			state = (connection.GetCon()).prepareStatement("INSERT INTO ted.users VALUES (?,?,?,?,?,?,?,?,?,?,?,0)");
+			state = (connection.GetCon()).prepareStatement("INSERT INTO ted.users VALUES (?,?,?,?,?,?,?,?,?,?,?,0,'user')");
 
 	        state.setString(1,username);
 	        state.setString(2,password);

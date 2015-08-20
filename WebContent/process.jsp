@@ -31,9 +31,17 @@
 	}
 	else if(x == 3)
 	{
+		session.setAttribute("log", log);
 %>
 		<p><b>Αναμένεται έγκρειση από τον Διαχειριστή</b></p>
 <%
+	}
+	else if(x == 4)
+	{
+		session.setAttribute("log", log);
+		String site2 = new String("after_login/admin_page.jsp");
+		response.setStatus(response.SC_MOVED_TEMPORARILY);
+		response.setHeader("Location", site2);
 	}
 	else
 	{

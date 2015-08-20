@@ -30,15 +30,15 @@ public class LoginSession {
 
 	public LoginSession(String username, String passwd)
 	{
-		name = username;
-	    pass = passwd;
+		name = new String(username);
+	    pass = new String(passwd);
 	    System.out.println("*****Start Login Session Constr name = "+name+" pass = "+pass);
 	    try
 	    {
 	        ConnectionDB link = new ConnectionDB();
 	        state = link.GetState();
 	        state = (link.GetCon()).prepareStatement(
-	        		"SELECT username ,password, ready "
+	        		"SELECT username ,password, ready, type "
 	        		+"FROM ted.users "
 	        		+"WHERE username = ? "
 	        		+"AND password = ?"
@@ -71,7 +71,12 @@ public class LoginSession {
 	            	&& set.getInt("ready") == 1) 					//0 den einai egkuro kai 1 einai einai OK
 	            {
 	                x = 1; //success
-	            }
+	                if(set.getString("type").equals("admin"))
+                	{
+	                	System.out.println("****FIND THIS type = "+set.getString("type"));
+	                	x = 4; //4 einai oti o xrhsths pou mphke einai admin eno
+                	}
+	            }													//1 o xrhsths einai aplos user
 	            else if(set.getInt("ready") == 0)
 	            {
 	            	x = 3; //not ready
