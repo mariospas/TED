@@ -57,4 +57,53 @@ public class ImportUpdateDB
 
 	}
 
+	public void updateUser(String username,String firstname,String lastname,String email,String telephone,
+						   String address,String tk,String city,String country,String afm)
+	{
+		try
+        {
+			state = (connection.GetCon()).prepareStatement("UPDATE ted.users SET firstname=?,lastname=?,"
+														+  "email=?,phone_number=?,address=?,postal_code=?,"
+														+  "city=?,country=?,afm=? "
+														+  "WHERE username=?");
+
+	        state.setString(1,firstname);
+	        state.setString(2,lastname);
+	        state.setString(3,email);
+	        state.setString(4,telephone);
+	        state.setString(5,address);
+	        state.setString(6,tk);
+	        state.setString(7,city);
+	        state.setString(8,country);
+	        state.setString(9,afm);
+	        state.setString(10,username);
+
+	        state.executeUpdate();
+        }
+		catch (Exception ex)
+        {
+        	ex.printStackTrace();
+        }
+	}
+
+
+	public void changeUserPass(String username,String password)
+	{
+		try
+		{
+			state = (connection.GetCon()).prepareStatement("UPDATE ted.users SET password=? WHERE username=?");
+
+			state.setString(1,password);
+			state.setString(2,username);
+
+			state.executeUpdate();
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}
+
+
+
 }

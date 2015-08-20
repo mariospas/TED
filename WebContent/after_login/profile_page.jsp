@@ -64,6 +64,11 @@
 			  </tr>
 			</table>
 
+			<div>
+				<p align="center"><a href="change_profile_info/change_info.jsp">Αλλαγή Στοιχείων</a></p>
+				<p align="center"><a href="change_profile_info/change_pass.jsp">Αλλαγή Κωδικού</a></p>
+			</div>
+
 <%
 		}
 	}

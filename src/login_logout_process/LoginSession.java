@@ -27,6 +27,7 @@ public class LoginSession {
     ResultSet set = null;
     String name = null;
     String pass = null;
+    String type1 = null;
 
 	public LoginSession(String username, String passwd)
 	{
@@ -75,7 +76,9 @@ public class LoginSession {
                 	{
 	                	System.out.println("****FIND THIS type = "+set.getString("type"));
 	                	x = 4; //4 einai oti o xrhsths pou mphke einai admin eno
+	                	type1 = new String("admin");
                 	}
+	                else type1 = new String("user");
 	            }													//1 o xrhsths einai aplos user
 	            else if(set.getInt("ready") == 0)
 	            {
@@ -106,6 +109,16 @@ public class LoginSession {
 	public String getPass()
 	{
 		return pass;
+	}
+
+	public void changePass(String newpass)
+	{
+		pass = new String(newpass);
+	}
+
+	public String getType()
+	{
+		return type1;
 	}
 
 }

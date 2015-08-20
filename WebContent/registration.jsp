@@ -89,7 +89,7 @@ function checkForm(form)
 
     <script type="text/javascript">
 
-			rescuefieldvalues(['onoma', 'epitheto', 'uname', 'taxudromio', 'thl', 'address', 'tk', 'afm']);
+			rescuefieldvalues(['onoma', 'epitheto', 'uname', 'taxudromio', 'thl', 'country', 'city', 'address', 'tk', 'afm']);
 
 	</script>
 
