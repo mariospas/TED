@@ -8,16 +8,24 @@
 <title>General Homepage</title>
 </head>
 <body>
+<jsp:include page="../logout.html"/>
+<jsp:include page="profile_button.html"/>
 <%
 	LoginSession log = (LoginSession) session.getAttribute("log");
 	if(log != null)
 	{
 		out.println("<center><h1>Welcome: " + log.getName() + "</h1>");
 %>
-<jsp:include page="../logout.html"/>
-<jsp:include page="profile_button.html"/>
+		<p align="center"><b><a href="auction/live_auctions.jsp">Διαχείριση Δημοπρασιών</a></b></p>
+		<p align="center"><b><a href="auction/find_auction.jsp">Αναζήτηση Δημοπρασιών</a></b></p>
 <%}
-	else out.println("<center><h1> Guest Mode </h1></center>");
+	else
+	{
+		out.println("<center><h1> Guest Mode </h1></center>");
+%>
+		<p align="center"><b><a href="auction/find_auction.jsp">Αναζήτηση Δημοπρασιών</a></b></p>
+<%
+	}
 %>
 
 </body>
