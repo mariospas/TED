@@ -48,8 +48,9 @@
 				while (item_set.next())
 				{
 %>
+
 					<tr>
-					  <td id="photo_url" name="photo_url"><%out.print(item_set.getString("photo_url"));%></td>
+					  <td id="photo_url" name="photo_url"><img src="<%out.print(item_set.getString("photo_url"));%>" width="60" height="60"></td>
 					  <td id="item_id" name="item_id"><%out.print(item_set.getLong("item_id"));%></td>
 					  <td id="name" name="name"><%out.print(item_set.getString("name"));%>;</td>
 					  <td id="currently_price" name="currently_price"><%out.print(item_set.getFloat("currently_price"));%></td>
@@ -101,7 +102,7 @@
 				{
 %>
 					<tr>
-					  <td id="photo_url" name="photo_url"><%out.print(item_set.getString("photo_url"));%></td>
+					  <td id="photo_url" name="photo_url"><img src="<%out.print(item_set.getString("photo_url"));%>" width="60" height="60"></td>
 					  <td id="item_id" name="item_id"><%out.print(item_set.getLong("item_id"));%></td>
 					  <td id="name" name="name"><%out.print(item_set.getString("name"));%>;</td>
 					  <td id="currently_price" name="currently_price"><%out.print(item_set.getFloat("currently_price"));%></td>
