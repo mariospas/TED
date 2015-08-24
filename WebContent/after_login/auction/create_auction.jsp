@@ -44,14 +44,14 @@
         </div>
 
         <div id="main_form">
-        	<form method="post" action="save_auction.jsp">
+        	<form method="post" action="save_auction.jsp" ENCTYPE="multipart/form-data" >
             	<p><label>Όνομα :</label>
 				<input type="text" id="name" name="name" style="width: 300px;" required/></p>
                 <br/>
-                <p><label>Κατηγορίες :</label>
+                <p><label>Κατηγορίες :</label></p>
                 <div class="multiselect">
 			        <div class="selectBox" onclick="showCheckboxes()">
-			            <select>
+			            <select required>
 			                <option>Select an option</option>
 			            </select>
 			            <div class="overSelect"></div>
@@ -61,20 +61,17 @@
 			        while (set.next())
 					{
 					%>
-			            <label for="<%out.print(set.getString("value"));%>"><input type="checkbox" name="category" id="<%out.print(set.getString("value"));%>"/><%out.print(set.getString("value"));%></label>
+			            <label for="<%out.print(set.getString("value"));%>"><input type="checkbox" name="<%out.print(set.getString("value"));%>" id="<%out.print(set.getString("value"));%>"/><%out.print(set.getString("value"));%></label>
 			       <%}
 			        %>
 			        </div>
 			    </div>
-				</br>
-                <p><label>Τωρινή Τιμή :</label>
-				<input type="number" id="currently_price" name="currently_price" required/></p>
-                <br/>
+				<br/>
                 <p><label>Αρχική Προσφορά :</label>
-           		<input type="number" id="first_bid" name="first_bid" required/></p>
+           		<input type="text" id="first_bid" name="first_bid" required/></p>
                 <br/>
                 <p><label>*Τιμή Αγοράς :</label>
-				<input type="number" id="buy_price" name="buy_price"  /></p>
+				<input type="text" id="buy_price" name="buy_price"  /></p>
                 <br/>
                 <p><label>Location : (latitude;longtitude e.g 2.458;3.589)</label></p>
 				<input type="text" id="latlong" name="latlong" required/></p>

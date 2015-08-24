@@ -17,7 +17,7 @@
 	if(log != null)
 	{
 %>
-		<p align="center"><b><a href="auction/create_auction.jsp">Δημιουργία Δημοπρασίας</a></b></p>
+		<p align="center"><b><a href="create_auction.jsp">Δημιουργία Δημοπρασίας</a></b></p>
 		</br>
 
 <%

@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -100,12 +101,13 @@ public class Item {
 	{
 		try
 	    {
+			System.out.println("import Item");
 			state = link.GetState();
 			state = (link.GetCon()).prepareStatement(
-	        		"INSERT INTO ted.users "
+	        		"INSERT INTO ted.items "
 	        		+"VALUES (?,?,?,?,?,?,?,?,?,?,?)"
 	        		);
-			state.setInt(1, ItemID);
+			state.setLong(1, ItemID);
 			state.setString(2, Name);
 			state.setFloat(3, Currently);
 			state.setFloat(4, Buy_Price);
@@ -123,9 +125,71 @@ public class Item {
 	    {
 	    	ex.printStackTrace();
 	    }
+		System.out.println("out import Item");
+	}
+
+
+	public void insertCategories()
+	{
+
+		try
+	    {
+
+			String categ = null;
+			Iterator<String> iter = Category.iterator();
+			while (iter.hasNext())
+			{
+				categ = new String(iter.next());
+				state = link.GetState();
+				state = (link.GetCon()).prepareStatement(
+		        		"SELECT category_id "
+		        		+"FROM ted.category "
+		        		+"WHERE value=?"
+		        		);
+				state.setString(1, categ);
+				set = state.executeQuery();
+				while (set.next())
+				{
+					state = link.GetState();
+					state = (link.GetCon()).prepareStatement(
+			        		"INSERT INTO ted.item_category "
+			        		+"VALUES (?,?)"
+			        		);
+					state.setLong(1, ItemID);
+					state.setLong(2, set.getLong("category_id"));
+					state.executeUpdate();
+				}
+			}
+
+	    }
+		catch(SQLException ex)
+	    {
+	    	ex.printStackTrace();
+	    }
 
 	}
 
+
+	public void importLiveness()
+	{
+		try
+	    {
+			state = link.GetState();
+			state = (link.GetCon()).prepareStatement(
+	        		"INSERT INTO ted.user_item "
+	        		+"VALUES (?,?,?)"
+	        		);
+			state.setString(1, Seller_UserID);
+			state.setLong(2, ItemID);
+			state.setInt(3, 0);
+
+			state.executeUpdate();
+	    }
+		catch(SQLException ex)
+	    {
+	    	ex.printStackTrace();
+	    }
+	}
 
 
 
