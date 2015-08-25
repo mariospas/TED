@@ -44,8 +44,10 @@ public class Item {
 	//Bids/Bid/Amount
 	String Location = null;
 	String Country = null;
-	java.sql.Date Started;
-	java.sql.Date Ends;
+	//java.sql.Date Started;
+	//java.sql.Date Ends;
+	String Started = null;
+	String Ends = null;
 	String Seller_UserID = null;
 	String Description = null;
 	String Photo_Url = null;
@@ -57,7 +59,7 @@ public class Item {
 
 	public Item(String name,ArrayList<String> category,float currently,float buy_price,
 				float first_bid,String location,String country,String photo_url,
-				java.sql.Date started,java.sql.Date ends,String seller_userid,String description)
+				String started,String ends,String seller_userid,String description)
 	{
 		//ItemID;
 		Name = new String(name);
@@ -67,12 +69,13 @@ public class Item {
 		First_Bid = first_bid;
 		Location = new String(location);
 		Country = new String(country);
-		Started = started;
-		Ends = ends;
+		Started = new String(started);
+		Ends = new String(ends);
 		Seller_UserID = new String(seller_userid);
 		Description = new String(description);
 		Photo_Url = new String(photo_url);
 
+		System.out.println(Started + "  " + Ends);
 	    try
 	    {
 	        link = new ConnectionDB();
@@ -114,8 +117,8 @@ public class Item {
 			state.setFloat(5, First_Bid);
 			state.setString(6, Location);
 			state.setString(7, Country);
-			state.setDate(8, Started);
-			state.setDate(9, Ends);
+			state.setString(8, Started);
+			state.setString(9, Ends);
 			state.setString(10, Description);
 			state.setString(11, Photo_Url);
 

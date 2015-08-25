@@ -32,8 +32,10 @@
 		String latlong = null;
 		String country = null;
 		java.util.Date date = new SimpleDateFormat("MM-dd-yyyy").parse("2015-01-01");
-		java.sql.Date start_date = new java.sql.Date(date.getTime()) ;
-		java.sql.Date end_date = new java.sql.Date(date.getTime());
+		//java.sql.Date start_date = new java.sql.Date(date.getTime()) ;
+		//java.sql.Date end_date = new java.sql.Date(date.getTime());
+		String start_date = null;
+		String end_date = null;
 		String description = null;
 		ArrayList<String> categoriesList = new ArrayList<String>();
 		String photo_url = null;
@@ -57,13 +59,15 @@
 		        else if(fieldname.equals("country")) country = item.getString("UTF-8");
 		        else if(fieldname.equals("start_date"))
 		        {
-		        	date = new SimpleDateFormat("MM-dd-yyyy").parse(item.getString("UTF-8"));
-		        	start_date = new java.sql.Date(date.getTime());
+		        	//date = new SimpleDateFormat("yyyy-dd-MM").parse(item.getString("UTF-8"));
+		        	//start_date = new java.sql.Date(date.getTime());
+		        	start_date = item.getString("UTF-8");
 		        }
 		        else if(fieldname.equals("end_date"))
 		        {
-		        	date = new SimpleDateFormat("MM-dd-yyyy").parse(item.getString("UTF-8"));
-		        	end_date = new java.sql.Date(date.getTime());
+		        	//date = new SimpleDateFormat("yyyy-dd-MM").parse(item.getString("UTF-8"));
+		        	//end_date = new java.sql.Date(date.getTime());
+		        	end_date = item.getString("UTF-8");
 		        }
 		        else if(fieldname.equals("size")) continue;
 		        else if(fieldname.equals("description")) description = item.getString("UTF-8");

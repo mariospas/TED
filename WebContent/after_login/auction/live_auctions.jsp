@@ -108,8 +108,8 @@
 					  <td id="currently_price" name="currently_price"><%out.print(item_set.getFloat("currently_price"));%></td>
 					  <td id="buy_price" name="buy_price"><%out.print(item_set.getFloat("buy_price"));%></td>
 					  <td id="first_bid" name="first_bid"><%out.print(item_set.getFloat("first_bid"));%>;</td>
-					  <td id="start_date" name="start_date"><%out.print(item_set.getDate("start_date"));%></td>
-					  <td id="end_date" name="end_date"><%out.print(item_set.getDate("end_date"));%></td>
+					  <td id="start_date" name="start_date"><%out.print(item_set.getString("start_date"));%></td>
+					  <td id="end_date" name="end_date"><%out.print(item_set.getString("end_date"));%></td>
 					  <td><input type="radio" name="item" value="<%out.print(item_set.getLong("item_id"));%>" id="item"></td>
 					</tr>
 
