@@ -41,6 +41,26 @@ public class Category {
 		return set;
 	}
 
+	public ResultSet get_item_categories(long item_id)
+	{
+		try
+	    {
+	        state = (link.GetCon()).prepareStatement(
+	        		"SELECT * "+
+	        		"FROM ted.item_category "
+	        		+ "WHERE item_id=?"
+	        		);
+	        state.setLong(1, item_id);
+	        set = state.executeQuery();
+	    }
+	    catch(SQLException ex)
+	    {
+	    	ex.printStackTrace();
+	    }
+
+		return set;
+	}
+
 	public ResultSet get_categories_id(String category)
 	{
 		try

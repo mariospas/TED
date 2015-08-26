@@ -44,7 +44,7 @@
         </div>
 
         <div id="main_form">
-        	<form method="post" action="save_auction.jsp" ENCTYPE="multipart/form-data" >
+        	<form method="post" action="save_auction.jsp?id=create" ENCTYPE="multipart/form-data" >
             	<p><label>Όνομα :</label>
 				<input type="text" id="name" name="name" style="width: 300px;" required/></p>
                 <br/>
@@ -93,7 +93,7 @@
                 </br>
 				<input type="text" id="description" name="description" style="width: 300px; height: 300px;" required /></p>
                 <br/>
-                <input TYPE="submit" name="upload" id="sub_button" title="Add data to the Database" value="Αποθήκευση"/>
+                <input TYPE="submit" name="sub_button" id="sub_button" title="Add data to the Database" value="Αποθήκευση"/>
             </form>
        </div>
     </div>

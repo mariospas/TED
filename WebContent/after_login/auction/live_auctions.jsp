@@ -27,7 +27,7 @@
 		ResultSet item_set = null;
 %>
 		<p align="center"><b>Δημοπρασίες σε Εξέλιξη</b></p>
-		<form method="post" action="edit_auctions.jsp">
+		<form method="post" action="http://localhost:8080/TED/after_login/auction/edit_on_auction.jsp">
 			<table align="center" width="700" border="1">
 			<tr>
 			  <td>Φωτογραφία</td>
@@ -80,7 +80,7 @@
 		item_set = null;
 %>
 		<p align="center"><b>Απενεργοποιημένες Δημοπρασίες</b></p>
-		<form method="post" action="edit_auctions.jsp">
+		<form method="post" action="http://localhost:8080/TED/after_login/auction/edit_auction.jsp">
 			<table align="center" width="700" border="1">
 			<tr>
 			  <td>Φωτογραφία</td>
@@ -121,7 +121,9 @@
 			</table>
 			</br>
 			<div align="center">
+				<input align="center" TYPE="submit" name="sub" id="sub" value="Ενεργοποίηση"/>
 				<input align="center" TYPE="submit" name="sub" id="sub" value="Επεξεργασία"/>
+				<input align="center" TYPE="submit" name="sub" id="sub" value="Διαγραφή"/>
 			</div>
 		</form>
 

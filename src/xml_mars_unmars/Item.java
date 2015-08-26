@@ -32,7 +32,7 @@ import connection.ConnectionDB;
 
 public class Item {
 
-	int ItemID;
+	long ItemID;
 	String Name = null;
 	ArrayList<String> Category;
 	float Currently;
@@ -73,7 +73,8 @@ public class Item {
 		Ends = new String(ends);
 		Seller_UserID = new String(seller_userid);
 		Description = new String(description);
-		Photo_Url = new String(photo_url);
+		if(photo_url == null) Photo_Url = null;
+		else Photo_Url = new String(photo_url);
 
 		System.out.println(Started + "  " + Ends);
 	    try
@@ -98,6 +99,29 @@ public class Item {
 	    {
 	    	ex.printStackTrace();
 	    }
+	}
+
+
+	public Item(long item_id,String name,ArrayList<String> category,float currently,
+			float buy_price,float first_bid,String location,String country,String photo_url,
+			String started,String ends,String seller_userid,String description)
+	{
+		ItemID = item_id;
+		Name = new String(name);
+		Category = new ArrayList<String>(category);
+		Currently = currently;
+		Buy_Price = buy_price;
+		First_Bid = first_bid;
+		Location = new String(location);
+		Country = new String(country);
+		Started = new String(started);
+		Ends = new String(ends);
+		Seller_UserID = new String(seller_userid);
+		Description = new String(description);
+		if(photo_url == null) Photo_Url = null;
+		else Photo_Url = new String(photo_url);
+
+		link = new ConnectionDB();
 	}
 
 	public void importItem()
@@ -132,11 +156,126 @@ public class Item {
 	}
 
 
+	public void updateItem()
+	{
+		try
+	    {
+			if(Photo_Url != null)
+			{
+				//System.out.println("if");
+				state = link.GetState();
+				state = (link.GetCon()).prepareStatement(
+		        		"UPDATE ted.items "
+		        	   +"SET name=?,currently_price=?,buy_price=?,first_bid=?,location=?,"
+		        	   +"country=?,start_date=?,end_date=?,description=?,photo_url=? "
+					   +"WHERE item_id=?"
+		        		);
+
+				state.setString(1, Name);
+				state.setFloat(2, Currently);
+				state.setFloat(3, Buy_Price);
+				state.setFloat(4, First_Bid);
+				state.setString(5, Location);
+				state.setString(6, Country);
+				state.setString(7, Started);
+				state.setString(8, Ends);
+				state.setString(9, Description);
+				state.setString(10, Photo_Url);
+				state.setLong(11, ItemID);
+
+				state.executeUpdate();
+			}
+			else
+			{
+				//System.out.println("else 0 "+Name+" "+Currently+" "+Buy_Price+" "+First_Bid+" "+Location+" "+Country+" "+Started+" "+Ends+" "+Description+" "+ItemID);
+				state = link.GetState();
+				//System.out.println("else 1 "+Name+" "+Currently+" "+Buy_Price+" "+First_Bid+" "+Location+" "+Country+" "+Started+" "+Ends+" "+Description+" "+ItemID);
+				state = (link.GetCon()).prepareStatement(
+		        		"UPDATE ted.items "
+		        	   +"SET name=?,currently_price=?,buy_price=?,first_bid=?,location=?,"
+		        	   +"country=?,start_date=?,end_date=?,description=? "
+					   +"WHERE item_id=?"
+		        		);
+				//System.out.println("else 2 "+Name+" "+Currently+" "+Buy_Price+" "+First_Bid+" "+Location+" "+Country+" "+Started+" "+Ends+" "+Description+" "+ItemID);
+
+				state.setString(1, Name);
+				state.setFloat(2, Currently);
+				state.setFloat(3, Buy_Price);
+				state.setFloat(4, First_Bid);
+				state.setString(5, Location);
+				state.setString(6, Country);
+				state.setString(7, Started);
+				state.setString(8, Ends);
+				state.setString(9, Description);
+				state.setLong(10, ItemID);
+
+				//System.out.println("else 3 "+Name+" "+Currently+" "+Buy_Price+" "+First_Bid+" "+Location+" "+Country+" "+Started+" "+Ends+" "+Description+" "+ItemID);
+
+				state.executeUpdate();
+				//System.out.println("else 4 "+Name+" "+Currently+" "+Buy_Price+" "+First_Bid+" "+Location+" "+Country+" "+Started+" "+Ends+" "+Description+" "+ItemID);
+
+			}
+	    }
+		catch(SQLException ex)
+	    {
+	    	ex.printStackTrace();
+	    }
+	}
+
+
 	public void insertCategories()
 	{
 
 		try
 	    {
+			String categ = null;
+			Iterator<String> iter = Category.iterator();
+			while (iter.hasNext())
+			{
+				categ = new String(iter.next());
+				state = link.GetState();
+				state = (link.GetCon()).prepareStatement(
+		        		"SELECT category_id "
+		        		+"FROM ted.category "
+		        		+"WHERE value=?"
+		        		);
+				state.setString(1, categ);
+				set = state.executeQuery();
+				while (set.next())
+				{
+					state = link.GetState();
+					state = (link.GetCon()).prepareStatement(
+			        		"INSERT INTO ted.item_category "
+			        		+"VALUES (?,?)"
+			        		);
+					state.setLong(1, ItemID);
+					state.setLong(2, set.getLong("category_id"));
+					state.executeUpdate();
+				}
+			}
+
+	    }
+		catch(SQLException ex)
+	    {
+	    	ex.printStackTrace();
+	    }
+
+	}
+
+
+	public void updateCategories()
+	{
+
+		try
+	    {
+			state = link.GetState();
+			state = (link.GetCon()).prepareStatement(
+	        		"DELETE FROM item_category "
+	        		+"WHERE item_id=?"
+	        		);
+			state.setLong(1, ItemID);
+			state.executeUpdate();
+
 
 			String categ = null;
 			Iterator<String> iter = Category.iterator();
@@ -193,6 +332,10 @@ public class Item {
 	    	ex.printStackTrace();
 	    }
 	}
+
+
+
+
 
 
 
