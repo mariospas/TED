@@ -23,6 +23,7 @@
 %>
 		<jsp:include page="../logout.html"/>
 		<jsp:include page="profile_button.html"/>
+		<p align="left"><b><a href="auction/create_xml.jsp">Δημιουργία XML</a></b></p>
 		<p><b><center>Admin Page</center></b></p>
 
 

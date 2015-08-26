@@ -103,14 +103,20 @@
 			        byte[] buffer = new byte[filecontent.available()];
 			        filecontent.read(buffer);
 
-			        File dir = new File("imagesM");
+			        String current = getServletContext().getRealPath(File.separator);
+			        File dir = new File(current+"imagesM");
 			        dir.mkdir();
-			        String current = System.getProperty("user.dir");
-				    File targetFile = new File(current+File.separator+"imagesM"+File.separator+filename);
+			        dir = new File(current+"imagesM"+File.separator+"users");
+			        dir.mkdir();
+			        dir = new File(current+"imagesM"+File.separator+"users"+File.separator+log.getName());
+			        dir.mkdir();
+			        current += "imagesM"+File.separator+"users"+File.separator+log.getName()+File.separator;
+			        String url = new String("imagesM"+File.separator+"users"+File.separator+log.getName()+File.separator);
+				    File targetFile = new File(current+filename);
 				    OutputStream outStream = new FileOutputStream(targetFile);
 				    outStream.write(buffer);
 
-				    photo_url = current+File.separator+"imagesM"+File.separator+filename;
+				    photo_url = getServletContext().getContextPath()+File.separator+url+filename;
 		        }
 		    }
 		}

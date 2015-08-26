@@ -1,4 +1,6 @@
 package xml_mars_unmars;
+import java.io.File;
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.sql.PreparedStatement;
@@ -10,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,8 +20,13 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.servlet.*;
+import javax.servlet.http.HttpServlet;
+
+import org.apache.commons.io.FileUtils;
 
 import connection.ConnectionDB;
 
@@ -30,7 +38,8 @@ import connection.ConnectionDB;
  */
 
 
-public class Item {
+@SuppressWarnings("serial")
+public class Item extends HttpServlet{
 
 	long ItemID;
 	String Name = null;
@@ -51,6 +60,7 @@ public class Item {
 	String Seller_UserID = null;
 	String Description = null;
 	String Photo_Url = null;
+	String download_url = null;
 
 	ConnectionDB link;
 
@@ -122,6 +132,143 @@ public class Item {
 		else Photo_Url = new String(photo_url);
 
 		link = new ConnectionDB();
+	}
+
+	//constr for xml
+	public Item(String current,String ted ) throws IOException
+	{
+
+		long itemid=0;
+		String name = null;
+		ArrayList<String> category;
+		float currently;
+		float buy_price;
+		float first_bid;
+		int num_of_bids;
+		String location = null;
+		String country = null;
+		String started = null;
+		String ends = null;
+		Seller seller_userid;
+		String description = null;
+		String photo_url = null;
+		List<Bid> bid;
+		List<ItemXML> items = new ArrayList<ItemXML>();
+		link = new ConnectionDB();
+
+		try
+		{
+			System.out.println("~~ 1 ~~");
+			state = link.GetState();
+			state = (link.GetCon()).prepareStatement(
+	        		"select * "
+					+"from ted.items i, ted.user_item u "
+					+"where i.item_id=u.item_id and u.live=1"
+	        		);
+			set = state.executeQuery();
+
+			while(set.next())
+			{
+				System.out.println("~~ 2 ~~");
+
+				itemid = set.getLong("item_id");
+				name = set.getString("name");
+				category = this.findCategories(itemid);
+				currently = set.getFloat("currently_price");
+				buy_price = set.getFloat("buy_price");
+				first_bid = set.getFloat("first_bid");
+
+				System.out.println("~~ 3 ~~");
+				state = (link.GetCon()).prepareStatement(
+		        		"SELECT * "
+		        		+"FROM ted.item_bids "
+		        		+"WHERE item_id=?"
+		        		);
+		        state.setLong(1, itemid);
+		        ResultSet set_row = state.executeQuery();
+		        set_row.first();
+		        num_of_bids = set_row.getRow();
+		        System.out.println("~~ 4 ~~");
+
+				location = set.getString("location");
+				country = set.getString("country");
+				started = set.getString("start_date");
+				ends = set.getString("end_date");
+				System.out.println("~~ 5 ~~");
+
+				state = (link.GetCon()).prepareStatement(
+		        		"SELECT * "
+		        		+"FROM ted.user_item "
+		        		+"WHERE item_id=?"
+		        		);
+		        state.setLong(1, itemid);
+		        ResultSet set_usr = state.executeQuery();
+		        set_usr.first();
+				seller_userid = this.createSeller(itemid);
+				System.out.println("~~ 6 ~~");
+
+				description = set.getString("description");
+				photo_url = set.getString("photo_url");
+				System.out.println("~~ 7 ~~");
+				bid = this.create_bids(itemid);
+				System.out.println("~~ 8 ~~");
+
+				ItemXML itemxml = new ItemXML(name, category, currently, buy_price, first_bid, num_of_bids, location, country, photo_url, started, ends, seller_userid, description, bid, itemid);
+				System.out.println("~~ 9 ~~");
+				items.add(itemxml);
+				System.out.println("~~ 10 ~~");
+			}
+
+	        //Creating items object for marshaling into XML document
+			ItemsXML itemsXML = new ItemsXML(items);
+			System.out.println("~~ 11 ~~");
+
+	        JAXBContext jaxbCtx = null;
+	        StringWriter xmlWriter = null;
+	        try {
+	            //XML Binding code using JAXB
+
+	            jaxbCtx = JAXBContext.newInstance(ItemsXML.class);
+	            xmlWriter = new StringWriter();
+	            jaxbCtx.createMarshaller().marshal(itemsXML, xmlWriter);
+	            //System.out.println("XML Marshal example in Java");
+	            //System.out.println(xmlWriter);
+	            System.out.println("~~ 12 ~~");
+
+
+
+	            System.out.println("~~ current ~~");
+		        File dir = new File(current+"xml_files");
+		        dir.mkdir();
+		        current += "xml_files"+File.separator;
+		        String url = new String("xml_files"+File.separator);
+			    File targetFile = new File(current+"xml_all_files.xml");
+			    System.out.println("~~ 13 ~~");
+
+			    download_url = new String(ted+File.separator+url+"xml_all_files.xml");
+	            FileUtils.writeStringToFile(targetFile, xmlWriter.toString());
+	            System.out.println("~~ 14 ~~");
+
+	            /*Booking b = (Booking) jaxbCtx.createUnmarshaller().unmarshal(
+	                                               new StringReader(xmlWriter.toString()));
+	            System.out.println("XML Unmarshal example in JAva");
+	            System.out.println(b.toString());*/
+	        }
+	        catch (JAXBException ex) {
+	            Logger.getLogger(Item.class.getName()).log(Level.SEVERE,
+	                                                                          null, ex);
+	        }
+		}
+		catch(SQLException ex)
+	    {
+	    	ex.printStackTrace();
+	    }
+
+    }
+
+	public String getDownloadLink()
+	{
+		return download_url;
 	}
 
 	public void importItem()
@@ -335,86 +482,247 @@ public class Item {
 
 
 
+	public ArrayList<String> findCategories(long itemid)
+	{
+
+		ArrayList<String> categories = new ArrayList<String>();
+
+		try
+	    {
+			state = link.GetState();
+			state = (link.GetCon()).prepareStatement(
+	        		"SELECT * "
+	        		+"FROM ted.item_category "
+	        		+ "WHERE item_id=?"
+	        		);
+			state.setLong(1, itemid);
+			ResultSet item_cat = state.executeQuery();
+
+			while(item_cat.next())
+			{
+				int category_id = item_cat.getInt("category_id");
+				state = link.GetState();
+				state = (link.GetCon()).prepareStatement(
+		        		"SELECT value "
+		        		+"FROM ted.category "
+		        		+ "WHERE category_id=?"
+		        		);
+				state.setLong(1, category_id);
+				ResultSet value_set = state.executeQuery();
+				while(value_set.next())
+				{
+					categories.add(value_set.getString("value"));
+				}
+			}
 
 
 
+	    }
+		catch(SQLException ex)
+	    {
+	    	ex.printStackTrace();
+	    }
 
-	public Item(String args[]){
-
-        //Creating booking object for marshaling into XML document
-        Booking booking = new Booking();
-        booking.setName("Rohit");
-        booking.setContact(983672431);
-        DateFormat formatter = new SimpleDateFormat("dd/MM/yy");
-        Date startDate = null;
-        Date endDate = null;
-        try {
-            startDate = formatter.parse("11/09/2012");
-            endDate = formatter.parse("14/09/2012");
-        } catch (ParseException ex) {
-            Logger.getLogger(Item.class.getName()).log(Level.SEVERE,
-                                                                         null, ex);
-        }
-        booking.setStartDate(startDate);
-        booking.setEndDate(endDate);
-        booking.setAddress("Mumbai");
+		return categories;
+	}
 
 
-        JAXBContext jaxbCtx = null;
-        StringWriter xmlWriter = null;
-        try {
-            //XML Binding code using JAXB
+	public Seller createSeller(long itemid)
+	{
 
-            jaxbCtx = JAXBContext.newInstance(Booking.class);
-            xmlWriter = new StringWriter();
-            jaxbCtx.createMarshaller().marshal(booking, xmlWriter);
-            System.out.println("XML Marshal example in Java");
-            System.out.println(xmlWriter);
+		Seller sel = null;
+		int rate = 0;
 
-            Booking b = (Booking) jaxbCtx.createUnmarshaller().unmarshal(
-                                               new StringReader(xmlWriter.toString()));
-            System.out.println("XML Unmarshal example in JAva");
-            System.out.println(b.toString());
-        } catch (JAXBException ex) {
-            Logger.getLogger(Item.class.getName()).log(Level.SEVERE,
-                                                                          null, ex);
-        }
-    }
+		try
+	    {
+			state = link.GetState();
+			state = (link.GetCon()).prepareStatement(
+	        		"SELECT * "
+	        		+"FROM ted.user_item "
+	        		+ "WHERE item_id=?"
+	        		);
+			state.setLong(1, itemid);
+			ResultSet user_item = state.executeQuery();
+
+			while(user_item.next())
+			{
+				String username = user_item.getString("username");
+				state = link.GetState();
+				state = (link.GetCon()).prepareStatement(
+		        		"SELECT value "
+		        		+"FROM ted.sellers "
+		        		+ "WHERE username=?"
+		        		);
+				state.setString(1, username);
+				ResultSet value_set = state.executeQuery();
+				while(value_set.next())
+				{
+					rate = value_set.getInt("value");
+				}
+
+				sel = new Seller(rate,username);
+			}
+
+
+
+	    }
+		catch(SQLException ex)
+	    {
+	    	ex.printStackTrace();
+	    }
+
+		return sel;
+	}
+
+
+	public List<Bid> create_bids(long itemid)
+	{
+
+		List<Bid> bids = new ArrayList<Bid>();
+
+		try
+	    {
+			state = link.GetState();
+			state = (link.GetCon()).prepareStatement(
+	        		"SELECT * "
+	        		+"FROM ted.item_bids "
+	        		+ "WHERE item_id=?"
+	        		);
+			state.setLong(1, itemid);
+			ResultSet item_bids = state.executeQuery();
+
+			while(item_bids.next())
+			{
+				String time = item_bids.getString("date_time");
+				float amount = item_bids.getFloat("price");
+				String username = item_bids.getString("username");
+				state = link.GetState();
+				state = (link.GetCon()).prepareStatement(
+		        		"SELECT city,country "
+		        		+"FROM ted.users "
+		        		+ "WHERE username=?"
+		        		);
+				state.setString(1, username);
+				ResultSet loc_set = state.executeQuery();
+				while(loc_set.next())
+				{
+					String location = loc_set.getString("city");
+					String country = loc_set.getString("country");
+					Bidder bidder = new Bidder(location, country);
+					Bid bid = new Bid(bidder, time, amount);
+					bids.add(bid);
+				}
+			}
+
+
+
+	    }
+		catch(SQLException ex)
+	    {
+	    	ex.printStackTrace();
+	    }
+
+		return bids;
+	}
+
 }
 
-@XmlRootElement(name="booking")
+@XmlRootElement(name="Items")
 @XmlAccessorType(XmlAccessType.FIELD)
-class Booking{
-    @XmlElement(name="name")
-    private String name;
+class ItemsXML
+{
+	@XmlElement(name="Item")
+	List<ItemXML> ItemsXML;
 
-    @XmlElement(name="contact")
-    private int contact;
-
-    @XmlElement(name="startDate")
-    private Date startDate;
-
-    @XmlElement(name="endDate")
-    private Date endDate;
-
-    @XmlElement(name="address")
-    private String address;
-
-    public Booking(){}
-
-    public Booking(String name, int contact, Date startDate, Date endDate, String address){
-        this.name = name;
-        this.contact = contact;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.address = address;
+    public ItemsXML(List<ItemXML> itemsXML){
+    	ItemsXML = new ArrayList<ItemXML>(itemsXML);
+    }
+    public ItemsXML(){
     }
 
-    public String getAddress() { return address; }
-    public void setAddress(String address) {this.address = address; }
+}
 
-    public int getContact() { return contact; }
-    public void setContact(int contact) {this.contact = contact;}
+//@XmlRootElement(name="Item")
+//@XmlAccessorType(XmlAccessType.FIELD)
+class ItemXML{
+
+	@XmlAttribute(name="ItemID")
+    protected long ItemID;
+
+	@XmlElement(name="Name")
+	String Name = null;
+
+	@XmlElement(name="Category")
+	ArrayList<String> Category;
+
+	@XmlElement(name="Currently")
+	float Currently;
+
+	@XmlElement(name="Buy_Price")
+	float Buy_Price;
+
+	@XmlElement(name="First_Bid")
+	float First_Bid;
+
+	@XmlElement(name="Number_of_Bids")
+	int Number_of_Bids;  // upologizo otan thelo apo sunarthsh
+
+	@XmlElement(name="Bids")
+	Bids bids;
+
+	@XmlElement(name="Location")
+	String Location = null;
+
+	@XmlElement(name="Country")
+	String Country = null;
+
+	@XmlElement(name="Started")
+	String Started = null;
+
+	@XmlElement(name="Ends")
+	String Ends = null;
+
+	@XmlElement(name="Seller")
+	Seller Seller_UserID;
+
+	@XmlElement(name="Description")
+	String Description = null;
+
+	@XmlElement(name="Photo_Url")
+	String Photo_Url = null;
+
+
+    public ItemXML(String name,ArrayList<String> category,float currently,float buy_price,
+				float first_bid,int num_of_bids,String location,String country,String photo_url,
+				String started,String ends,Seller seller_userid,String description,List<Bid> bid,
+				long itemid)
+    {
+    	Name = new String(name);
+		Category = new ArrayList<String>(category);
+		Currently = currently;
+		Buy_Price = buy_price;
+		First_Bid = first_bid;
+		Number_of_Bids = num_of_bids;
+		Location = new String(location);
+		Country = new String(country);
+		Started = new String(started);
+		Ends = new String(ends);
+		Seller_UserID = seller_userid;
+		Description = new String(description);
+		if(photo_url == null) Photo_Url = null;
+		else Photo_Url = new String(photo_url);
+		bids = new Bids(bid);
+		ItemID = itemid;
+    }
+
+    public ItemXML(){
+    }
+/*
+    public String getName() { return Name; }
+    public void setName(String name) {this.Name = name; }
+
+    public ArrayList<String> getCategory() { return Category; }
+    public void setCategory(ArrayList<String> category) {this.Category = new ArrayList<String>(category);}
 
     public Date getEndDate() { return endDate; }
     public void setEndDate(Date endDate) { this.endDate = endDate; }
@@ -430,5 +738,78 @@ class Booking{
         return "Booking{" + "name=" + name + ", contact=" + contact + ", startDate=" + startDate + ", endDate=" + endDate + ", address=" + address + '}';
 
     }
+    */
 
+}
+
+//@XmlRootElement(name="Bids")
+//@XmlAccessorType(XmlAccessType.FIELD)
+class Bids{
+
+	@XmlElement(name="Bid")
+	List<Bid> Bid;
+
+	public Bids(List<Bid> bid)
+	{
+		Bid = new ArrayList<Bid>(bid);
+	}
+	public Bids(){
+    }
+}
+
+
+//@XmlRootElement(name="Bid")
+//@XmlAccessorType(XmlAccessType.FIELD)
+class Bid{
+	@XmlElement(name="Bidder")
+	Bidder bidder;
+	@XmlElement(name="Time")
+	String Time;
+	@XmlElement(name="Amount")
+	float Amount;
+
+	public Bid(Bidder bider,String time,float amount)
+	{
+		bidder = bider;
+		Time = new String(time);
+		Amount = amount;
+	}
+	public Bid(){
+    }
+}
+
+//@XmlRootElement(name="Bidder")
+//@XmlAccessorType(XmlAccessType.FIELD)
+class Bidder{
+	@XmlElement(name="Location")
+	String Location;
+	@XmlElement(name="Country")
+	String Country;
+
+	public Bidder(String loc,String con)
+	{
+		Location = new String(loc);
+		Country = new String(con);
+	}
+	public Bidder(){
+    }
+}
+
+class Seller
+{
+	@XmlAttribute(name="Rating")
+	int rating;
+
+	@XmlAttribute(name="UserID")
+	String username;
+
+	public Seller(int rate,String user)
+	{
+		rating = rate;
+		username = new String(user);
+	}
+
+	public Seller()
+	{
+	}
 }
