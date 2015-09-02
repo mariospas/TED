@@ -58,7 +58,7 @@
 	        	}
 		        else if(fieldname.equals("buy_price"))
 		        {
-		        	if(item.getString("UTF-8") != null)
+		        	if(item.getString("UTF-8").length() > 0)
 		        	{
 		        		buy_price = Float.parseFloat(item.getString("UTF-8"));
 		        	}

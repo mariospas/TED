@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.nio.charset.Charset;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,6 +29,7 @@ import javax.servlet.http.HttpServlet;
 
 import org.apache.commons.io.FileUtils;
 
+import sun.nio.cs.StandardCharsets;
 import connection.ConnectionDB;
 
 /**
@@ -248,11 +250,6 @@ public class Item extends HttpServlet{
 			    download_url = new String(ted+File.separator+url+"xml_all_files.xml");
 	            FileUtils.writeStringToFile(targetFile, xmlWriter.toString());
 	            System.out.println("~~ 14 ~~");
-
-	            /*Booking b = (Booking) jaxbCtx.createUnmarshaller().unmarshal(
-	                                               new StringReader(xmlWriter.toString()));
-	            System.out.println("XML Unmarshal example in JAva");
-	            System.out.println(b.toString());*/
 	        }
 	        catch (JAXBException ex) {
 	            Logger.getLogger(Item.class.getName()).log(Level.SEVERE,
@@ -265,6 +262,60 @@ public class Item extends HttpServlet{
 	    }
 
     }
+
+	public Item(String xml) throws IOException
+	{
+		//try
+		//{
+			JAXBContext jaxbCtx = null;
+
+			try
+			{
+				jaxbCtx = JAXBContext.newInstance(ItemsXML.class);
+				File targetFile = new File(xml);
+			    System.out.println("~~ 13 222 ~~");
+			    //System.out.println(FileUtils.readFileToString(targetFile));
+
+
+		        ItemsXML b = (ItemsXML) jaxbCtx.createUnmarshaller().unmarshal(
+		                                           new StringReader(FileUtils.readFileToString(targetFile)));
+		        //System.out.println("XML Unmarshal example in JAva");
+		        //System.out.println(b.toString());
+
+		        List<ItemXML> Items = b.getItemsXML();
+		        for(ItemXML itemElem : Items)
+		        {
+		        	System.out.println("Item ID = "+itemElem.getItemID());
+		        	ItemID = itemElem.getItemID();
+					Name = itemElem.getName();
+					Currently = itemElem.getCurrently();
+					Buy_Price = itemElem.getBuy_Price();
+					First_Bid = itemElem.getFirst_Bid();
+					Location = itemElem.getLocation();
+					Country = itemElem.getCountry();
+					Started = itemElem.getStartedDate();
+					Ends = itemElem.getEndsDate();
+					Description = itemElem.getDescription();
+					Photo_Url = itemElem.getPhoto_Url();
+					Category = itemElem.getCategory();
+
+					this.importItem();
+					this.insertCategories();
+					this.importLiveness(1);
+		        }
+			}
+	        catch (JAXBException ex)
+	        {
+	            Logger.getLogger(Item.class.getName()).log(Level.SEVERE,
+	                                                                          null, ex);
+	        }
+		//}
+       // catch(SQLException ex)
+	   // {
+	   // 	ex.printStackTrace();
+	  //  }
+
+	}
 
 	public String getDownloadLink()
 	{
@@ -480,6 +531,27 @@ public class Item extends HttpServlet{
 	    }
 	}
 
+	public void importLiveness(int num)
+	{
+		try
+	    {
+			state = link.GetState();
+			state = (link.GetCon()).prepareStatement(
+	        		"INSERT INTO ted.user_item "
+	        		+"VALUES (?,?,?)"
+	        		);
+			state.setString(1, Seller_UserID);
+			state.setLong(2, ItemID);
+			state.setInt(3, num);
+
+			state.executeUpdate();
+	    }
+		catch(SQLException ex)
+	    {
+	    	ex.printStackTrace();
+	    }
+	}
+
 
 
 	public ArrayList<String> findCategories(long itemid)
@@ -598,9 +670,9 @@ public class Item extends HttpServlet{
 				String username = item_bids.getString("username");
 				state = link.GetState();
 				state = (link.GetCon()).prepareStatement(
-		        		"SELECT city,country "
-		        		+"FROM ted.users "
-		        		+ "WHERE username=?"
+		        		"SELECT city,country,value "
+		        		+"FROM ted.users u, ted.bidders b "
+		        		+ "WHERE u.username=? AND b.username=u.username"
 		        		);
 				state.setString(1, username);
 				ResultSet loc_set = state.executeQuery();
@@ -608,7 +680,8 @@ public class Item extends HttpServlet{
 				{
 					String location = loc_set.getString("city");
 					String country = loc_set.getString("country");
-					Bidder bidder = new Bidder(location, country);
+					int rating = loc_set.getInt("value");
+					Bidder bidder = new Bidder(location, country, rating, username);
 					Bid bid = new Bid(bidder, time, amount);
 					bids.add(bid);
 				}
@@ -640,6 +713,11 @@ class ItemsXML
     public ItemsXML(){
     }
 
+    public List<ItemXML> getItemsXML()
+    {
+    	return ItemsXML;
+    }
+
 }
 
 //@XmlRootElement(name="Item")
@@ -653,22 +731,22 @@ class ItemXML{
 	String Name = null;
 
 	@XmlElement(name="Category")
-	ArrayList<String> Category;
+	ArrayList<String> Category = null;
 
 	@XmlElement(name="Currently")
-	float Currently;
+	float Currently = 0;
 
 	@XmlElement(name="Buy_Price")
-	float Buy_Price;
+	float Buy_Price = 0;
 
 	@XmlElement(name="First_Bid")
-	float First_Bid;
+	float First_Bid = 0;
 
 	@XmlElement(name="Number_of_Bids")
-	int Number_of_Bids;  // upologizo otan thelo apo sunarthsh
+	int Number_of_Bids = 0;  // upologizo otan thelo apo sunarthsh
 
 	@XmlElement(name="Bids")
-	Bids bids;
+	Bids bids = null;
 
 	@XmlElement(name="Location")
 	String Location = null;
@@ -717,28 +795,85 @@ class ItemXML{
 
     public ItemXML(){
     }
-/*
-    public String getName() { return Name; }
-    public void setName(String name) {this.Name = name; }
 
-    public ArrayList<String> getCategory() { return Category; }
-    public void setCategory(ArrayList<String> category) {this.Category = new ArrayList<String>(category);}
 
-    public Date getEndDate() { return endDate; }
-    public void setEndDate(Date endDate) { this.endDate = endDate; }
-
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public Date getStartDate() { return startDate; }
-    public void setStartDate(Date startDate) { this.startDate = startDate; }
-
-    @Override
-    public String toString() {
-        return "Booking{" + "name=" + name + ", contact=" + contact + ", startDate=" + startDate + ", endDate=" + endDate + ", address=" + address + '}';
-
+    public long getItemID()
+    {
+    	return ItemID;
     }
-    */
+
+    public String getName()
+    {
+    	return Name;
+    }
+
+    public ArrayList<String> getCategory()
+    {
+    	return Category;
+    }
+
+    public float getCurrently()
+    {
+    	return Currently;
+    }
+
+    public float getBuy_Price()
+    {
+    	return Buy_Price;
+    }
+
+    public float getFirst_Bid()
+    {
+    	return First_Bid;
+    }
+
+    public int getNumber_of_Bids()
+    {
+    	return Number_of_Bids;
+    }
+
+    public Bids getBids()
+    {
+    	return bids;
+    }
+
+    public String getLocation()
+    {
+    	return Location;
+    }
+
+    public String getCountry()
+    {
+    	return Country;
+    }
+
+    public String getStartedDate()
+    {
+    	return Started;
+    }
+
+    public String getEndsDate()
+    {
+    	return Ends;
+    }
+
+    public Seller getSeller_UserID()
+    {
+    	return Seller_UserID;
+    }
+
+    public String getDescription()
+    {
+    	return Description;
+    }
+
+    public String getPhoto_Url()
+    {
+    	return Photo_Url;
+    }
+
+
+
 
 }
 
@@ -755,6 +890,11 @@ class Bids{
 	}
 	public Bids(){
     }
+
+	public List<Bid> getBids()
+	{
+		return Bid;
+	}
 }
 
 
@@ -776,23 +916,70 @@ class Bid{
 	}
 	public Bid(){
     }
+
+	public Bidder getBidder()
+	{
+		return bidder;
+	}
+
+	public String getTime()
+	{
+		return Time;
+	}
+
+	public float getAmount()
+	{
+		return Amount;
+	}
+
 }
 
 //@XmlRootElement(name="Bidder")
 //@XmlAccessorType(XmlAccessType.FIELD)
 class Bidder{
+
+	@XmlAttribute(name="Rating")
+	int rating = 0;
+
+	@XmlAttribute(name="UserID")
+	String username = null;
+
 	@XmlElement(name="Location")
 	String Location;
+
 	@XmlElement(name="Country")
 	String Country;
 
-	public Bidder(String loc,String con)
+	public Bidder(String loc,String con,int rate,String user)
 	{
 		Location = new String(loc);
 		Country = new String(con);
+		rating = rate;
+		username = new String(user);
 	}
 	public Bidder(){
     }
+
+	public int getRating()
+	{
+		return rating;
+	}
+
+	public String getUsername()
+	{
+		return username;
+	}
+
+	public String getLocation()
+	{
+		return Location;
+	}
+
+	public String getCountry()
+	{
+		return Country;
+	}
+
 }
 
 class Seller
@@ -812,4 +999,15 @@ class Seller
 	public Seller()
 	{
 	}
+
+	public int getRating()
+	{
+		return rating;
+	}
+
+	public String getUsername()
+	{
+		return username;
+	}
+
 }
