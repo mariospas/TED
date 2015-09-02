@@ -298,10 +298,17 @@ public class Item extends HttpServlet{
 					Description = itemElem.getDescription();
 					Photo_Url = itemElem.getPhoto_Url();
 					Category = itemElem.getCategory();
+					Bids bids = itemElem.getBids();
+					Seller seller = itemElem.getSeller_UserID();
+
+					this.importNewCategories();
 
 					this.importItem();
 					this.insertCategories();
-					this.importLiveness(1);
+					//this.importLiveness(1);
+
+					this.importNewBids(bids);
+					this.importNewSeller(seller);
 		        }
 			}
 	        catch (JAXBException ex)
@@ -531,7 +538,7 @@ public class Item extends HttpServlet{
 	    }
 	}
 
-	public void importLiveness(int num)
+	public void importLiveness(int num, String Seller_UserID)
 	{
 		try
 	    {
@@ -698,6 +705,272 @@ public class Item extends HttpServlet{
 		return bids;
 	}
 
+
+	public void importNewCategories()
+	{
+		ResultSet set1;
+		try
+	    {
+		    int category_id = 0;
+	        link = new ConnectionDB();
+	        state = link.GetState();
+	        state = (link.GetCon()).prepareStatement(
+	        		"SELECT * "+
+	        		"FROM ted.category "+
+	        		"ORDER BY category_id DESC "+
+	        		"LIMIT 1"
+	        		);
+	        set1 = state.executeQuery();
+	        if(set1.next())
+	        {
+	        	category_id = (set1.getInt("category_id"));
+	        	category_id++;
+	        }
+	        else category_id = 1;
+
+	        for(String cat_value : Category)
+	        {
+		        state = link.GetState();
+		        state = (link.GetCon()).prepareStatement(
+		        		"SELECT * "+
+		        		"FROM ted.category "+
+		        		"WHERE value=?"
+		        		);
+		        state.setString(1, cat_value);
+		        set1 = state.executeQuery();
+
+		        set1.first();
+		        if(set.getString("value") == null)
+		        {
+		        	continue;
+		        }
+		        else
+		        {
+		        	System.out.println("import Item");
+					state = link.GetState();
+					state = (link.GetCon()).prepareStatement(
+			        		"INSERT INTO ted.category "
+			        		+"VALUES (?,?)"
+			        		);
+					state.setInt(1, category_id);
+					state.setString(2, cat_value);
+
+					state.executeUpdate();
+					category_id++;
+		        }
+	        }
+	    }
+	    catch(SQLException ex)
+	    {
+	    	ex.printStackTrace();
+	    }
+	}
+
+	public void importNewBids(Bids bids)
+	{
+		List<Bid> bid_list = bids.getBids();
+
+		for(Bid bidElem : bid_list)
+		{
+			Bidder bidder = bidElem.getBidder();
+			String count = new String(bidder.getCountry());
+			String loc = new String(bidder.getLocation());
+			int rate = bidder.getRating();
+			String user = new String(bidder.getUsername());
+			this.insertNewUser(count, loc, user);
+			this.insertNewBidder(user, rate);
+
+			String time = bidElem.getTime();
+			float price = bidElem.getAmount();
+
+			this.insertBid(price, user, time);
+		}
+	}
+
+	public void insertNewUser(String country, String location,String user)
+	{
+		ResultSet set1;
+		try
+	    {
+			state = link.GetState();
+	        state = (link.GetCon()).prepareStatement(
+	        		"SELECT * "+
+	        		"FROM ted.users "+
+	        		"WHERE username=?"
+	        		);
+	        state.setString(1, user);
+	        set1 = state.executeQuery();
+
+	        set1.first();
+	        if(set.getString("username") != null)
+	        {
+	        	System.out.println("import New User");
+				state = link.GetState();
+				state = (link.GetCon()).prepareStatement("INSERT INTO ted.users VALUES (?,1,demo,demo,demo,demo,demo,demo,?,?,demo,1,'user')");
+
+		        state.setString(1,user);
+		        state.setString(2,location);
+		        state.setString(3,country);
+
+		        state.executeUpdate();
+	        }
+	    }
+		catch(SQLException ex)
+	    {
+	    	ex.printStackTrace();
+	    }
+	}
+
+	public void insertNewUser(String user)
+	{
+		ResultSet set1;
+		try
+	    {
+			state = link.GetState();
+	        state = (link.GetCon()).prepareStatement(
+	        		"SELECT * "+
+	        		"FROM ted.users "+
+	        		"WHERE username=?"
+	        		);
+	        state.setString(1, user);
+	        set1 = state.executeQuery();
+
+	        set1.first();
+	        if(set.getString("username") != null)
+	        {
+	        	System.out.println("import New User");
+				state = link.GetState();
+				state = (link.GetCon()).prepareStatement("INSERT INTO ted.users VALUES (?,1,demo,demo,demo,demo,demo,demo,demo,demo,demo,1,'user')");
+
+		        state.setString(1,user);
+
+		        state.executeUpdate();
+	        }
+	    }
+		catch(SQLException ex)
+	    {
+	    	ex.printStackTrace();
+	    }
+	}
+
+	public void insertNewBidder(String user,int rate)
+	{
+		ResultSet set1;
+		try
+	    {
+			state = link.GetState();
+	        state = (link.GetCon()).prepareStatement(
+	        		"SELECT * "+
+	        		"FROM ted.bidders "+
+	        		"WHERE username=?"
+	        		);
+	        state.setString(1, user);
+	        set1 = state.executeQuery();
+
+	        set1.first();
+	        if(set.getString("username") != null)
+	        {
+	        	System.out.println("import New Bidder");
+				state = link.GetState();
+				state = (link.GetCon()).prepareStatement("INSERT INTO ted.bidders VALUES (?,?)");
+
+		        state.setString(1,user);
+		        state.setInt(2,rate);
+
+		        state.executeUpdate();
+	        }
+	        else
+	        {
+	        	state = link.GetState();
+				state = (link.GetCon()).prepareStatement("UPDATE ted.bidders SET value=? WHERE username=?");
+
+		        state.setInt(1,rate);
+		        state.setString(2,user);
+
+		        state.executeUpdate();
+	        }
+	    }
+		catch(SQLException ex)
+	    {
+	    	ex.printStackTrace();
+	    }
+	}
+
+	public void insertBid(float price, String user, String time)
+	{
+		ResultSet set1;
+		try
+	    {
+			System.out.println("import New Bidder");
+			state = link.GetState();
+			state = (link.GetCon()).prepareStatement("INSERT INTO ted.item_bids VALUES (?,?,?,?)");
+
+	        state.setLong(1,ItemID);
+	        state.setFloat(2,price);
+	        state.setString(3,user);
+	        state.setString(4,time);
+
+	        state.executeUpdate();
+
+	    }
+		catch(SQLException ex)
+	    {
+	    	ex.printStackTrace();
+	    }
+	}
+
+	public void importNewSeller(Seller seller)
+	{
+		String user = seller.getUsername();
+		int rate = seller.getRating();
+
+		this.insertNewUser(user);
+		this.insertNewSeller(user, rate);
+		this.importLiveness(1, user);
+	}
+
+	public void insertNewSeller(String user,int rate)
+	{
+		ResultSet set1;
+		try
+	    {
+			state = link.GetState();
+	        state = (link.GetCon()).prepareStatement(
+	        		"SELECT * "+
+	        		"FROM ted.sellers "+
+	        		"WHERE username=?"
+	        		);
+	        state.setString(1, user);
+	        set1 = state.executeQuery();
+
+	        set1.first();
+	        if(set.getString("username") != null)
+	        {
+	        	System.out.println("import New Seller");
+				state = link.GetState();
+				state = (link.GetCon()).prepareStatement("INSERT INTO ted.sellers VALUES (?,?)");
+
+		        state.setString(1,user);
+		        state.setInt(2,rate);
+
+		        state.executeUpdate();
+	        }
+	        else
+	        {
+	        	state = link.GetState();
+				state = (link.GetCon()).prepareStatement("UPDATE ted.sellers SET value=? WHERE username=?");
+
+		        state.setInt(1,rate);
+		        state.setString(2,user);
+
+		        state.executeUpdate();
+	        }
+	    }
+		catch(SQLException ex)
+	    {
+	    	ex.printStackTrace();
+	    }
+	}
 }
 
 @XmlRootElement(name="Items")
