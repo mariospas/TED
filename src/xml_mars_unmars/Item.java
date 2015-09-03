@@ -12,8 +12,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,6 +34,7 @@ import org.apache.commons.io.FileUtils;
 
 import sun.nio.cs.StandardCharsets;
 import connection.ConnectionDB;
+import category.*;
 
 /**
  * JAXB example to generate xml document from Java object also called xml marshaling
@@ -273,8 +277,7 @@ public class Item extends HttpServlet{
 
 	public Item(String xml) throws IOException
 	{
-		//try
-		//{
+
 			JAXBContext jaxbCtx = null;
 			link = new ConnectionDB();
 
@@ -283,13 +286,12 @@ public class Item extends HttpServlet{
 				jaxbCtx = JAXBContext.newInstance(ItemsXML.class);
 				File targetFile = new File(xml);
 			    System.out.println("~~ 13 222 ~~");
-			    //System.out.println(FileUtils.readFileToString(targetFile));
+
 
 
 		        ItemsXML b = (ItemsXML) jaxbCtx.createUnmarshaller().unmarshal(
 		                                           new StringReader(FileUtils.readFileToString(targetFile)));
-		        //System.out.println("XML Unmarshal example in JAva");
-		        //System.out.println(b.toString());
+
 
 		        List<ItemXML> Items = b.getItemsXML();
 		        for(ItemXML itemElem : Items)
@@ -325,13 +327,89 @@ public class Item extends HttpServlet{
 	            Logger.getLogger(Item.class.getName()).log(Level.SEVERE,
 	                                                                          null, ex);
 	        }
-		//}
-       // catch(SQLException ex)
-	   // {
-	   // 	ex.printStackTrace();
-	  //  }
+
 
 	}
+
+
+	public Item(String username,int num)
+	{
+		LinkedHashMap<String, Integer> catPerUser = new LinkedHashMap<String,Integer>();
+		LinkedHashMap<String, LinkedHashMap<String, Integer>> all_user_cat = new LinkedHashMap<String,LinkedHashMap<String, Integer>>();
+		Category cat = new Category();
+
+
+		link = new ConnectionDB();
+		String user = null;
+		String category = null;
+		try
+	    {
+			state = link.GetState();
+			state = (link.GetCon()).prepareStatement(
+	        		"SELECT username "
+	        		+ "FROM ted.users"
+	        		);
+			set = state.executeQuery();
+
+			while(set.next())    //gia olous tous xrhstes
+			{
+				ResultSet set_cat = cat.get_categories();
+				while(set_cat.next())
+				{
+					category = set_cat.getString("value");
+					catPerUser.put(category, 0);
+				}
+
+				user = set.getString("username");
+				state = link.GetState();
+				state = (link.GetCon()).prepareStatement(
+		        		"SELECT item_id "
+		        		+ "FROM ted.item_bids "
+		        		+ "WHERE username=?"
+		        		);
+				state.setString(1, user);
+				ResultSet set1 = state.executeQuery();
+
+				while(set1.next())    //gia ola ta item pou exei kanei bid o idios xthsths
+				{
+					long item_id = set1.getLong("item_id");
+					state = link.GetState();
+					state = (link.GetCon()).prepareStatement(
+			        		"SELECT cat.value "
+			        		+ "FROM ted.item_category ic, ted.category cat "
+			        		+ "WHERE ic.item_id=? AND ic.category_id=cat.category_id"
+			        		);
+					state.setLong(1, item_id);
+					ResultSet set2 = state.executeQuery();
+
+					while(set2.next())   //gia kathe kathgoria tou item
+					{
+						String cat_value = set2.getString("value");
+						//int count = catPerUser.get(cat_value);
+						//count++;
+						catPerUser.put(cat_value, catPerUser.get(cat_value) + 1);
+						System.out.println("user = "+user+" bids this item = "+item_id+" in this category = "+cat_value+" with value = "+catPerUser.get(cat_value));
+
+					}
+				}
+				all_user_cat.put(user, catPerUser);
+			}
+
+			this.findTopKNeigh(username, num, all_user_cat);
+
+	    }
+		catch(SQLException ex)
+	    {
+	    	ex.printStackTrace();
+	    }
+		finally
+		{
+	        //if (set != null) try { set.close(); } catch (SQLException logOrIgnore) {}
+	        if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
+	        //if (conn != null) try { conn.close(); } catch (SQLException logOrIgnore) {}
+		}
+	}
+
 
 	public String getDownloadLink()
 	{
@@ -1157,6 +1235,24 @@ public class Item extends HttpServlet{
 	        //if (conn != null) try { conn.close(); } catch (SQLException logOrIgnore) {}
 		}
 	}
+
+	public void findTopKNeigh(String username,int K, LinkedHashMap<String, LinkedHashMap<String, Integer>> all_user_cat)
+	{
+		int i=0;
+		int j;
+		LinkedHashMap<String, Integer> user_cat = all_user_cat.get(username);
+		for (Map.Entry<String, LinkedHashMap<String, Integer>> entry : all_user_cat.entrySet()) {
+			i++;
+			System.out.println(i+" Key : " + entry.getKey());
+			j=0;
+			for (Map.Entry<String, Integer> value : entry.getValue().entrySet())
+			{
+				j++;
+				System.out.println(j+" cat : " + value.getKey()+" "+value.getValue());
+			}
+		}
+	}
+
 }
 
 @XmlRootElement(name="Items")

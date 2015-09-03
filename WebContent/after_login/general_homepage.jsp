@@ -1,3 +1,4 @@
+<%@page import="xml_mars_unmars.Item"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="login_logout_process.*"%>
@@ -14,11 +15,12 @@
 	LoginSession log = (LoginSession) session.getAttribute("log");
 	if(log != null)
 	{
+		Item item = new Item(log.getName(),7);
 		out.println("<center><h1>Welcome: " + log.getName() + "</h1>");
 %>
 		<p align="center"><b><a href="auction/live_auctions.jsp">Διαχείριση Δημοπρασιών</a></b></p>
 		<p align="center"><b><a href="auction/find_auction.jsp">Αναζήτηση Δημοπρασιών</a></b></p>
-<%}
+<%	}
 	else
 	{
 		out.println("<center><h1> Guest Mode </h1></center>");
