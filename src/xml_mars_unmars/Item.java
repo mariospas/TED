@@ -168,6 +168,7 @@ public class Item extends HttpServlet{
 					+"where i.item_id=u.item_id and u.live=1"
 	        		);
 			set = state.executeQuery();
+			//if (state != null) try { state.close(); } catch (SQLException logOrIgnore) {}
 
 			while(set.next())
 			{
@@ -197,6 +198,7 @@ public class Item extends HttpServlet{
 				started = set.getString("start_date");
 				ends = set.getString("end_date");
 				System.out.println("~~ 5 ~~");
+				if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 
 				state = (link.GetCon()).prepareStatement(
 		        		"SELECT * "
@@ -219,7 +221,13 @@ public class Item extends HttpServlet{
 				System.out.println("~~ 9 ~~");
 				items.add(itemxml);
 				System.out.println("~~ 10 ~~");
+
+		        //if (set_usr != null) try { set_usr.close(); } catch (SQLException logOrIgnore) {}
+		        //if (set_row != null) try { set_row.close(); } catch (SQLException logOrIgnore) {}
+		        if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
+		        //if (conn != null) try { conn.close(); } catch (SQLException logOrIgnore) {}
 			}
+			if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 
 	        //Creating items object for marshaling into XML document
 			ItemsXML itemsXML = new ItemsXML(items);
@@ -268,6 +276,7 @@ public class Item extends HttpServlet{
 		//try
 		//{
 			JAXBContext jaxbCtx = null;
+			link = new ConnectionDB();
 
 			try
 			{
@@ -304,7 +313,7 @@ public class Item extends HttpServlet{
 					this.importNewCategories();
 
 					this.importItem();
-					this.insertCategories();
+					this.updateCategories();
 					//this.importLiveness(1);
 
 					this.importNewBids(bids);
@@ -333,31 +342,59 @@ public class Item extends HttpServlet{
 	{
 		try
 	    {
-			System.out.println("import Item");
-			state = link.GetState();
-			state = (link.GetCon()).prepareStatement(
-	        		"INSERT INTO ted.items "
-	        		+"VALUES (?,?,?,?,?,?,?,?,?,?,?)"
-	        		);
-			state.setLong(1, ItemID);
-			state.setString(2, Name);
-			state.setFloat(3, Currently);
-			state.setFloat(4, Buy_Price);
-			state.setFloat(5, First_Bid);
-			state.setString(6, Location);
-			state.setString(7, Country);
-			state.setString(8, Started);
-			state.setString(9, Ends);
-			state.setString(10, Description);
-			state.setString(11, Photo_Url);
 
-			state.executeUpdate();
+			state = link.GetState();
+	        state = (link.GetCon()).prepareStatement(
+	        		"SELECT * "+
+	        		"FROM ted.items "+
+	        		"WHERE item_id=?"
+	        		);
+	        state.setLong(1, ItemID);
+	        ResultSet set1 = state.executeQuery();
+	        //if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
+
+	        if(set1.next())
+	        {
+	        	return;
+	        }
+	        else
+	        {
+	        	if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
+
+				System.out.println("import Item "+ItemID);
+				state = link.GetState();
+				state = (link.GetCon()).prepareStatement(
+		        		"INSERT INTO ted.items "
+		        		+"VALUES (?,?,?,?,?,?,?,?,?,?,?)"
+		        		);
+				state.setLong(1, ItemID);
+				state.setString(2, Name);
+				state.setFloat(3, Currently);
+				state.setFloat(4, Buy_Price);
+				state.setFloat(5, First_Bid);
+				state.setString(6, Location);
+				state.setString(7, Country);
+				state.setString(8, Started);
+				state.setString(9, Ends);
+				state.setString(10, Description);
+				state.setString(11, Photo_Url);
+
+				state.executeUpdate();
+				if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
+	        }
 	    }
 		catch(SQLException ex)
 	    {
 	    	ex.printStackTrace();
 	    }
-		System.out.println("out import Item");
+		finally
+		{
+	        //if (set != null) try { set.close(); } catch (SQLException logOrIgnore) {}
+	        //if(set1 != null) try { set1.close(); } catch (SQLException logOrIgnore) {}
+	        if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
+	        //if (conn != null) try { conn.close(); } catch (SQLException logOrIgnore) {}
+		}
+		System.out.println("out import Item "+ItemID);
 	}
 
 
@@ -425,6 +462,12 @@ public class Item extends HttpServlet{
 	    {
 	    	ex.printStackTrace();
 	    }
+		finally
+		{
+	        //if (set != null) try { set.close(); } catch (SQLException logOrIgnore) {}
+	        if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
+	        //if (conn != null) try { conn.close(); } catch (SQLException logOrIgnore) {}
+		}
 	}
 
 
@@ -433,6 +476,7 @@ public class Item extends HttpServlet{
 
 		try
 	    {
+			System.out.println("InsertCategories");
 			String categ = null;
 			Iterator<String> iter = Category.iterator();
 			while (iter.hasNext())
@@ -446,6 +490,7 @@ public class Item extends HttpServlet{
 		        		);
 				state.setString(1, categ);
 				set = state.executeQuery();
+				//if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 				while (set.next())
 				{
 					state = link.GetState();
@@ -456,14 +501,22 @@ public class Item extends HttpServlet{
 					state.setLong(1, ItemID);
 					state.setLong(2, set.getLong("category_id"));
 					state.executeUpdate();
+					if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 				}
+				if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 			}
-
+			System.out.println("OUT InsertCategories");
 	    }
 		catch(SQLException ex)
 	    {
 	    	ex.printStackTrace();
 	    }
+		finally
+		{
+	        //if (set != null) try { set.close(); } catch (SQLException logOrIgnore) {}
+	        if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
+	        //if (conn != null) try { conn.close(); } catch (SQLException logOrIgnore) {}
+		}
 
 	}
 
@@ -473,6 +526,7 @@ public class Item extends HttpServlet{
 
 		try
 	    {
+			System.out.println("1 UpdateCategories");
 			state = link.GetState();
 			state = (link.GetCon()).prepareStatement(
 	        		"DELETE FROM item_category "
@@ -480,8 +534,9 @@ public class Item extends HttpServlet{
 	        		);
 			state.setLong(1, ItemID);
 			state.executeUpdate();
+			if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 
-
+			System.out.println("2 UpdateCategories");
 			String categ = null;
 			Iterator<String> iter = Category.iterator();
 			while (iter.hasNext())
@@ -495,8 +550,11 @@ public class Item extends HttpServlet{
 		        		);
 				state.setString(1, categ);
 				set = state.executeQuery();
+				//if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
+				System.out.println("3 UpdateCategories");
 				while (set.next())
 				{
+					System.out.println("4 UpdateCategories");
 					state = link.GetState();
 					state = (link.GetCon()).prepareStatement(
 			        		"INSERT INTO ted.item_category "
@@ -505,14 +563,23 @@ public class Item extends HttpServlet{
 					state.setLong(1, ItemID);
 					state.setLong(2, set.getLong("category_id"));
 					state.executeUpdate();
+					if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
+					System.out.println("5 UpdateCategories");
 				}
+				if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 			}
-
+			System.out.println("OUT UpdateCategories");
 	    }
 		catch(SQLException ex)
 	    {
 	    	ex.printStackTrace();
 	    }
+		finally
+		{
+	        //if (set != null) try { set.close(); } catch (SQLException logOrIgnore) {}
+	        if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
+	        //if (conn != null) try { conn.close(); } catch (SQLException logOrIgnore) {}
+		}
 
 	}
 
@@ -536,6 +603,12 @@ public class Item extends HttpServlet{
 	    {
 	    	ex.printStackTrace();
 	    }
+		finally
+		{
+	        //if (set != null) try { set.close(); } catch (SQLException logOrIgnore) {}
+	        if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
+	        //if (conn != null) try { conn.close(); } catch (SQLException logOrIgnore) {}
+		}
 	}
 
 	public void importLiveness(int num, String Seller_UserID)
@@ -557,6 +630,12 @@ public class Item extends HttpServlet{
 	    {
 	    	ex.printStackTrace();
 	    }
+		finally
+		{
+	        //if (set != null) try { set.close(); } catch (SQLException logOrIgnore) {}
+	        if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
+	        //if (conn != null) try { conn.close(); } catch (SQLException logOrIgnore) {}
+		}
 	}
 
 
@@ -576,6 +655,7 @@ public class Item extends HttpServlet{
 	        		);
 			state.setLong(1, itemid);
 			ResultSet item_cat = state.executeQuery();
+			//if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 
 			while(item_cat.next())
 			{
@@ -588,11 +668,14 @@ public class Item extends HttpServlet{
 		        		);
 				state.setLong(1, category_id);
 				ResultSet value_set = state.executeQuery();
+				//if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 				while(value_set.next())
 				{
 					categories.add(value_set.getString("value"));
 				}
+				if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 			}
+			if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 
 
 
@@ -601,6 +684,12 @@ public class Item extends HttpServlet{
 	    {
 	    	ex.printStackTrace();
 	    }
+		finally
+		{
+	        //if (set != null) try { set.close(); } catch (SQLException logOrIgnore) {}
+	        if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
+	        //if (conn != null) try { conn.close(); } catch (SQLException logOrIgnore) {}
+		}
 
 		return categories;
 	}
@@ -611,6 +700,8 @@ public class Item extends HttpServlet{
 
 		Seller sel = null;
 		int rate = 0;
+		ResultSet user_item = null;
+		ResultSet value_set = null;
 
 		try
 	    {
@@ -621,7 +712,8 @@ public class Item extends HttpServlet{
 	        		+ "WHERE item_id=?"
 	        		);
 			state.setLong(1, itemid);
-			ResultSet user_item = state.executeQuery();
+			user_item = state.executeQuery();
+			//if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 
 			while(user_item.next())
 			{
@@ -633,14 +725,17 @@ public class Item extends HttpServlet{
 		        		+ "WHERE username=?"
 		        		);
 				state.setString(1, username);
-				ResultSet value_set = state.executeQuery();
+				value_set = state.executeQuery();
+				//if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 				while(value_set.next())
 				{
 					rate = value_set.getInt("value");
 				}
 
 				sel = new Seller(rate,username);
+				if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 			}
+			if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 
 
 
@@ -649,6 +744,13 @@ public class Item extends HttpServlet{
 	    {
 	    	ex.printStackTrace();
 	    }
+		finally
+		{
+	        //if (user_item != null) try { user_item.close(); } catch (SQLException logOrIgnore) {}
+	        //if (value_set != null) try { value_set.close(); } catch (SQLException logOrIgnore) {}
+	        if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
+	        //if (conn != null) try { conn.close(); } catch (SQLException logOrIgnore) {}
+		}
 
 		return sel;
 	}
@@ -658,6 +760,8 @@ public class Item extends HttpServlet{
 	{
 
 		List<Bid> bids = new ArrayList<Bid>();
+		ResultSet loc_set = null;
+		ResultSet item_bids = null;
 
 		try
 	    {
@@ -668,7 +772,7 @@ public class Item extends HttpServlet{
 	        		+ "WHERE item_id=?"
 	        		);
 			state.setLong(1, itemid);
-			ResultSet item_bids = state.executeQuery();
+			item_bids = state.executeQuery();
 
 			while(item_bids.next())
 			{
@@ -682,7 +786,7 @@ public class Item extends HttpServlet{
 		        		+ "WHERE u.username=? AND b.username=u.username"
 		        		);
 				state.setString(1, username);
-				ResultSet loc_set = state.executeQuery();
+				loc_set = state.executeQuery();
 				while(loc_set.next())
 				{
 					String location = loc_set.getString("city");
@@ -701,6 +805,14 @@ public class Item extends HttpServlet{
 	    {
 	    	ex.printStackTrace();
 	    }
+		finally
+		{
+	        //if (item_bids != null) try { item_bids.close(); } catch (SQLException logOrIgnore) {}
+	        //if (loc_set != null) try { loc_set.close(); } catch (SQLException logOrIgnore) {}
+	        if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
+	        //if (conn != null) try { conn.close(); } catch (SQLException logOrIgnore) {}
+		}
+
 
 		return bids;
 	}
@@ -708,11 +820,11 @@ public class Item extends HttpServlet{
 
 	public void importNewCategories()
 	{
-		ResultSet set1;
+
 		try
 	    {
 		    int category_id = 0;
-	        link = new ConnectionDB();
+	        //link = new ConnectionDB();
 	        state = link.GetState();
 	        state = (link.GetCon()).prepareStatement(
 	        		"SELECT * "+
@@ -720,7 +832,8 @@ public class Item extends HttpServlet{
 	        		"ORDER BY category_id DESC "+
 	        		"LIMIT 1"
 	        		);
-	        set1 = state.executeQuery();
+	        ResultSet set1 = state.executeQuery();
+	        //if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 	        if(set1.next())
 	        {
 	        	category_id = (set1.getInt("category_id"));
@@ -730,6 +843,7 @@ public class Item extends HttpServlet{
 
 	        for(String cat_value : Category)
 	        {
+	        	System.out.println(" 1 Insert new category for loop "+cat_value);
 		        state = link.GetState();
 		        state = (link.GetCon()).prepareStatement(
 		        		"SELECT * "+
@@ -738,14 +852,21 @@ public class Item extends HttpServlet{
 		        		);
 		        state.setString(1, cat_value);
 		        set1 = state.executeQuery();
+		        //if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 
-		        set1.first();
-		        if(set.getString("value") == null)
+		        System.out.println(" 2 Insert new category for loop "+cat_value);
+		        //set1.first();
+		        System.out.println(" 3 Insert new category for loop "+cat_value);
+		        if(set1.next())
 		        {
+		        	if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
+		        	System.out.println(" 3.1 Insert new category for loop "+cat_value);
 		        	continue;
 		        }
 		        else
 		        {
+		        	if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
+		        	System.out.println(" 3.2 Insert new category for loop "+cat_value);
 		        	System.out.println("import Item");
 					state = link.GetState();
 					state = (link.GetCon()).prepareStatement(
@@ -756,6 +877,7 @@ public class Item extends HttpServlet{
 					state.setString(2, cat_value);
 
 					state.executeUpdate();
+					if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 					category_id++;
 		        }
 	        }
@@ -764,32 +886,52 @@ public class Item extends HttpServlet{
 	    {
 	    	ex.printStackTrace();
 	    }
+		finally
+		{
+	        //if (set != null) try { set.close(); } catch (SQLException logOrIgnore) {}
+	        if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
+	        //if (conn != null) try { conn.close(); } catch (SQLException logOrIgnore) {}
+		}
 	}
 
 	public void importNewBids(Bids bids)
 	{
 		List<Bid> bid_list = bids.getBids();
+		System.out.println("importNewBids");
 
-		for(Bid bidElem : bid_list)
+		if(bid_list != null)
 		{
-			Bidder bidder = bidElem.getBidder();
-			String count = new String(bidder.getCountry());
-			String loc = new String(bidder.getLocation());
-			int rate = bidder.getRating();
-			String user = new String(bidder.getUsername());
-			this.insertNewUser(count, loc, user);
-			this.insertNewBidder(user, rate);
+			for(Bid bidElem : bid_list)
+			{
+				System.out.println("FOR bidElem");
 
-			String time = bidElem.getTime();
-			float price = bidElem.getAmount();
+				String count = null;
+				String loc = null;
 
-			this.insertBid(price, user, time);
+				Bidder bidder = bidElem.getBidder();
+				if(bidder.getCountry()!=null) count = new String(bidder.getCountry());
+				if(bidder.getLocation()!=null) loc = new String(bidder.getLocation());
+				int rate = bidder.getRating();
+				String user = new String(bidder.getUsername());
+
+				System.out.println("Import BIDS insertNewUser");
+				this.insertNewUser(count, loc, user);
+
+				System.out.println("Import BIDS insertNewBidder");
+				this.insertNewBidder(user, rate);
+
+				String time = bidElem.getTime();
+				float price = bidElem.getAmount();
+
+				System.out.println("Import BIDS insertBid");
+				this.insertBid(price, user, time);
+			}
 		}
 	}
 
 	public void insertNewUser(String country, String location,String user)
 	{
-		ResultSet set1;
+		ResultSet set1 = null;
 		try
 	    {
 			state = link.GetState();
@@ -800,30 +942,41 @@ public class Item extends HttpServlet{
 	        		);
 	        state.setString(1, user);
 	        set1 = state.executeQuery();
+	        //if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 
-	        set1.first();
-	        if(set.getString("username") != null)
+	        //set1.first();
+	        if(set1.next())
+	        {
+
+	        }
+	        else
 	        {
 	        	System.out.println("import New User");
 				state = link.GetState();
-				state = (link.GetCon()).prepareStatement("INSERT INTO ted.users VALUES (?,1,demo,demo,demo,demo,demo,demo,?,?,demo,1,'user')");
+				state = (link.GetCon()).prepareStatement("INSERT INTO ted.users VALUES (?,1,'demo','demo','demo','demo','demo','demo',?,?,'demo',1,'user')");
 
 		        state.setString(1,user);
 		        state.setString(2,location);
 		        state.setString(3,country);
 
 		        state.executeUpdate();
+		       // if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 	        }
 	    }
 		catch(SQLException ex)
 	    {
 	    	ex.printStackTrace();
 	    }
+		finally
+		{
+	        //if (set1 != null) try { set1.close(); } catch (SQLException logOrIgnore) {}
+	        if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
+	        //if (conn != null) try { conn.close(); } catch (SQLException logOrIgnore) {}
+		}
 	}
 
 	public void insertNewUser(String user)
 	{
-		ResultSet set1;
 		try
 	    {
 			state = link.GetState();
@@ -833,14 +986,15 @@ public class Item extends HttpServlet{
 	        		"WHERE username=?"
 	        		);
 	        state.setString(1, user);
-	        set1 = state.executeQuery();
+	        ResultSet set1 = state.executeQuery();
 
-	        set1.first();
-	        if(set.getString("username") != null)
+	        //set1.first();
+	        if(set1.next()){}
+	        else
 	        {
 	        	System.out.println("import New User");
 				state = link.GetState();
-				state = (link.GetCon()).prepareStatement("INSERT INTO ted.users VALUES (?,1,demo,demo,demo,demo,demo,demo,demo,demo,demo,1,'user')");
+				state = (link.GetCon()).prepareStatement("INSERT INTO ted.users VALUES (?,1,'demo','demo','demo','demo','demo','demo','demo','demo','demo',1,'user')");
 
 		        state.setString(1,user);
 
@@ -851,11 +1005,17 @@ public class Item extends HttpServlet{
 	    {
 	    	ex.printStackTrace();
 	    }
+		finally
+		{
+	        //if (set1 != null) try { set1.close(); } catch (SQLException logOrIgnore) {}
+	        if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
+	        //if (conn != null) try { conn.close(); } catch (SQLException logOrIgnore) {}
+		}
 	}
 
 	public void insertNewBidder(String user,int rate)
 	{
-		ResultSet set1;
+		ResultSet set1 = null;
 		try
 	    {
 			state = link.GetState();
@@ -866,20 +1026,10 @@ public class Item extends HttpServlet{
 	        		);
 	        state.setString(1, user);
 	        set1 = state.executeQuery();
+	        //if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 
-	        set1.first();
-	        if(set.getString("username") != null)
-	        {
-	        	System.out.println("import New Bidder");
-				state = link.GetState();
-				state = (link.GetCon()).prepareStatement("INSERT INTO ted.bidders VALUES (?,?)");
-
-		        state.setString(1,user);
-		        state.setInt(2,rate);
-
-		        state.executeUpdate();
-	        }
-	        else
+	        //set1.first();
+	        if(set1.next())
 	        {
 	        	state = link.GetState();
 				state = (link.GetCon()).prepareStatement("UPDATE ted.bidders SET value=? WHERE username=?");
@@ -888,17 +1038,37 @@ public class Item extends HttpServlet{
 		        state.setString(2,user);
 
 		        state.executeUpdate();
+		        //if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
+	        }
+	        else
+	        {
+
+		        System.out.println("import New Bidder");
+				state = link.GetState();
+				state = (link.GetCon()).prepareStatement("INSERT INTO ted.bidders VALUES (?,?)");
+
+		        state.setString(1,user);
+		        state.setInt(2,rate);
+
+		        state.executeUpdate();
+		        //if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 	        }
 	    }
 		catch(SQLException ex)
 	    {
 	    	ex.printStackTrace();
 	    }
+		finally
+		{
+	        //if (set1 != null) try { set1.close(); } catch (SQLException logOrIgnore) {}
+	        if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
+	        //if (conn != null) try { conn.close(); } catch (SQLException logOrIgnore) {}
+		}
 	}
 
 	public void insertBid(float price, String user, String time)
 	{
-		ResultSet set1;
+		ResultSet set1 = null;
 		try
 	    {
 			System.out.println("import New Bidder");
@@ -911,12 +1081,19 @@ public class Item extends HttpServlet{
 	        state.setString(4,time);
 
 	        state.executeUpdate();
+	        //if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 
 	    }
 		catch(SQLException ex)
 	    {
 	    	ex.printStackTrace();
 	    }
+		finally
+		{
+	        //if (set1 != null) try { set1.close(); } catch (SQLException logOrIgnore) {}
+	        if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
+	        //if (conn != null) try { conn.close(); } catch (SQLException logOrIgnore) {}
+		}
 	}
 
 	public void importNewSeller(Seller seller)
@@ -931,7 +1108,6 @@ public class Item extends HttpServlet{
 
 	public void insertNewSeller(String user,int rate)
 	{
-		ResultSet set1;
 		try
 	    {
 			state = link.GetState();
@@ -941,10 +1117,23 @@ public class Item extends HttpServlet{
 	        		"WHERE username=?"
 	        		);
 	        state.setString(1, user);
-	        set1 = state.executeQuery();
+	        ResultSet set1 = state.executeQuery();
+	        //if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 
-	        set1.first();
-	        if(set.getString("username") != null)
+	        //set1.first();
+	        if(set1.next())
+	        {
+	        	state = link.GetState();
+				state = (link.GetCon()).prepareStatement("UPDATE ted.sellers SET value=? WHERE username=?");
+
+		        state.setInt(1,rate);
+		        state.setString(2,user);
+
+		        state.executeUpdate();
+		        //if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
+
+	        }
+	        else
 	        {
 	        	System.out.println("import New Seller");
 				state = link.GetState();
@@ -954,22 +1143,19 @@ public class Item extends HttpServlet{
 		        state.setInt(2,rate);
 
 		        state.executeUpdate();
-	        }
-	        else
-	        {
-	        	state = link.GetState();
-				state = (link.GetCon()).prepareStatement("UPDATE ted.sellers SET value=? WHERE username=?");
-
-		        state.setInt(1,rate);
-		        state.setString(2,user);
-
-		        state.executeUpdate();
+		        //if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 	        }
 	    }
 		catch(SQLException ex)
 	    {
 	    	ex.printStackTrace();
 	    }
+		finally
+		{
+	       // if (set1 != null) try { set1.close(); } catch (SQLException logOrIgnore) {}
+	        if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
+	        //if (conn != null) try { conn.close(); } catch (SQLException logOrIgnore) {}
+		}
 	}
 }
 

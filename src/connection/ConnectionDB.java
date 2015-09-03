@@ -44,4 +44,19 @@ public class ConnectionDB {
 		return con;
 	}
 
+	public void Close_connection() throws SQLException
+	{
+		con.close();
+	}
+
+	public void Close_statement() throws SQLException
+	{
+		state.close();
+	}
+
+	public void Close_resultset() throws SQLException
+	{
+		set.close();
+	}
+
 }
