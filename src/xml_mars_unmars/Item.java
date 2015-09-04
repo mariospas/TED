@@ -1313,7 +1313,7 @@ public class Item extends HttpServlet{
 					int user_cat_value = user_cat.get(user_cat_name);
 					//System.out.println(i+" user_cat_value : " + user_cat_value+" cat name: "+user_cat_name);
 					//j++;
-					sum = sum + Math.pow((user_cat_value - value.getValue()), 2);
+					sum = sum + Math.pow((user_cat_value - value.getValue()), 2);  //euklidia norma
 					//System.out.println(j+" cat : " + value.getKey()+" "+value.getValue());
 				}
 				double square = Math.sqrt(sum);
