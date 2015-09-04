@@ -11,10 +11,13 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -44,6 +47,42 @@ import category.*;
  */
 
 
+class UserScore implements Comparator<UserScore>
+{
+	String username = null;
+	double score = 0.0;
+
+	public UserScore(String user,double scor)
+	{
+		username = new String(user);
+		score = scor;
+	}
+
+	public UserScore()
+	{	}
+
+	public String getName() { return username; }
+	public double getScore() { return score; }
+
+	public String printUserScore()
+	{
+		return "username = "+username+" score = "+score;
+	}
+
+	@Override
+	public int compare(UserScore o1, UserScore o2) {
+		System.out.println(o1.username+" "+o1.score+"      "+o2.username+" "+o2.score);
+        if(o1.score < o2.score) return -1;
+        else if(o1.score > o2.score) return 1;
+        return 0;
+	}
+
+
+}
+
+
+
+
 @SuppressWarnings("serial")
 public class Item extends HttpServlet{
 
@@ -67,6 +106,7 @@ public class Item extends HttpServlet{
 	String Description = null;
 	String Photo_Url = null;
 	String download_url = null;
+	LinkedList<UserScore> list = null;
 
 	ConnectionDB link;
 
@@ -334,7 +374,7 @@ public class Item extends HttpServlet{
 
 	public Item(String username,int num)
 	{
-		LinkedHashMap<String, Integer> catPerUser = new LinkedHashMap<String,Integer>();
+
 		LinkedHashMap<String, LinkedHashMap<String, Integer>> all_user_cat = new LinkedHashMap<String,LinkedHashMap<String, Integer>>();
 		Category cat = new Category();
 
@@ -353,6 +393,8 @@ public class Item extends HttpServlet{
 
 			while(set.next())    //gia olous tous xrhstes
 			{
+				LinkedHashMap<String, Integer> catPerUser = new LinkedHashMap<String,Integer>();
+				boolean flag = false; //gia to an exei kanei bid h oxi
 				ResultSet set_cat = cat.get_categories();
 				while(set_cat.next())
 				{
@@ -372,6 +414,7 @@ public class Item extends HttpServlet{
 
 				while(set1.next())    //gia ola ta item pou exei kanei bid o idios xthsths
 				{
+					flag = true;
 					long item_id = set1.getLong("item_id");
 					state = link.GetState();
 					state = (link.GetCon()).prepareStatement(
@@ -388,14 +431,22 @@ public class Item extends HttpServlet{
 						//int count = catPerUser.get(cat_value);
 						//count++;
 						catPerUser.put(cat_value, catPerUser.get(cat_value) + 1);
-						System.out.println("user = "+user+" bids this item = "+item_id+" in this category = "+cat_value+" with value = "+catPerUser.get(cat_value));
+						//System.out.println("user = "+user+" bids this item = "+item_id+" in this category = "+cat_value+" with value = "+catPerUser.get(cat_value));
 
 					}
 				}
-				all_user_cat.put(user, catPerUser);
+				if(user.equals(username)) System.out.println("******* user = "+user+" *******");
+				if(flag) all_user_cat.put(user, catPerUser);
 			}
 
-			this.findTopKNeigh(username, num, all_user_cat);
+			list = this.findTopKNeigh(username, num, all_user_cat);
+			if(list != null)
+			{
+				for(UserScore user_score : list)
+				{
+					System.out.println(user_score.printUserScore());
+				}
+			}
 
 	    }
 		catch(SQLException ex)
@@ -1236,21 +1287,63 @@ public class Item extends HttpServlet{
 		}
 	}
 
-	public void findTopKNeigh(String username,int K, LinkedHashMap<String, LinkedHashMap<String, Integer>> all_user_cat)
+	public LinkedList<UserScore> findTopKNeigh(String username,int K, LinkedHashMap<String, LinkedHashMap<String, Integer>> all_user_cat)
 	{
 		int i=0;
-		int j;
-		LinkedHashMap<String, Integer> user_cat = all_user_cat.get(username);
-		for (Map.Entry<String, LinkedHashMap<String, Integer>> entry : all_user_cat.entrySet()) {
-			i++;
-			System.out.println(i+" Key : " + entry.getKey());
-			j=0;
-			for (Map.Entry<String, Integer> value : entry.getValue().entrySet())
+		//int j;
+		LinkedHashMap<String, Integer> user_cat = null;
+		user_cat = all_user_cat.get(username);
+		LinkedList<UserScore> neigh_list = null;
+		if(user_cat != null)
+		{
+			neigh_list = new LinkedList<UserScore>();
+			int size = K;
+			for (Map.Entry<String, LinkedHashMap<String, Integer>> entry : all_user_cat.entrySet()) // username
 			{
-				j++;
-				System.out.println(j+" cat : " + value.getKey()+" "+value.getValue());
+				i++;
+				//System.out.println(i+" Key : " + entry.getKey());
+				//j=0;
+				if(username.equals(entry.getKey())) continue;
+
+				Iterator<String> it = user_cat.keySet().iterator();
+				double sum = 0.0;
+				for (Map.Entry<String, Integer> value : entry.getValue().entrySet()) //kathgoria kai agores ana username
+				{
+					String user_cat_name = it.next();
+					int user_cat_value = user_cat.get(user_cat_name);
+					//System.out.println(i+" user_cat_value : " + user_cat_value+" cat name: "+user_cat_name);
+					//j++;
+					sum = sum + Math.pow((user_cat_value - value.getValue()), 2);
+					//System.out.println(j+" cat : " + value.getKey()+" "+value.getValue());
+				}
+				double square = Math.sqrt(sum);
+				System.out.println(i+" user : " + entry.getKey()+" in common points = "+square+" with user = "+username);
+
+				UserScore user_score = new UserScore(entry.getKey(), square);
+				if(size != 0)
+				{
+					size--;
+					neigh_list.add(user_score);
+					if(size == 0)
+					{
+						Collections.sort(neigh_list, new UserScore());
+					}
+				}
+				else if(size == 0)
+				{
+					UserScore last = neigh_list.getLast();
+					if(user_score.getScore() < last.getScore())
+					{
+						neigh_list.removeLast();
+						neigh_list.addLast(user_score);
+						Collections.sort(neigh_list, new UserScore());
+					}
+				}
 			}
 		}
+		else System.out.println("NULL");
+
+		return neigh_list;
 	}
 
 }
