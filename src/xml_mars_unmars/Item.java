@@ -98,10 +98,10 @@ public class Item extends HttpServlet{
 	//Bids/Bid/Amount
 	String Location = null;
 	String Country = null;
-	//java.sql.Date Started;
-	//java.sql.Date Ends;
-	String Started = null;
-	String Ends = null;
+	java.sql.Timestamp Started;
+	java.sql.Timestamp Ends;
+	//String Started = null;
+	//String Ends = null;
 	String Seller_UserID = null;
 	String Description = null;
 	String Photo_Url = null;
@@ -115,7 +115,7 @@ public class Item extends HttpServlet{
 
 	public Item(String name,ArrayList<String> category,float currently,float buy_price,
 				float first_bid,String location,String country,String photo_url,
-				String started,String ends,String seller_userid,String description)
+				java.sql.Timestamp started,java.sql.Timestamp ends,String seller_userid,String description)
 	{
 		//ItemID;
 		Name = new String(name);
@@ -125,8 +125,8 @@ public class Item extends HttpServlet{
 		First_Bid = first_bid;
 		Location = new String(location);
 		Country = new String(country);
-		Started = new String(started);
-		Ends = new String(ends);
+		Started = started;
+		Ends = ends;
 		Seller_UserID = new String(seller_userid);
 		Description = new String(description);
 		if(photo_url == null) Photo_Url = null;
@@ -160,7 +160,7 @@ public class Item extends HttpServlet{
 
 	public Item(long item_id,String name,ArrayList<String> category,float currently,
 			float buy_price,float first_bid,String location,String country,String photo_url,
-			String started,String ends,String seller_userid,String description)
+			java.sql.Timestamp started,java.sql.Timestamp ends,String seller_userid,String description)
 	{
 		ItemID = item_id;
 		Name = new String(name);
@@ -170,8 +170,8 @@ public class Item extends HttpServlet{
 		First_Bid = first_bid;
 		Location = new String(location);
 		Country = new String(country);
-		Started = new String(started);
-		Ends = new String(ends);
+		Started = started;
+		Ends = ends;
 		Seller_UserID = new String(seller_userid);
 		Description = new String(description);
 		if(photo_url == null) Photo_Url = null;
@@ -239,8 +239,15 @@ public class Item extends HttpServlet{
 
 				location = set.getString("location");
 				country = set.getString("country");
-				started = set.getString("start_date");
-				ends = set.getString("end_date");
+
+				java.sql.Timestamp stamp = set.getTimestamp("start_date");
+				Date date = stamp;
+				started = date.toString();
+
+				stamp = set.getTimestamp("end_date");
+				date = stamp;
+				ends = date.toString();
+
 				System.out.println("~~ 5 ~~");
 				if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 
@@ -339,13 +346,16 @@ public class Item extends HttpServlet{
 		        	System.out.println("Item ID = "+itemElem.getItemID());
 		        	ItemID = itemElem.getItemID();
 					Name = itemElem.getName();
-					Currently = itemElem.getCurrently();
-					Buy_Price = itemElem.getBuy_Price();
-					First_Bid = itemElem.getFirst_Bid();
+					String string = itemElem.getCurrently();
+					if(string != null) Currently = Float.parseFloat(string.substring(1));
+					string = itemElem.getBuy_Price();
+					if(string != null) Buy_Price = Float.parseFloat(string.substring(1));
+					string = itemElem.getFirst_Bid();
+					if(string != null) First_Bid = Float.parseFloat(string.substring(1));
 					Location = itemElem.getLocation();
 					Country = itemElem.getCountry();
-					Started = itemElem.getStartedDate();
-					Ends = itemElem.getEndsDate();
+					Started = this.splitterDateTime(itemElem.getStartedDate());
+					Ends = this.splitterDateTime(itemElem.getEndsDate());
 					Description = itemElem.getDescription();
 					Photo_Url = itemElem.getPhoto_Url();
 					Category = itemElem.getCategory();
@@ -503,8 +513,8 @@ public class Item extends HttpServlet{
 				state.setFloat(5, First_Bid);
 				state.setString(6, Location);
 				state.setString(7, Country);
-				state.setString(8, Started);
-				state.setString(9, Ends);
+				state.setTimestamp(8, Started);
+				state.setTimestamp(9, Ends);
 				state.setString(10, Description);
 				state.setString(11, Photo_Url);
 
@@ -548,8 +558,8 @@ public class Item extends HttpServlet{
 				state.setFloat(4, First_Bid);
 				state.setString(5, Location);
 				state.setString(6, Country);
-				state.setString(7, Started);
-				state.setString(8, Ends);
+				state.setTimestamp(7, Started);
+				state.setTimestamp(8, Ends);
 				state.setString(9, Description);
 				state.setString(10, Photo_Url);
 				state.setLong(11, ItemID);
@@ -575,8 +585,8 @@ public class Item extends HttpServlet{
 				state.setFloat(4, First_Bid);
 				state.setString(5, Location);
 				state.setString(6, Country);
-				state.setString(7, Started);
-				state.setString(8, Ends);
+				state.setTimestamp(7, Started);
+				state.setTimestamp(8, Ends);
 				state.setString(9, Description);
 				state.setLong(10, ItemID);
 
@@ -902,10 +912,13 @@ public class Item extends HttpServlet{
 	        		);
 			state.setLong(1, itemid);
 			item_bids = state.executeQuery();
-
+			//System.out.println("before while bid");
 			while(item_bids.next())
 			{
-				String time = item_bids.getString("date_time");
+				java.sql.Timestamp stamp = item_bids.getTimestamp("date_time");
+				Date date = stamp;
+				String time = date.toString();
+				//System.out.println("time = "+time);
 				float amount = item_bids.getFloat("price");
 				String username = item_bids.getString("username");
 				state = link.GetState();
@@ -1049,8 +1062,11 @@ public class Item extends HttpServlet{
 				System.out.println("Import BIDS insertNewBidder");
 				this.insertNewBidder(user, rate);
 
-				String time = bidElem.getTime();
-				float price = bidElem.getAmount();
+				java.sql.Timestamp time = this.splitterDateTime(bidElem.getTime());
+
+				float price = 0;
+				String string = bidElem.getAmount();
+				if(string != null) price = Float.parseFloat(string.substring(1));
 
 				System.out.println("Import BIDS insertBid");
 				this.insertBid(price, user, time);
@@ -1195,7 +1211,7 @@ public class Item extends HttpServlet{
 		}
 	}
 
-	public void insertBid(float price, String user, String time)
+	public void insertBid(float price, String user, java.sql.Timestamp time)
 	{
 		ResultSet set1 = null;
 		try
@@ -1207,7 +1223,7 @@ public class Item extends HttpServlet{
 	        state.setLong(1,ItemID);
 	        state.setFloat(2,price);
 	        state.setString(3,user);
-	        state.setString(4,time);
+	        state.setTimestamp(4,time);
 
 	        state.executeUpdate();
 	        //if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
@@ -1346,6 +1362,28 @@ public class Item extends HttpServlet{
 		return neigh_list;
 	}
 
+
+	public java.sql.Timestamp splitterDateTime(String set)
+	{
+		java.sql.Timestamp date_sql = null;
+
+		String[] parts = set.split(" ");
+		String date = new String(parts[0]);
+		String time = new String(parts[1]);
+
+		String[] date_parts = date.split("-");
+		String proper_date = "20"+date_parts[2]+"-"+date_parts[0]+"-"+date_parts[1]+time;
+
+		Date java_date;
+		try {
+			java_date = new SimpleDateFormat("yyyy-MMM-ddhh:mm").parse(proper_date);
+			date_sql = new java.sql.Timestamp(java_date.getTime());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		return date_sql;
+	}
 }
 
 @XmlRootElement(name="Items")
@@ -1382,13 +1420,13 @@ class ItemXML{
 	ArrayList<String> Category = null;
 
 	@XmlElement(name="Currently")
-	float Currently = 0;
+	String Currently = null;
 
 	@XmlElement(name="Buy_Price")
-	float Buy_Price = 0;
+	String Buy_Price = null;
 
 	@XmlElement(name="First_Bid")
-	float First_Bid = 0;
+	String First_Bid = null;
 
 	@XmlElement(name="Number_of_Bids")
 	int Number_of_Bids = 0;  // upologizo otan thelo apo sunarthsh
@@ -1425,9 +1463,9 @@ class ItemXML{
     {
     	Name = new String(name);
 		Category = new ArrayList<String>(category);
-		Currently = currently;
-		Buy_Price = buy_price;
-		First_Bid = first_bid;
+		Currently = Float.toString(currently);
+		Buy_Price = Float.toString(buy_price);
+		First_Bid = Float.toString(first_bid);
 		Number_of_Bids = num_of_bids;
 		Location = new String(location);
 		Country = new String(country);
@@ -1460,17 +1498,17 @@ class ItemXML{
     	return Category;
     }
 
-    public float getCurrently()
+    public String getCurrently()
     {
     	return Currently;
     }
 
-    public float getBuy_Price()
+    public String getBuy_Price()
     {
     	return Buy_Price;
     }
 
-    public float getFirst_Bid()
+    public String getFirst_Bid()
     {
     	return First_Bid;
     }
@@ -1554,13 +1592,13 @@ class Bid{
 	@XmlElement(name="Time")
 	String Time;
 	@XmlElement(name="Amount")
-	float Amount;
+	String Amount;
 
 	public Bid(Bidder bider,String time,float amount)
 	{
 		bidder = bider;
 		Time = new String(time);
-		Amount = amount;
+		Amount = Float.toString(amount);
 	}
 	public Bid(){
     }
@@ -1575,7 +1613,7 @@ class Bid{
 		return Time;
 	}
 
-	public float getAmount()
+	public String getAmount()
 	{
 		return Amount;
 	}

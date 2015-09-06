@@ -1,3 +1,4 @@
+<%@page import="java.util.Date"%>
 <%@page import="org.apache.commons.fileupload.FileItem"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -32,10 +33,12 @@
 		String latlong = null;
 		String country = null;
 		java.util.Date date = new SimpleDateFormat("MM-dd-yyyy").parse("2015-01-01");
-		//java.sql.Date start_date = new java.sql.Date(date.getTime()) ;
-		//java.sql.Date end_date = new java.sql.Date(date.getTime());
+		java.sql.Timestamp start_date_sql = null ;
+		java.sql.Timestamp end_date_sql = null;
 		String start_date = null;
 		String end_date = null;
+		String start_time = null;
+		String end_time = null;
 		String description = null;
 		ArrayList<String> categoriesList = new ArrayList<String>();
 		String photo_url = null;
@@ -68,15 +71,36 @@
 		        else if(fieldname.equals("country")) country = item.getString("UTF-8");
 		        else if(fieldname.equals("start_date"))
 		        {
-		        	//date = new SimpleDateFormat("yyyy-dd-MM").parse(item.getString("UTF-8"));
+		        	//date = new SimpleDateFormat("yyyy-MM-dd").parse(item.getString("UTF-8"));
 		        	//start_date = new java.sql.Date(date.getTime());
 		        	start_date = item.getString("UTF-8");
+		        	//out.println(start_date);
+		        	//out.println(date);
+		        }
+		        else if(fieldname.equals("start_time"))
+		        {
+		        	start_time = item.getString("UTF-8");
+		        	date = new SimpleDateFormat("yyyy-MM-ddhh:mm").parse(start_date+item.getString("UTF-8"));
+		        	start_date_sql = new java.sql.Timestamp(date.getTime());
+		        	//out.println(start_time);
+		        	//out.println(date);
+		        	//out.println(start_date_sql);
 		        }
 		        else if(fieldname.equals("end_date"))
 		        {
 		        	//date = new SimpleDateFormat("yyyy-dd-MM").parse(item.getString("UTF-8"));
 		        	//end_date = new java.sql.Date(date.getTime());
 		        	end_date = item.getString("UTF-8");
+		        }
+		        else if(fieldname.equals("end_time"))
+		        {
+		        	end_time = item.getString("UTF-8");
+		        	date = new SimpleDateFormat("yyyy-MM-ddhh:mm").parse(end_date+item.getString("UTF-8"));
+		        	end_date_sql = new java.sql.Timestamp(date.getTime());
+		        	//out.println(start_time);
+		        	//out.println(date);
+		        	//out.println(end_date_sql);
+		        	//out.println(end_time);
 		        }
 		        else if(fieldname.equals("size")) continue;
 		        else if(fieldname.equals("description")) description = item.getString("UTF-8");
@@ -125,7 +149,7 @@
 		if(sub_button.equals("Αποθήκευση"))
 		{
 			Item item = new Item(name,categoriesList,currently_price,buy_price,first_bid,latlong,country,
-								photo_url,start_date,end_date,log.getName(),description);
+								photo_url,start_date_sql,end_date_sql,log.getName(),description);
 
 			item.importItem();
 			item.insertCategories();
@@ -141,7 +165,7 @@
 		{
 			long item_id = (long) session.getAttribute("item");
 			Item item = new Item(item_id,name,categoriesList,currently_price,buy_price,first_bid,latlong,country,
-					photo_url,start_date,end_date,log.getName(),description);
+					photo_url,start_date_sql,end_date_sql,log.getName(),description);
 
 			item.updateItem();
 			item.updateCategories();

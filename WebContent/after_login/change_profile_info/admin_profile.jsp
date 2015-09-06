@@ -69,7 +69,7 @@
 			{
 %>
 				<div>
-					<p align="center"><a href="change_profile_info/confirmation.jsp">Επιβεβαίωση Χρήστη</a></p>
+					<p align="center"><a href="confirmation.jsp">Επιβεβαίωση Χρήστη</a></p>
 				</div>
 
 <%

@@ -79,11 +79,13 @@
                 <p><label>Χώρα :</label>
 				<input type="text" id="country" name="country" required/></p>
                 <br/>
-                <p><label>Ημερομηνία Έναρξης :</label>
+                <p><label>Ημερομηνία και Ώρα έναρξης :</label>
 				<input type="date" id="start_date" name="start_date" required /></p>
+				<input type="time" id="start_time" name="start_time" required /></p>
 				<br/>
-                <p><label>Ημερομηνία Τερματισμού :  :</label>
-				<input type="date" id="end_date" name="end_date" required /></p>
+                <p><label>Ημερομηνία και Ώρα Τερματισμού :  :</label>
+                <input type="date" id="end_date" name="end_date" required /></p>
+				<input type="time" id="end_time" name="end_time" required /></p>
 				<br/>
                 <p><label>* Φωτογραφία :</label>
                 <input type="hidden" name="size" value="1048576">
