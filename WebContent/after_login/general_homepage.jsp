@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="login_logout_process.*"%>
+<%@ page import="check_uti.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -15,6 +16,7 @@
 	LoginSession log = (LoginSession) session.getAttribute("log");
 	if(log != null)
 	{
+		DataCheck data_check = new DataCheck();
 		Item item = new Item(log.getName(),7);
 		out.println("<center><h1>Welcome: " + log.getName() + "</h1>");
 %>

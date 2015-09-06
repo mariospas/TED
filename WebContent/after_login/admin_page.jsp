@@ -18,6 +18,7 @@
 	}
 	else
 	{
+		DataCheck data_check = new DataCheck();
 		Users users = new Users();
 		ResultSet set = users.all_users();
 %>

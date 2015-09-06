@@ -15,6 +15,7 @@
 	LoginSession log = (LoginSession) session.getAttribute("log");
 	if(log.getType().equals("admin"))
 	{
+		DataCheck data_check = new DataCheck();
 		String name = request.getParameter("uname");
 		session.setAttribute("admin_user", name);
 		Profile prof = new Profile(name);
