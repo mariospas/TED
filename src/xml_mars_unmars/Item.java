@@ -106,7 +106,7 @@ public class Item extends HttpServlet{
 	String Description = null;
 	String Photo_Url = null;
 	String download_url = null;
-	LinkedList<UserScore> list = null;
+	LinkedList<String> list = null;
 
 	ConnectionDB link;
 
@@ -452,9 +452,9 @@ public class Item extends HttpServlet{
 			list = this.findTopKNeigh(username, num, all_user_cat);
 			if(list != null)
 			{
-				for(UserScore user_score : list)
+				for(String user_score : list)
 				{
-					System.out.println(user_score.printUserScore());
+					System.out.println(user_score);
 				}
 			}
 
@@ -1303,15 +1303,17 @@ public class Item extends HttpServlet{
 		}
 	}
 
-	public LinkedList<UserScore> findTopKNeigh(String username,int K, LinkedHashMap<String, LinkedHashMap<String, Integer>> all_user_cat)
+	public LinkedList<String> findTopKNeigh(String username,int K, LinkedHashMap<String, LinkedHashMap<String, Integer>> all_user_cat)
 	{
 		int i=0;
 		//int j;
 		LinkedHashMap<String, Integer> user_cat = null;
 		user_cat = all_user_cat.get(username);
 		LinkedList<UserScore> neigh_list = null;
+		LinkedList<String> neigh_username = null;
 		if(user_cat != null)
 		{
+			neigh_username = new LinkedList<String>();
 			neigh_list = new LinkedList<UserScore>();
 			int size = K;
 			for (Map.Entry<String, LinkedHashMap<String, Integer>> entry : all_user_cat.entrySet()) // username
@@ -1356,10 +1358,15 @@ public class Item extends HttpServlet{
 					}
 				}
 			}
+
+			for(UserScore elem: neigh_list)
+			{
+				neigh_username.add(elem.getName());
+			}
 		}
 		else System.out.println("NULL");
 
-		return neigh_list;
+		return neigh_username;
 	}
 
 
@@ -1384,6 +1391,8 @@ public class Item extends HttpServlet{
 
 		return date_sql;
 	}
+
+	public LinkedList<String> getListNeighUsers(){ return list; }
 }
 
 @XmlRootElement(name="Items")
