@@ -23,7 +23,8 @@
 		String item_name = request.getParameter("item");
 		//out.println("<p><b>"+item_name+"</b></p>");
 		long item_id = Long.parseLong(item_name);
-		Auctions auction = new Auctions(log.getName());
+		Auctions auction = new Auctions(log.getName(),item_id);
+		boolean b = auction.checkBidUser();
 
 		Category cat = new Category();
 		ResultSet item_set = auction.requested_item(item_id);
@@ -72,13 +73,24 @@
 						<p><%out.print(item_set.getString("description"));%>" required /></p>
 		                <br/>
 		    </div>
-		    <form method="post" action="confirm.jsp?item=<%out.print(item_id);%>" >
-			    <p><label>Δώστε μία Προσφορά :</label>
-				<input type="text" id="bid" name="bid" required/></p>
-	            <br/>
-	            <input TYPE="submit" name="sub_button" id="sub_button" title="Add data to the Database" value="Προσθήκη"/>
-		    </form>
 <%
+			if(b == false)
+			{
+%>
+			    <form method="post" action="confirm.jsp?item=<%out.print(item_id);%>" >
+				    <p><label>Δώστε μία Προσφορά :</label>
+					<input type="text" id="bid" name="bid" required/></p>
+		            <br/>
+		            <input TYPE="submit" name="sub_button" id="sub_button" title="Add data to the Database" value="Προσθήκη"/>
+			    </form>
+<%
+			}
+			else
+			{
+%>
+				<p>Έχεις κάνει την τελευταία προσφορά</p>
+<%
+			}
 		}
 	}
 	else

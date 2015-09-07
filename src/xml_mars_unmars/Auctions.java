@@ -39,6 +39,15 @@ public class Auctions {
 
 	}
 
+	public Auctions(String username,long item_id) {
+
+		name = new String(username);
+		ItemID = item_id;
+        link = new ConnectionDB();
+        state = link.GetState();
+
+	}
+
 	public ResultSet online_auctions()
 	{
 		long item = -1;
@@ -235,59 +244,140 @@ public class Auctions {
 	    return set;
 	}
 
-	public void addBid()
+	public boolean addBid()
 	{
+		boolean b = true;
 		try
 		{
-			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-ddHH:mm");
-			   //get current date time with Date()
-			Date date = new Date();
-			String date_str = dateFormat.format(date);
-			try {
-				date = dateFormat.parse(date_str);
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			java.sql.Timestamp stamp = new java.sql.Timestamp(date.getTime());
+			b = this.updateCurrentPrice();
+			if(b)
+			{
+				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-ddHH:mm");
+				   //get current date time with Date()
+				Date date = new Date();
+				String date_str = dateFormat.format(date);
+				try {
+					date = dateFormat.parse(date_str);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				java.sql.Timestamp stamp = new java.sql.Timestamp(date.getTime());
 
 
-			state = (link.GetCon()).prepareStatement(
-	        		"SELECT * "
-					+"FROM ted.bidders "
-					+ "WHERE username=?"
-	        		);
-	        state.setString(1, name);
-	        set = state.executeQuery();
-	        if(set.next())
-	        {
-
-	        }
-	        else
-	        {
 				state = (link.GetCon()).prepareStatement(
-		        		"INSERT INTO ted.bidders "
-						+"VALUES (?,1)"
+		        		"SELECT * "
+						+"FROM ted.bidders "
+						+ "WHERE username=?"
 		        		);
 		        state.setString(1, name);
-		        state.executeUpdate();
-	        }
+		        set = state.executeQuery();
+		        if(set.next())
+		        {
 
-	        state = (link.GetCon()).prepareStatement(
-	        		"INSERT INTO ted.item_bids "
-					+"VALUES (?,?,?,?)"
-	        		);
-	        state.setLong(1, ItemID);
-	        state.setFloat(2, Bid);
-	        state.setString(3, name);
-	        state.setTimestamp(4, stamp);
-	        state.executeUpdate();
+		        }
+		        else
+		        {
+					state = (link.GetCon()).prepareStatement(
+			        		"INSERT INTO ted.bidders "
+							+"VALUES (?,1)"
+			        		);
+			        state.setString(1, name);
+			        state.executeUpdate();
+		        }
+
+		        state = (link.GetCon()).prepareStatement(
+		        		"INSERT INTO ted.item_bids "
+						+"VALUES (?,?,?,?)"
+		        		);
+		        state.setLong(1, ItemID);
+		        state.setFloat(2, Bid);
+		        state.setString(3, name);
+		        state.setTimestamp(4, stamp);
+		        state.executeUpdate();
+
+			}
 		}
 		catch(SQLException ex)
 	    {
 	    	ex.printStackTrace();
 	    }
+		return b;
 	}
 
+
+	public boolean updateCurrentPrice()
+	{
+		boolean flag=true;
+		try
+		{
+			state = (link.GetCon()).prepareStatement(
+	        		"SELECT * "
+					+"FROM ted.items "
+					+ "WHERE item_id=?"
+	        		);
+	        state.setLong(1, ItemID);
+	        ResultSet set1 = state.executeQuery();
+
+	        while(set1.next())
+	        {
+	        	float price = set1.getFloat("currently_price");
+	        	if(price>Bid)
+	        	{
+	        		return false;
+	        	}
+	        	else
+	        	{
+	        		state = (link.GetCon()).prepareStatement(
+	    	        		"UPDATE items "+
+	        				"SET currently_price=? "+
+	        				"WHERE item_id=?"
+	    	        		);
+	        		state.setFloat(1, Bid);
+	    	        state.setLong(2, ItemID);
+	    	        state.executeUpdate();
+	        	}
+	        }
+		}
+		catch(SQLException ex)
+	    {
+	    	ex.printStackTrace();
+	    }
+
+		return flag;
+	}
+
+	public boolean checkBidUser()
+	{
+		boolean b = false;
+
+		try
+		{
+			state = (link.GetCon()).prepareStatement(
+	        		"SELECT * "
+					+"FROM ted.item_bids b,ted.items i "
+					+ "WHERE b.username=? AND b.item_id=? AND b.item_id=i.item_id"
+	        		);
+	        state.setString(1, name);
+	        state.setLong(2,ItemID);
+	        ResultSet set1 = state.executeQuery();
+
+	        while(set1.next())
+	        {
+	        	float price = set1.getFloat("price");
+	        	float cur_price = set1.getFloat("currently_price");
+	        	if(price == cur_price)
+	        	{
+	        		return true;
+	        	}
+	        }
+		}
+		catch(SQLException ex)
+	    {
+	    	ex.printStackTrace();
+	    }
+
+		return b;
+	}
 
 }

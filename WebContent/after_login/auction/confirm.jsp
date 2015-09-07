@@ -27,11 +27,21 @@
 			float bid = Float.parseFloat(bid_string);
 
 			Auctions auction = new Auctions(log.getName(),item_id,bid);
-			auction.addBid();
+			boolean b = auction.addBid();
+			if(b)
+			{
+				String site = new String("item_details.jsp?item="+item_id);
+				response.setStatus(response.SC_MOVED_TEMPORARILY);
+				response.setHeader("Location", site);
+			}
+			else
+			{
 			%>
 
-			    <p align="center">SKATA</p>
-	<%
+			    <p align="center">Παρακαλώ εισάγεται προσφορά μεγαλύτερη από την τωρινή τιμή !</p>
+			    <p align="center"><b><a href="item_details.jsp?item=<%out.print(item_id);%>">Επιστροφή</a></b></p>
+			<%
+			}
 
 		}
 		else
