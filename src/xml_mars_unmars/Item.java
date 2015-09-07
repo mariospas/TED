@@ -355,7 +355,7 @@ public class Item extends HttpServlet{
 					Location = itemElem.getLocation();
 					Country = itemElem.getCountry();
 					Started = this.splitterDateTime(itemElem.getStartedDate());
-					Ends = this.splitterDateTime(itemElem.getEndsDate());
+					Ends = this.splitterENDDateTime(itemElem.getEndsDate());
 					Description = itemElem.getDescription();
 					Photo_Url = itemElem.getPhoto_Url();
 					Category = itemElem.getCategory();
@@ -1380,6 +1380,28 @@ public class Item extends HttpServlet{
 
 		String[] date_parts = date.split("-");
 		String proper_date = "20"+date_parts[2]+"-"+date_parts[0]+"-"+date_parts[1]+time;
+
+		Date java_date;
+		try {
+			java_date = new SimpleDateFormat("yyyy-MMM-ddhh:mm").parse(proper_date);
+			date_sql = new java.sql.Timestamp(java_date.getTime());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		return date_sql;
+	}
+
+	public java.sql.Timestamp splitterENDDateTime(String set)
+	{
+		java.sql.Timestamp date_sql = null;
+
+		String[] parts = set.split(" ");
+		String date = new String(parts[0]);
+		String time = new String(parts[1]);
+
+		String[] date_parts = date.split("-");
+		String proper_date = "2016"+"-"+date_parts[0]+"-"+date_parts[1]+time;
 
 		Date java_date;
 		try {

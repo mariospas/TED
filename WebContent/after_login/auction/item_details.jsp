@@ -72,7 +72,7 @@
 						<p><%out.print(item_set.getString("description"));%>" required /></p>
 		                <br/>
 		    </div>
-		    <form method="post" action="confirm.jsp" >
+		    <form method="post" action="confirm.jsp?item=<%out.print(item_id);%>" >
 			    <p><label>Δώστε μία Προσφορά :</label>
 				<input type="text" id="bid" name="bid" required/></p>
 	            <br/>

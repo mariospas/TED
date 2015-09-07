@@ -35,10 +35,13 @@ public class NeighItems {
 	        	state = link.GetState();
 		        state = (link.GetCon()).prepareStatement(
 		        		"SELECT item_id "+
-		        		"FROM ted.item_bids "+
-		        		"WHERE username=? "+
-		        		"ORDER BY date_time DESC "+
-		        		"LIMIT 1"
+		        		"FROM ted.user_item u "+
+		        	    "WHERE u.live=1 AND u.item_id IN "+
+				        		"(SELECT item_id "+
+				        		"FROM ted.item_bids "+
+				        		"WHERE username=? "+
+				        		"ORDER BY date_time DESC "+
+				        		")"
 		        		);
 		        state.setString(1, username);
 		        set = state.executeQuery();
@@ -50,32 +53,35 @@ public class NeighItems {
 		        }
 	        }
 
-	        friend_list = new LinkedList<FriendItems>();
-	        for(long item_id : items_list)
-	        {
-	        	//System.out.println("1 "+item_id+" NeighItems");
-	        	state = link.GetState();
-		        state = (link.GetCon()).prepareStatement(
-		        		"SELECT name,currently_price,photo_url "
-		        		+ "FROM ted.items "
-		        		+"WHERE item_id=?"
-		        		);
-		        state.setLong(1, item_id);
-		        set = state.executeQuery();
-		        //System.out.println("2 "+item_id+" NeighItems");
-
-		        while(set.next())
+	        if(items_list.size() > 0)
+        	{
+	        	friend_list = new LinkedList<FriendItems>();
+		        for(long item_id : items_list)
 		        {
-		        	//System.out.println("3 "+set.getString("name")+" NeighItems");
-		        	FriendItems friend = new FriendItems(item_id,set.getString("name"), set.getFloat("currently_price"), set.getString("photo_url"));
+		        	//System.out.println("1 "+item_id+" NeighItems");
+		        	state = link.GetState();
+			        state = (link.GetCon()).prepareStatement(
+			        		"SELECT name,currently_price,photo_url "
+			        		+ "FROM ted.items "
+			        		+"WHERE item_id=?"
+			        		);
+			        state.setLong(1, item_id);
+			        set = state.executeQuery();
+			        //System.out.println("2 "+item_id+" NeighItems");
 
-		        	if(CheckAdd(friend_list, friend))
-		        	{
-		        		friend_list.add(friend);
-		        	}
-		        	//System.out.println("4 "+set.getString("name")+" NeighItems");
+			        while(set.next())
+			        {
+			        	//System.out.println("3 "+set.getString("name")+" NeighItems");
+			        	FriendItems friend = new FriendItems(item_id,set.getString("name"), set.getFloat("currently_price"), set.getString("photo_url"));
+
+			        	if(CheckAdd(friend_list, friend))
+			        	{
+			        		friend_list.add(friend);
+			        	}
+			        	//System.out.println("4 "+set.getString("name")+" NeighItems");
+			        }
 		        }
-	        }
+        	}
 
 	    }
 	    catch(SQLException ex)

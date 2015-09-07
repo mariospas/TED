@@ -3,6 +3,10 @@ package xml_mars_unmars;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import connection.ConnectionDB;
 
@@ -13,10 +17,23 @@ public class Auctions {
     String name = null;
     ConnectionDB link;
 
+    long ItemID;
+    float Bid;
+
 
 	public Auctions(String username) {
 
 		name = new String(username);
+        link = new ConnectionDB();
+        state = link.GetState();
+
+	}
+
+	public Auctions(String username,long item_id,float bid) {
+
+		name = new String(username);
+		ItemID = item_id;
+		Bid = bid;
         link = new ConnectionDB();
         state = link.GetState();
 
@@ -216,6 +233,60 @@ public class Auctions {
 	    }
 
 	    return set;
+	}
+
+	public void addBid()
+	{
+		try
+		{
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-ddHH:mm");
+			   //get current date time with Date()
+			Date date = new Date();
+			String date_str = dateFormat.format(date);
+			try {
+				date = dateFormat.parse(date_str);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			java.sql.Timestamp stamp = new java.sql.Timestamp(date.getTime());
+
+
+			state = (link.GetCon()).prepareStatement(
+	        		"SELECT * "
+					+"FROM ted.bidders "
+					+ "WHERE username=?"
+	        		);
+	        state.setString(1, name);
+	        set = state.executeQuery();
+	        if(set.next())
+	        {
+
+	        }
+	        else
+	        {
+				state = (link.GetCon()).prepareStatement(
+		        		"INSERT INTO ted.bidders "
+						+"VALUES (?,1)"
+		        		);
+		        state.setString(1, name);
+		        state.executeUpdate();
+	        }
+
+	        state = (link.GetCon()).prepareStatement(
+	        		"INSERT INTO ted.item_bids "
+					+"VALUES (?,?,?,?)"
+	        		);
+	        state.setLong(1, ItemID);
+	        state.setFloat(2, Bid);
+	        state.setString(3, name);
+	        state.setTimestamp(4, stamp);
+	        state.executeUpdate();
+		}
+		catch(SQLException ex)
+	    {
+	    	ex.printStackTrace();
+	    }
 	}
 
 
