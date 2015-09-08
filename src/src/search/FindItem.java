@@ -1,4 +1,4 @@
-package search;
+package src.search;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +16,7 @@ public class FindItem {
 	
     public FindItem() { }
     
-	public ResultSet LikeItem(String item, int offset, int noOfRecords) {
+	public ResultSet LikeItem(String item, int offset, int noOfRecords, String country, int minPrice, int maxPrice) {
 		
 		searchquery = new String(item).replace(" ", "%");
 		System.out.println("*****Starting Search Query with input = " +searchquery);
@@ -26,14 +26,22 @@ public class FindItem {
 			state = link.GetState();
 	        state = (link.GetCon()).prepareStatement(
 	        		"SELECT SQL_CALC_FOUND_ROWS * "
-	        		+"FROM ted.items "
-	        		+"WHERE name LIKE ? "
-	        		+"OR description LIKE ? "
+	        		+"FROM ted.items AS it, ted.user_item AS usi "
+	        		+"WHERE (it.name LIKE ? "
+	        		+"OR it.description LIKE ?) "
+	        		+"AND it.country LIKE ? "
+	        		+"AND it.buy_price>? "
+	        		+"AND it.buy_price<? "
+	        		+"AND it.item_id=usi.item_id "
+	        		+"AND usi.live=1 "
 	        		+"LIMIT ? OFFSET ?"); 
 	        state.setString(1, "%" + searchquery + "%");
 	        state.setString(2, "%" + searchquery + "%");
-	        state.setInt(3, noOfRecords);
-	        state.setInt(4, offset);
+	        state.setString(3, "%" + country);
+	        state.setInt(4, minPrice);
+	        state.setInt(5, maxPrice);
+	        state.setInt(6, noOfRecords);
+	        state.setInt(7, offset);
 	        System.out.println("*****Finished Search Query with input = " +searchquery);
 	        System.out.println("try state execute");
 			set = state.executeQuery();
@@ -51,7 +59,7 @@ public class FindItem {
 		return set;  
 	}
 	
-	public ResultSet LikeItem(String item, int category, int offset, int noOfRecords) {
+	public ResultSet LikeItem(String item, int category, int offset, int noOfRecords, String country, int minPrice, int maxPrice) {
         
         int categ = category;
         searchquery = new String(item).replace(" ", "%");
@@ -62,17 +70,25 @@ public class FindItem {
             state = link.GetState();
             state = (link.GetCon()).prepareStatement(
                     "SELECT SQL_CALC_FOUND_ROWS * "
-                    +"FROM ted.items AS it, ted.item_category AS it_c, ted.category AS categ "
+                    +"FROM ted.items AS it, ted.item_category AS it_c, ted.category AS categ, ted.user_item AS usi "
                     +"WHERE (it.name LIKE ? OR it.description LIKE ?) "
                     +"AND categ.category_id=? "
                     +"AND it.item_id=it_c.item_id "
                     +"AND categ.category_id=it_c.category_id "
+                    +"AND it.country LIKE ? "
+	        		+"AND it.buy_price>? "
+	        		+"AND it.buy_price<? "
+	        		+"AND it.item_id=usi.item_id "
+	        		+"AND usi.live=1 "
                     +"LIMIT ? OFFSET ?"); 
             state.setString(1, "%" + searchquery + "%");
             state.setString(2, "%" + searchquery + "%");
             state.setInt(3, categ);
-            state.setInt(4, noOfRecords);
-            state.setInt(5, offset);
+            state.setString(4, "%" + country);
+	        state.setInt(5, minPrice);
+	        state.setInt(6, maxPrice);
+            state.setInt(7, noOfRecords);
+            state.setInt(8, offset);
             System.out.println("*****Finished Search Query with input = " +searchquery);
             System.out.println("try state execute");
             set = state.executeQuery();

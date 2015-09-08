@@ -12,7 +12,7 @@
 		
 		<%
 		ResultSet results = (ResultSet) request.getAttribute("items");	
-		System.out.println("CATEGORY = " +request.getParameter("text"));
+		System.out.println("TEXT = " +request.getParameter("text"));
 		
 		//Check if there are any search results
 		if (!results.isBeforeFirst() ) {    
@@ -34,22 +34,34 @@
 		
 		<% System.out.println("ok so far 5"); %>
 		<form name="filter" action="getsearch" method="get">
-			min. <input type="text" name="min">
-			max. <input type="text" name="max">
-			City <select name="city">
+			min. <select name="min">
+						 <option value="-100">Any</option>
+					   <option value="5">5</option>
+					   <option value="20">20</option>
+					   <option value="50">50</option>
+					 </select> 
+			max. <select name="max">
+						 <option value="1000">Any</option>
+					   <option value="50">50</option>
+					   <option value="200">200</option>
+					   <option value="500">500</option>
+					 </select> 
+			City <select name="country">
 						 <option value="">Any</option>
 					   <option value="Greece">Athens</option>
 					   <option value="Greece">Thessaloniki</option>
 					   <option value="Greece">Patra</option>
 					 </select>
-			<br> 
+			<br>
+			<input type="hidden" name="category" value="<%= request.getParameter("category") %>">
+			<input type="hidden" name="text" value="<%= request.getParameter("text") %>">
 			<input type="submit" value="Apply">
 		</form>
 		 <%
     int pg = (int) request.getAttribute("currentPage");
     if (pg != 1){
     %>	
-    	<a href="getsearch?page=<%= pg - 1 %>&category=<%= request.getParameter("category") %>&text=<%= request.getParameter("text") %>&country=<%= request.getParameter("city") %>&min=<%= request.getParameter("min") %>&max=<%= request.getParameter("max") %>">Previous</a>
+    	<a href="getsearch?page=<%= pg - 1 %>&category=<%= request.getParameter("category") %>&text=<%= request.getParameter("text") %>&country=<%= request.getAttribute("country") %>&min=<%= request.getAttribute("min") %>&max=<%= request.getAttribute("max") %>">Previous</a>
     <% } %>
      
     <%
@@ -60,15 +72,14 @@
     	if (pg == k) { %>
     		<%= k %>
     	<% } else {%>
-    		<a href="getsearch?page=<%= k %>&category=<%= request.getParameter("category") %>&text=<%= request.getParameter("text") %>&country=<%= request.getParameter("city") %>&min=<%= request.getParameter("min") %>&max=<%= request.getParameter("max") %>"><%= k %></a>
+    		<a href="getsearch?page=<%= k %>&category=<%= request.getParameter("category") %>&text=<%= request.getParameter("text") %>&country=<%= request.getAttribute("country") %>&min=<%= request.getAttribute("min") %>&max=<%= request.getAttribute("max") %>"><%= k %></a>
     	<% } %>
     <% } %>
     
     <%
     if (pg < num) {
     %>
-    	<a href="getsearch?page=<%= pg + 1 %>&category=<%= request.getParameter("category") %>&text=<%= request.getParameter("text") %>&country=<%= request.getParameter("city") %>&min=<%= request.getParameter("min") %>&max=<%= request.getParameter("max") %>">Next</a>
+    	<a href="getsearch?page=<%= pg + 1 %>&category=<%= request.getParameter("category") %>&text=<%= request.getParameter("text") %>&country=<%= request.getAttribute("country") %>&min=<%= request.getAttribute("min") %>&max=<%= request.getAttribute("max") %>">Next</a>
     <% } %>
-    
 	</body>
 </html>

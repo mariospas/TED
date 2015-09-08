@@ -1,4 +1,4 @@
-package search;
+package src.search;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -34,14 +34,16 @@ public class GetSearch extends HttpServlet {
         if (request.getParameter("country") != null) {
         	country = request.getParameter("country");
         }
-		
+
         //PROBLEM WITH MIN/MAX PRICE
         if (request.getParameter("min") != null) {
-        	//minPrice = Integer.parseInt(request.getParameter("min"));
+        	minPrice = Integer.parseInt(request.getParameter("min"));
+        	System.out.println("INSIDE THE PARAM MIN " +minPrice);
         }
         
         if (request.getParameter("max") != null) {
-        	//maxPrice = Integer.parseInt(request.getParameter("max"));
+        	maxPrice = Integer.parseInt(request.getParameter("max"));
+        	System.out.println("INSIDE THE PARAM MIN " +maxPrice);
         }
         
 		if(request.getParameter("page") != null)
@@ -54,9 +56,11 @@ public class GetSearch extends HttpServlet {
 		category = Integer.parseInt(categ);
 		System.out.println(category);
 		
+		System.out.println("OOOOOOOOKKKKKK");
+		
 		FindItem items = new FindItem();
 		if (category != 0) {
-			result = items.LikeItem(search, category, (page-1)*recordsPerPage, recordsPerPage);
+			result = items.LikeItem(search, category, (page-1)*recordsPerPage, recordsPerPage, country, minPrice, maxPrice);
 			try {
 			  if (!result.isBeforeFirst() ) {    
 			    System.out.println("Item not found in normal search");
@@ -66,7 +70,7 @@ public class GetSearch extends HttpServlet {
 			} catch (SQLException e) {
 			    e.printStackTrace(); }
 		} else {
-			result = items.LikeItem(search, (page-1)*recordsPerPage, recordsPerPage);
+			result = items.LikeItem(search, (page-1)*recordsPerPage, recordsPerPage, country, minPrice, maxPrice);
 			try {
 			  if (!result.isBeforeFirst() ) {    
 			    System.out.println("Item not found in normal search");
@@ -83,6 +87,9 @@ public class GetSearch extends HttpServlet {
         request.setAttribute("items", result);
         request.setAttribute("noOfPages", noOfPages);
         request.setAttribute("currentPage", page);
+        request.setAttribute("min", minPrice);
+        request.setAttribute("max", maxPrice);
+        request.setAttribute("country", country);
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/DisplayItems.jsp");
 		dispatcher.forward(request,response);
 	}
