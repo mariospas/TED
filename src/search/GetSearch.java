@@ -1,4 +1,4 @@
-package src.search;
+package search;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -90,7 +90,7 @@ public class GetSearch extends HttpServlet {
         request.setAttribute("min", minPrice);
         request.setAttribute("max", maxPrice);
         request.setAttribute("country", country);
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/DisplayItems.jsp");
+        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/search/DisplayItems.jsp");
 		dispatcher.forward(request,response);
 	}
 

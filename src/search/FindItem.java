@@ -1,4 +1,4 @@
-package src.search;
+package search;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

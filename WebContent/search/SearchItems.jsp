@@ -9,7 +9,7 @@
 	<body>
 		<center><h4>Item Search</h4></center>
 		
-		<form name="search" action="getsearch" method="get">
+		<form name="search" action="../getsearch" method="get">
 			<center>
 				<select name="category">
 					<option value="0">All</option>

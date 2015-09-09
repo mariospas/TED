@@ -8,7 +8,7 @@
 	</head>
 	<body>
 		<h4>New Message</h4>
-		<form name="message" action="getmessage" method="post">
+		<form name="message" action="../getmessage" method="post">
 			To <input type="text" name="recipient"><br>
 			Subject <input type="text" name="subject"><br><br>
 		  Description<br>
