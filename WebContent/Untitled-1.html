@@ -1,0 +1,193 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>HTML5 responsive website tutorial</title>
+        <link rel="stylesheet" href="appearance/css/reset.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="appearance/css/style.css" type="text/css" media="screen" />
+        <link href="appearance/css/lightbox.css" rel="stylesheet" />
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans|Baumans' rel='stylesheet' type='text/css'/>
+        <script src="appearance/scripts/modernizr.custom.04512.js"></script>
+        <script src="appearance/scripts/respond.js"></script>
+        
+        <!-- include extern jQuery file but fall back to local file if extern one fails to load !-->
+        <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript">window.jQuery || document.write('<script type="text\/javascript" src="js\/1.7.2.jquery.min"><\/script>')</script>
+        
+        <script async src="appearance/scripts/lightbox.js"></script>
+        <script src="appearance/scripts/prefixfree.min.js"></script>
+        <script src="appearance/scripts/jquery.slides.min.js"></script>
+        
+        <script>
+			(function ($, window, document, undefined)
+			{
+				'use strict';
+				$(function ()
+				{
+					$("#mobileMenu").hide();
+					$(".toggleMobile").click(function()
+					{
+						$(this).toggleClass("active");
+						$("#mobileMenu").slideToggle(500);
+					});
+				});
+				$(window).on("resize", function()
+				{
+					if($(this).width() > 500)
+					{
+						$("#mobileMenu").hide();
+						$(".toggleMobile").removeClass("active");
+					}
+				});
+			})(jQuery, window, document);
+		</script>
+        
+   
+    </head>
+    <body>
+        <header>
+            <div class="toggleMobile">
+                <span class="menu1"></span>
+                <span class="menu2"></span>
+                <span class="menu3"></span>
+            </div>
+            <div id="mobileMenu">
+                <ul>
+                    <li><a href="javascript:void(0)">Home</a></li>
+                    <li><a href="javascript:void(0)">Porfolio</a></li>
+                    <li><a href="javascript:void(0)">About</a></li>
+               </ul>
+            </div>
+            <h1>Lingulo HTML5</h1>
+            <p>A responsive website tutorial</p>
+
+            <nav>
+                <ul>
+                    <li><a href="javascript:void(0)">Home</a></li>
+                    <li><a href="javascript:void(0)">Porfolio</a></li>
+                    <li><a href="javascript:void(0)">About</a></li>
+                    <li><a href="javascript:void(0)">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+        <section class="container">
+        	<div class="search" id="slider_content1">
+                <form action="#">
+                <input type="text" name="sitesearch" value="Enter a word..."/>
+                <input type="submit" name="start_search" class="button" value="Search"/>
+                </form>
+        	</div>
+            <div id="slides">
+                <img src="img/slide1.jpg" alt="Some alt text">
+                <img src="img/slide2.jpg" alt="Some alt text">
+                <img src="img/slide3.jpg" alt="Some alt text">
+            </div>
+        </section>
+        
+        <section id="spacer">
+            <h2 class="hidden">Dolor sit amet</h2>
+            <p>protinomena proionta</p>
+        </section>
+        
+        <section id="boxcontent">
+            <h2 class="hidden">Adipiscing</h2>
+            <article>
+                <img src="img/some_icon.png" alt="alt text"/>
+                <h3>Lorem ipsum</h3>
+                <p>
+                Eines Tages aber beschloß eine kleine Zeile Blindtext, ihr Name war Lorem Ipsum, hinaus zu gehen.</p>
+            </article>
+            <article>
+                <img src="img/some_icon.png" alt="alt text"/>
+                <h3>Consectetuer</h3>
+                <p>
+                Der große Oxmox riet ihr davon ab, da es dort wimmele von bösen Kommata, wilden Fragezeichen...</p>
+            </article>
+            <article>
+                <img src="img/some_icon.png" alt="alt text"/>
+                <h3>Dolor sit amet</h3>
+                <p>
+                Es packte seine sieben Versalien, schob sich sein Initial in den Gürtel und machte sich auf den Weg.</p>
+            </article>
+            <br class="clear"/>
+        </section>
+        
+        
+        <footer>
+            <h2 class="hidden">Our footer</h2>
+            <section id="copyright">
+                <h3 class="hidden">Copyright notice</h3>
+                <div class="wrapper">
+                <div class="social">
+                <a href="javascript:void(0)"><img src="img/Social-Networks-Google-plus-icon.png" alt="google plus" width="25"/></a>
+                <a href="javascript:void(0)"><img src="img/Logos-Tumblr-icon.png" alt="tumblr" width="25"/></a>
+                <a href="javascript:void(0)"><img src="img/Logos-Youtube-icon.png" alt="youtube" width="25"/></a>
+                <a href="javascript:void(0)"><img src="img/Social-Networks-Bebo-icon.png" alt="bebo" width="25"/></a>
+                <a href="javascript:void(0)"><img src="img/Social-Networks-Xing-icon.png" alt="xing" width="25"/></a></div>
+                &copy; Copyright 2015 by Hyper Mario & Ign . All Rights Reserved.</div>
+            </section>
+            <section class="wrapper">
+                <h3 class="hidden">Footer content</h3>
+                <article class="column">
+                    <h4>Lorem ipsum</h4>
+                    Unterwegs traf es eine Copy. Die Copy warnte das Blindtextchen, da, wo sie herkäme wäre sie zigmal umgeschrieben worden und alles, was von ihrem Ursprung noch übrig wäre, sei das Wort "und" und das Blindtextchen solle umkehren und wieder in sein.
+                </article>
+                <article class="column midlist">
+                <h4>Consectetuer</h4>
+                    <ul>
+                        <li><a href="javascript:void(0)">Die Copy warnte das Blindtextchen</a></li>
+                        <li><a href="javascript:void(0)">Unterwegs traf es eine Copy</a></li>
+                        <li><a href="javascript:void(0)">Doch alles Gutzureden konnte</a></li>
+                        <li><a href="javascript:void(0)">Als es die ersten Hügel</a></li>
+                    </ul>
+                </article>
+                <article class="column rightlist">
+                    <h4>Dolor sit amet</h4>
+                    <ul>
+                        <li><a href="javascript:void(0)"><img src="img/example-slide-1sml.jpg" width="80" alt="some alt text"/><span>Unterwegs traf es eine Copy. Die Copy warnte.</span></a></li>
+                        <li><a href="javascript:void(0)"><img src="img/example-slide-2sml.jpg" width="80" alt="some alt text"/><span>Doch alles Gutzureden konnte es nicht.</span></a></li>
+                        <li><a href="javascript:void(0)"><img src="img/example-slide-3sml.jpg" width="80" alt="some alt text"/><span>Und es dann in ihre Agentur schleppten.</span></a></li>
+                    </ul>
+                </article>
+            </section>
+        </footer>
+        
+     </body>
+     
+     
+     
+     
+     	<script>
+			$(function() 
+			{
+				$('#slides').slidesjs
+				({
+					height: 350,
+					navigation: false,
+					pagination: false,
+					effect: 
+					{
+						fade: 
+						{
+							speed: 400
+						}
+					},callback:
+					{
+						
+						complete: function(number)
+						{
+							$("#slider_content" + number).delay(500).fadeIn(1000);
+						}
+					},
+					play:
+					{
+						active: false,
+						auto: true,
+						interval: 6000,
+						pauseOnHover: false
+					}
+				});
+			});
+		</script>
+</html>
