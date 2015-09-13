@@ -28,7 +28,12 @@
 			
 			<p align="left">
 			Result: <%= results.getString("name") %> <br>
-			Description: <%= results.getString("description") %> </p>
+			Description: <%= results.getString("description") %> <br>
+			Buy Price: <%= results.getString("buy_price") %> <br>
+			<img src="http://www.w3schools.com/html/pic_mountain.jpg" alt="Mountain View" style="width:304px;height:228px;"></p>
+		 	<!--  Auto einai to kanoniko code gia na pairnei apo th vash
+		 	<img src="<%= results.getString("photo_url") %>" alt="My Image" style="width:304px;height:228px;"></p>
+		 	-->
 		 	
 		<% } %>
 		

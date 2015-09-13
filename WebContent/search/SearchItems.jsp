@@ -23,9 +23,9 @@
 		</form>
 		
 		<center>Choose Category: <br>
-		<a href="">Computers</a>
-		<a href="">House</a> <br>
-		<a href="">Services</a>
-		<a href="">Bikes</a></center>
+		<a href="../getsearch?category=1&text=">Computers</a>
+		<a href="../getsearch?category=2&text=">House</a> <br>
+		<a href="../getsearch?category=3&text=">Services</a>
+		<a href="../getsearch?category=4&text=">Bikes</a></center>
 	</body>
 </html>
