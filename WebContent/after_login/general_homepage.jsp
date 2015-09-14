@@ -44,7 +44,7 @@
 				$(window).on("resize", function()
 				{
 
-					if($(this).width() > 500)
+					if($(this).width() > 700)
 					{
 						$("#mobileMenu").hide();
 						$(".toggleMobile").removeClass("active");
