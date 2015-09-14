@@ -11,7 +11,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>HTML5 responsive website tutorial</title>
+        <title>General HomePage</title>
         <link rel="stylesheet" href="/TED/appearance/css/reset.css" type="text/css" media="screen" />
         <link rel="stylesheet" href="/TED/appearance/css/style.css" type="text/css" media="screen" />
         <link href="/TED/appearance/css/lightbox.css" rel="stylesheet" />
@@ -26,6 +26,7 @@
         <script async src="/TED/appearance/scripts/lightbox.js"></script>
         <script src="/TED/appearance/scripts/prefixfree.min.js"></script>
         <script src="/TED/appearance/scripts/jquery.slides.min.js"></script>
+
 
         <script>
 			(function ($, window, document, undefined)
@@ -42,13 +43,34 @@
 				});
 				$(window).on("resize", function()
 				{
+
 					if($(this).width() > 500)
 					{
 						$("#mobileMenu").hide();
 						$(".toggleMobile").removeClass("active");
 					}
+
 				});
 			})(jQuery, window, document);
+		</script>
+
+
+
+		<script>
+		function jqUpdateSize(){
+		    // Get the dimensions of the viewport
+		    var width = $(window).width();
+		    var height = $(window).height();
+
+		    $('#jqWidth').html(width);      // Display the width
+		    $('#jqHeight').html(height);    // Display the height
+
+	    	if(width < 700) $(".search2").show();
+	    	else if(width > 700) $(".search2").hide();
+
+		};
+		$(document).ready(jqUpdateSize);    // When the page first loads
+		$(window).resize(jqUpdateSize);
 		</script>
 
 
@@ -97,6 +119,28 @@
                 <img src="/TED/img/slide2.jpg" alt="Some alt text">
                 <img src="/TED/img/slide3.jpg" alt="Some alt text">
             </div>
+        </section>
+        <section>
+
+	        <div class="search2" id="search2">
+				<form name="search" action="../getsearch" method="get">
+						<p align="center"><select name="category">
+							<option value="0">Επέλεξε την κατηγορία σου</option>
+						   <%
+						    i=0;
+				        while (set.next())
+						{
+				        	i++;
+						%>
+				            <option value="<%out.print(i);%>" name="<%out.print(set.getString("value"));%>" id="<%out.print(set.getString("value"));%>"><%out.print(set.getString("value"));%></option>
+				       <%}
+						   %>
+						</select>
+						<input type="text" name="text"></p>
+						<p align="center"><input type="submit" name="start_search" class="button" value="Search"/></p>
+				</form>
+			</div>
+
         </section>
 <%
 
@@ -184,4 +228,6 @@
 				});
 			});
 		</script>
+
+
 </html>

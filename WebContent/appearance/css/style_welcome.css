@@ -168,11 +168,11 @@ ul#navigation li a {
     text-transform:uppercase;
 	display:inline-block;
 	background: #343434;
-
-	-webkit-transition:color 0.2s linear, background 0.2s linear;
-	-moz-transition:color 0.2s linear, background 0.2s linear;
-	-o-transition:color 0.2s linear, background 0.2s linear;
-	transition:color 0.2s linear, background 0.2s linear;
+	
+	-webkit-transition:color 0.2s linear, background 0.2s linear;	
+	-moz-transition:color 0.2s linear, background 0.2s linear;	
+	-o-transition:color 0.2s linear, background 0.2s linear;	
+	transition:color 0.2s linear, background 0.2s linear;	
 }
 
 ul#navigation li a:hover {
@@ -190,23 +190,23 @@ ul#navigation li:hover > ul
 ul#navigation ul, ul#navigation ul li ul {
 	list-style: none;
     margin: 0;
-    padding: 0;
+    padding: 0;    
 	visibility:hidden;
-    position: absolute;
-	/*position:fixed;*/
+    /*position: absolute;*/
+	position:static;
     z-index: 99999;
 	width:auto;
 	background:#343434;
 	opacity:0;
-	-webkit-transition:opacity 0.2s linear, visibility 0.2s linear;
-	-moz-transition:opacity 0.2s linear, visibility 0.2s linear;
-	-o-transition:opacity 0.2s linear, visibility 0.2s linear;
-	transition:opacity 0.2s linear, visibility 0.2s linear;
+	-webkit-transition:opacity 0.2s linear, visibility 0.2s linear; 
+	-moz-transition:opacity 0.2s linear, visibility 0.2s linear; 
+	-o-transition:opacity 0.2s linear, visibility 0.2s linear; 
+	transition:opacity 0.2s linear, visibility 0.2s linear; 	
 }
 
 ul#navigation ul {
-    top: 30px;
-    right: 0px;
+    top: 180px;
+    left: 800px;
 }
 
 ul#navigation ul li ul {
@@ -356,14 +356,10 @@ ul#navigation li a.last {
 {
         padding:7px 14px;
         border: 1px solid #52CAE0;
-        background-image: linear-gradient(bottom, #52CAE0 0%, #ff8c66 100%);
-        background-image: linear-gradient(to bottom, #ff8c66 0%, #52CAE0 100%);
-        background-color: #eb653c;
+		background-color:#343434;
         color: #EBE8DE;
-        text-shadow: 1px 1px 0px #52CAE0;
-        text-decoration:none;
         border-radius:5px;
-        box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.3);*/
+        box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.3);
 }
 
 .button:hover
@@ -406,15 +402,7 @@ ul#navigation li a.last {
         margin-right:-480px;
 }
 
-.search2
-{
-	display:none;
-	background-color: #343434;
-	padding-top:20px;
-	padding-bottom:20px;
-	background:#BBBBBB;
 
-}
 /* FOUR COLUMNS */
 
 #four_columns, #text_columns
@@ -694,10 +682,27 @@ footer .wrapper .column h4
 /* Center the slideshow */
 .container
 {
-        width:auto;
-        margin: 0 auto;
-        position:relative;
+		
+		color:#FFFFFF;
+		margin-left:auto;
+		margin-right:auto;
+		width:30%;
+		
 }
+
+.insidebox
+{
+	 margin-top:30px;
+     border-bottom-left-radius:25px;
+	 border-bottom-right-radius:25px;
+	 border-top-left-radius:25px;
+	 border-top-right-radius:25px;
+	 background-color: #343434;
+	 padding-top:20px;
+	 padding-bottom:20px;
+		
+}
+
 
 /* Show active item in the pagination */
 .slidesjs-pagination .active
@@ -746,27 +751,31 @@ footer .wrapper .column h4
         {
                 display:inline;
         }
+		.container
+        {
+                height:1px;
+                top: -1500px;
+				width:auto;
+        }
+		
 }
 
 @media (max-width: 915px)
 {
+		.container
+        {
+                height:1px;
+                top: -1500px;
+				width:auto;
+        }
+		
         #boxcontent article
         {
                 float: none;
                 margin: 30px auto 0 auto;
                 width: 60%;
         }
-
-        .search2
-		{
-				display:none;
-				background-color: #343434;
-				padding-top:20px;
-				padding-bottom:20px;
-				background:#BBBBBB;
-		}
-
-		#spacer
+        #spacer
         {
                 font-size:15px;
         }
@@ -820,7 +829,9 @@ footer .wrapper .column h4
         {
                 height:1px;
                 top: -1500px;
+				width:auto;
         }
+		
         header
         {
                 height:120px;
@@ -833,16 +844,6 @@ footer .wrapper .column h4
                 top:100px;
                 margin-left: -184px;
         }
-
-        .search2
-		{
-				display:none;
-				background-color: #343434;
-				padding-top:20px;
-				padding-bottom:20px;
-				background:#BBBBBB;
-		}
-
         #spacer
         {
                 height:100px;
@@ -885,11 +886,18 @@ footer .wrapper .column h4
 
 @media (max-width: 500px)
 {
+		.container
+        {
+                height:1px;
+                top: -1500px;
+				width:auto;
+        }
+		
         header
         {
             margin-top: 80px;
             text-align: center;
-        }
+        }        
         #spacer
         {
                 height:auto;
