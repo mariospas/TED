@@ -33,7 +33,7 @@ public class ImportUpdateDB
 		try
         {
 			System.out.println("***** Start Import " +firstname+ " ******");
-			state = (connection.GetCon()).prepareStatement("INSERT INTO ted.users VALUES (?,?,?,?,?,?,?,?,?,?,?,0,'user')");
+			state = (connection.GetCon()).prepareStatement("INSERT INTO ted.users VALUES (?,AES_ENCRYPT(?, SHA2('134711Kk',512)),?,?,?,?,?,?,?,?,?,0,'user')");
 
 	        state.setString(1,username);
 	        state.setString(2,password);
@@ -46,7 +46,6 @@ public class ImportUpdateDB
 	        state.setString(9,city);
 	        state.setString(10,country);
 	        state.setString(11,afm);
-	        System.out.println("***** SKAYTA " +password+ " ******");
 	        state.executeUpdate();
 	        System.out.println("***** finish Import " +password+ " ******");
         }
@@ -91,7 +90,7 @@ public class ImportUpdateDB
 	{
 		try
 		{
-			state = (connection.GetCon()).prepareStatement("UPDATE ted.users SET password=? WHERE username=?");
+			state = (connection.GetCon()).prepareStatement("UPDATE ted.users SET password=AES_ENCRYPT(?, SHA2('134711Kk',512)) WHERE username=?");
 
 			state.setString(1,password);
 			state.setString(2,username);

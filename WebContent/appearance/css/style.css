@@ -105,6 +105,11 @@ header p
         margin-left:132px;
 }
 
+header p a:hover
+{
+        color:#52CAE0;
+}
+
 /*
 nav
 {

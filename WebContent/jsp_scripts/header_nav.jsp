@@ -11,8 +11,10 @@
 	ResultSet set1 = cat1.get_categories();
 %>
 	<header>
-			<p align="right" style="margin:0 20px 0 0;"><a href="/TED/logout_process.jsp">ΑΠΟΣΥΝΔΕΣΗ</a>
+			<p align="right" style="margin:0 20px 0 0;"><a href="auction/live_auctions.jsp">ΔΙΑΧΕΙΡΙΣΗ ΔΗΜΟΠΡΑΣΙΩΝ</a>
+			&nbsp;&nbsp;&nbsp;<a href="/TED/logout_process.jsp">ΑΠΟΣΥΝΔΕΣΗ</a>
             &nbsp;&nbsp;&nbsp;<a href="/TED/after_login/profile_page.jsp">ΠΡΟΦΙΛ</a></p>
+
             <div class="toggleMobile">
                 <span class="menu1"></span>
                 <span class="menu2"></span>

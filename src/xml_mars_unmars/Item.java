@@ -1098,7 +1098,7 @@ public class Item extends HttpServlet{
 	        {
 	        	System.out.println("import New User");
 				state = link.GetState();
-				state = (link.GetCon()).prepareStatement("INSERT INTO ted.users VALUES (?,1,'demo','demo','demo','demo','demo','demo',?,?,'demo',1,'user')");
+				state = (link.GetCon()).prepareStatement("INSERT INTO ted.users VALUES (?,aes_encrypt('1', SHA2('134711Kk',512)),'demo','demo','demo','demo','demo','demo',?,?,'demo',1,'user')");
 
 		        state.setString(1,user);
 		        state.setString(2,location);
@@ -1139,7 +1139,7 @@ public class Item extends HttpServlet{
 	        {
 	        	System.out.println("import New User");
 				state = link.GetState();
-				state = (link.GetCon()).prepareStatement("INSERT INTO ted.users VALUES (?,1,'demo','demo','demo','demo','demo','demo','demo','demo','demo',1,'user')");
+				state = (link.GetCon()).prepareStatement("INSERT INTO ted.users VALUES (?,aes_encrypt('1', SHA2('134711Kk',512)),'demo','demo','demo','demo','demo','demo','demo','demo','demo',1,'user')");
 
 		        state.setString(1,user);
 

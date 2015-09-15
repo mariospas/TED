@@ -42,7 +42,7 @@ public class LoginSession {
 	        		"SELECT username ,password, ready, type "
 	        		+"FROM ted.users "
 	        		+"WHERE username = ? "
-	        		+"AND password = ?"
+	        		+"AND password = AES_ENCRYPT(?, SHA2('134711Kk',512))"
 	        		);
 	        state.setString(1, name);
 	        state.setString(2, pass);
@@ -67,9 +67,7 @@ public class LoginSession {
 	        while (set.next())
 	        {
 	        	System.out.println("FIND THIS USERNAME = "+set.getString("username"));
-	            if (set.getString("username").equals(name)
-	            	&& set.getString("password").equals(pass)       //gia to login elenxo name pass kai ready status
-	            	&& set.getInt("ready") == 1) 					//0 den einai egkuro kai 1 einai einai OK
+	            if (set.getInt("ready") == 1) 					//0 den einai egkuro kai 1 einai einai OK
 	            {
 	                x = 1; //success
 	                if(set.getString("type").equals("admin"))
