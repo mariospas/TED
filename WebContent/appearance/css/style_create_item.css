@@ -15,9 +15,10 @@ input
         font-size:16px;
         padding: 7px;
         outline: 0;
-        border:0;
+        border: solid #565555;
+		border-width: 2px 2px;
         width:250px;
-        background: #EBE8DE;
+        background: #ffffff;
         border-radius:5px;
 }
 
@@ -31,6 +32,13 @@ input[type=submit]
         box-shadow: none;
         background: #333333;
         color: #fff;
+		margin-bottom:10px;
+		margin-left:45%;
+}
+
+input[type=submit]:hover
+{
+        background: #52CAE0;;
 }
 
 p
@@ -430,9 +438,10 @@ select
     font-size:16px;
     padding: 7px;
     outline: 0;
-    border:0;
-    width:250px;
-    background: #EBE8DE;
+	border: solid #565555;
+	border-width: 2px 2px;
+	width:250px;
+	background: #ffffff;
     border-radius:5px;
     margin-bottom:5px;
     margin-top:5px;
@@ -755,6 +764,37 @@ footer .wrapper .column h4
         position:absolute;
         clip: rect(1px 1px 1px 1px); /* IE6 & 7 */
           clip: rect(1px, 1px, 1px, 1px);
+}
+
+
+
+#all_form
+{
+	border-radius:10px;
+	border: solid #52CAE0;
+	border-width: 4px 4px;
+	margin-left:20px;
+	margin-right:20px;
+	margin-top:20px;
+	margin-bottom:20px;
+	padding-left:20px;
+	padding-right:20px;
+}
+
+.main_form form p label
+{
+	font-size:20px;
+	font-weight:600;
+
+}
+
+.main_form form hr
+{
+	background-color:#4B4B4B;
+	height:2px;
+	width:40%;
+	margin-bottom:10px;
+	margin-top:10px;
 }
 
 

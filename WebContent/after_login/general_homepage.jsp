@@ -78,47 +78,37 @@
 <body>
 <jsp:include page="../jsp_scripts/header_nav.jsp"/>
 <%
-	LoginSession log = (LoginSession) session.getAttribute("log");
-	if(log != null)
-	{
-		DataCheck data_check = new DataCheck();
-		Item item = new Item(log.getName(),3);
-		LinkedList<String> usernames = item.getListNeighUsers();
-
-		Category cat = new Category();
-		ResultSet set = cat.get_categories();
-
-		//out.println("<center><h1>Welcome: " + log.getName() + "</h1>");
+	Category cat = new Category();
+	ResultSet set = cat.get_categories();
 %>
-<!-- 	<p align="center"><b><a href="auction/live_auctions.jsp">Διαχείριση Δημοπρασιών</a></b></p>
-		<p align="center"><b><a href="auction/find_auction.jsp">Αναζήτηση Δημοπρασιών</a></b></p>
--->
 		<section class="container">
 
-			<div class="search" id="slider_content1">
-				<form name="search" action="../getsearch" method="get">
-						<select name="category">
-							<option value="0">Επέλεξε την κατηγορία σου</option>
-						   <%
-						   int i=0;
-				        while (set.next())
-						{
-				        	i++;
-						%>
-				            <option value="<%out.print(i);%>" name="<%out.print(set.getString("value"));%>" id="<%out.print(set.getString("value"));%>"><%out.print(set.getString("value"));%></option>
-				       <%}
-						   %>
-						</select>
-						<input type="text" name="text">
-						<input type="submit" name="start_search" class="button" value="Search"/>
-				</form>
-			</div>
+			<section id="spacer2">
+				<div class="search" id="slider_content1">
+					<form name="search" action="../getsearch" method="get">
+							<select name="category">
+								<option value="0">Επέλεξε την κατηγορία σου</option>
+							   <%
+							   int i=0;
+					        while (set.next())
+							{
+					        	i++;
+							%>
+					            <option value="<%out.print(i);%>" name="<%out.print(set.getString("value"));%>" id="<%out.print(set.getString("value"));%>"><%out.print(set.getString("value"));%></option>
+					       <%}
+							   %>
+							</select>
+							&nbsp;<input type="text" name="text">
+							<input type="submit" name="start_search" class="button" value="Search"/>
+					</form>
+				</div>
 
-            <div id="slides">
-                <img src="/TED/img/slide1.jpg" alt="Some alt text">
-                <img src="/TED/img/slide2.jpg" alt="Some alt text">
-                <img src="/TED/img/slide3.jpg" alt="Some alt text">
-            </div>
+	            <div id="slides">
+	                <img src="/TED/img/slide1.jpg" alt="Some alt text">
+	                <img src="/TED/img/slide2.jpg" alt="Some alt text">
+	                <img src="/TED/img/slide3.jpg" alt="Some alt text">
+	            </div>
+	        </section>
         </section>
         <section>
 
@@ -142,6 +132,22 @@
 			</div>
 
         </section>
+<%
+	LoginSession log = (LoginSession) session.getAttribute("log");
+	if(log != null)
+	{
+		DataCheck data_check = new DataCheck();
+		Item item = new Item(log.getName(),3);
+		LinkedList<String> usernames = item.getListNeighUsers();
+
+
+
+		//out.println("<center><h1>Welcome: " + log.getName() + "</h1>");
+%>
+<!-- 	<p align="center"><b><a href="auction/live_auctions.jsp">Διαχείριση Δημοπρασιών</a></b></p>
+		<p align="center"><b><a href="auction/find_auction.jsp">Αναζήτηση Δημοπρασιών</a></b></p>
+-->
+
 <%
 
 		if(usernames != null)
@@ -183,10 +189,7 @@
 	}
 	else
 	{
-		out.println("<center><h1> Guest Mode </h1></center>");
-%>
-		<p align="center"><b><a href="auction/find_auction.jsp">Αναζήτηση Δημοπρασιών</a></b></p>
-<%
+
 	}
 %>
 		<jsp:include page="../jsp_scripts/footer.jsp"/>

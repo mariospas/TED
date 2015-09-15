@@ -29,7 +29,7 @@
 		ResultSet item_set = null;
 %>
 		<p align="center"><b>Δημοπρασίες σε Εξέλιξη</b></p>
-		<form method="post" action="http://localhost:8080/TED/after_login/auction/edit_on_auction.jsp">
+		<form method="post" action="https://snf-674750.vm.okeanos.grnet.gr:8443/TED/after_login/auction/edit_on_auction.jsp">
 			<table align="center" width="700" border="1">
 			<tr>
 			  <td>Φωτογραφία</td>
@@ -82,7 +82,7 @@
 		item_set = null;
 %>
 		<p align="center"><b>Απενεργοποιημένες Δημοπρασίες</b></p>
-		<form method="post" action="http://localhost:8080/TED/after_login/auction/edit_auction.jsp">
+		<form method="post" action="https://snf-674750.vm.okeanos.grnet.gr:8443/TED/after_login/auction/edit_auction.jsp">
 			<table align="center" width="700" border="1">
 			<tr>
 			  <td>Φωτογραφία</td>

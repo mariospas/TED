@@ -136,7 +136,7 @@
 			                <br/>
 			                <input TYPE="submit" name="sub_button" id="sub_button" title="Add data to the Database" value="Αποθήκευση Επεξεργασίας"/>
 			            </form>
-						<form method="post" action="http://localhost:8080/TED/after_login/auction/edit_auction.jsp">
+						<form method="post" action="https://snf-674750.vm.okeanos.grnet.gr:8443/TED/after_login/auction/edit_auction.jsp">
 				            <p><input type="radio" name="item" value="<%out.print(item_set.getLong("item_id"));%>" id="item">Συμφωνώ να διαγραφή το προϊόν</p>
 							<input align="center" TYPE="submit" name="sub" id="sub" value="Διαγραφή"/>
 							 <input type="button" onclick="history.go(-1);" value="Άκυρο">

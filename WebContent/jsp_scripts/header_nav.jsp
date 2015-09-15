@@ -11,10 +11,17 @@
 	ResultSet set1 = cat1.get_categories();
 %>
 	<header>
+	<%
+		LoginSession log = (LoginSession) session.getAttribute("log");
+		if(log != null)
+		{
+	%>
 			<p align="right" style="margin:0 20px 0 0;"><a href="auction/live_auctions.jsp">ΔΙΑΧΕΙΡΙΣΗ ΔΗΜΟΠΡΑΣΙΩΝ</a>
 			&nbsp;&nbsp;&nbsp;<a href="/TED/logout_process.jsp">ΑΠΟΣΥΝΔΕΣΗ</a>
             &nbsp;&nbsp;&nbsp;<a href="/TED/after_login/profile_page.jsp">ΠΡΟΦΙΛ</a></p>
-
+	<%
+		}
+	%>
             <div class="toggleMobile">
                 <span class="menu1"></span>
                 <span class="menu2"></span>
@@ -28,8 +35,8 @@
                     <li><a href="javascript:void(0)">Επικοινωνια</a></li>
                </ul>
             </div>
-            <h1>Lingulo HTML5</h1>
-            <p>A responsive website tutorial</p>
+            <h1> TED Store</h1>
+            <p>A DIT project</p>
 
             <div id="wrapper">
             <nav id="nav">
