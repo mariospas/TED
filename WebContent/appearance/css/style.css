@@ -86,6 +86,9 @@ header
 		padding: 30px 0px 30px 0px;
         /*max-width:900px;*/
        /* margin: 0 auto 0 auto;*/
+       -webkit-box-shadow: 0px 3px 5px rgba(100, 100, 100, 0.69);
+        -moz-box-shadow:    0px 3px 5px rgba(100, 100, 100, 0.69);
+        box-shadow:         0px 3px 5px rgba(100, 100, 100, 0.69);
 }
 
 header h1
@@ -326,10 +329,10 @@ ul#navigation li a.last {
 		margin-right:auto;
         display:none;
         z-index:11;
-        padding-left:29%;
-		padding-right:29%;
-		padding-top:10px;
-		padding-bottom:10px;
+        padding-left:34%;
+		padding-right:33%;
+		padding-top:20px;
+		padding-bottom:20px;
 }
 
 #slider_content1 h3, #slider_content2 h3, #slider_content3 h3

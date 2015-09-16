@@ -91,7 +91,7 @@
         	<form method="post" action="save_auction.jsp?id=create" ENCTYPE="multipart/form-data" >
             	<p><label>Όνομα :</label></p>
                 <hr>
-				<input type="text" id="name" name="name" style="width: 300px;" required/>
+				<input type="text" id="name" name="name"  required/>
                 <br/>
                 <p><label>Κατηγορίες :</label></p>
                 <hr>

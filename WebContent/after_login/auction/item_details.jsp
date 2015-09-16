@@ -4,15 +4,78 @@
 <%@ page import="login_logout_process.*"%>
 <%@ page import="xml_mars_unmars.*"%>
 <%@ page import="category.*"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML>
 <html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Δημοπρασία</title>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>General HomePage</title>
+        <link rel="stylesheet" href="/TED/appearance/css/reset.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="/TED/appearance/css/style_create_item.css" type="text/css" media="screen" />
+        <link href="/TED/appearance/css/lightbox.css" rel="stylesheet" />
+        <link href="/TED/appearance/css/acordeon.css" rel='stylesheet' type='text/css' />
+        <link rel="stylesheet" type="text/css" href="../../css/after_login/auction/create_auction.css">
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans|Baumans' rel='stylesheet' type='text/css'/>
+        <script src="/TED/appearance/scripts/modernizr.custom.04512.js"></script>
+        <script src="/TED/appearance/scripts/respond.js"></script>
+
+        <!-- include extern jQuery file but fall back to local file if extern one fails to load !-->
+        <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript">window.jQuery || document.write('<script type="text\/javascript" src="js\/1.7.2.jquery.min"><\/script>')</script>
+
+        <script async src="/TED/appearance/scripts/lightbox.js"></script>
+        <script src="/TED/appearance/scripts/prefixfree.min.js"></script>
+        <script src="/TED/appearance/scripts/jquery.slides.min.js"></script>
+        <script src="../../scripts/checkFileSize.js"></script>
+		<script src="../../scripts/saveDataAndFill.js"></script>
+
+
+        <script>
+			(function ($, window, document, undefined)
+			{
+				'use strict';
+				$(function ()
+				{
+					$("#mobileMenu").hide();
+					$(".toggleMobile").click(function()
+					{
+						$(this).toggleClass("active");
+						$("#mobileMenu").slideToggle(500);
+					});
+				});
+				$(window).on("resize", function()
+				{
+
+					if($(this).width() > 700)
+					{
+						$("#mobileMenu").hide();
+						$(".toggleMobile").removeClass("active");
+					}
+
+				});
+			})(jQuery, window, document);
+		</script>
+
+		<script>
+		    var expanded = false;
+		    function showCheckboxes() {
+		        var checkboxes = document.getElementById("checkboxes");
+		        if (!expanded) {
+		            checkboxes.style.display = "block";
+		            expanded = true;
+		        } else {
+		            checkboxes.style.display = "none";
+		            expanded = false;
+		        }
+		    }
+		</script>
+
+
+
 </head>
+
 <body>
-<jsp:include page="../../logout.html"/>
-<jsp:include page="../profile_button.html"/>
+<jsp:include page="../../jsp_scripts/header_nav.jsp"/>
 <%
 	LoginSession log = (LoginSession) session.getAttribute("log");
 	if(log != null)
@@ -27,53 +90,49 @@
 		boolean b = auction.checkBidUser();
 
 		Category cat = new Category();
+		ResultSet set = cat.get_categories();
 		ResultSet item_set = auction.requested_item(item_id);
-		ResultSet item_cat = cat.get_categories(item_id);
+		ResultSet item_cat = cat.get_item_categories(item_id);
 		while (item_set.next())
 		{
+
 %>
-			<div id="all_form">
-		    	<div id="form_title">
-		        	Δημοπρασία
-		        </div>
-		            	<p><label>Όνομα : <%out.print(item_set.getString("name"));%></label>
-		                <br/>
-		                <img src="<%out.print(item_set.getString("photo_url"));%>" width="120" height="120">
-		                <br/>
-		                <p><label>Κατηγορίες :
-<%
-			        	while (item_cat.next())
-						{
-%>
-		            		<%out.print(item_cat.getString(1));%> </label></p>
-<%
-			        	}
-%>
-						<br/>
-		                <p><label>Τωρινή Τιμή : <%out.print(item_set.getString("currently_price"));%></label>
-		                <br/>
-		                <%
-		                if(item_set.getString("buy_price") != null)
-		                {
-		                %>
-		                <p><label>Τιμή Αγοράς : <%out.print(item_set.getString("buy_price"));%></label>
-						<%
-		                }
-						%>
-		                <br/>
-		                <p><label>Location : <%out.print(item_set.getString("location"));%></label></p>
-						<br/>
-		                <p><label>Χώρα : <%out.print(item_set.getString("country"));%></label>
-						<br/>
-		                <p><label>Ημερομηνία Έναρξης : <%out.print(item_set.getString("start_date"));%></label>
-		                <p><label>Ημερομηνία Τερματισμού : <%out.print(item_set.getString("end_date"));%></label>
-						<br/>
-		               	<p><label>Περιγραφή  :</label>
-		                </br>
-						<p><%out.print(item_set.getString("description"));%>" required /></p>
-		                <br/>
-		    </div>
-<%
+			<div id="form_title">
+			        	<h2 align="center" style="font-size:24px;">Επισκόπηση Δημοπρασίας!</h2>
+			        </div>
+
+			        <div id="box_item">
+
+			        <section id="image_product">
+			        	<img src="<%out.print(item_set.getString("photo_url"));%>" width="300" height="450">
+
+			        </section>
+
+			        <section id="specs">
+
+			        		<p style="font-variant:small-caps; font-family: 'Open Sans', sans-serif;"><label><%out.print(item_set.getString("name"));%>" </label></p>
+			                <br/>
+			                <p><label>Κατηγορίες :
+						        <%
+						        while (set.next())
+								{
+						        	item_cat.beforeFirst();
+						        	while (item_cat.next())
+									{
+
+						        		if(set.getInt("category_id") == item_cat.getInt("category_id"))
+						        		{
+						        			out.print(set.getString("value")+", ");
+						        		}
+
+									}
+
+						         }
+						        %>
+						   	</label></p>
+							<br/>
+			                <p><label>Τωρινή Τιμή : <%out.print(item_set.getString("currently_price"));%></label></p>
+			                <%
 			if(b == false)
 			{
 %>
@@ -88,9 +147,49 @@
 			else
 			{
 %>
-				<p>Έχεις κάνει την τελευταία προσφορά</p>
+				<p style="color:rgba(255,0,4,1.00);">Έχεις κάνει την τελευταία προσφορά</p>
 <%
 			}
+%>
+			                <br/>
+			                <p><label>*Τιμή Αγοράς : <%out.print(item_set.getString("buy_price"));%></label></p>
+							<br/>
+			                <p><label>Ημερομηνία Έναρξης : <%out.print(item_set.getString("start_date"));%></label></p>
+							<br/>
+			                <p><label>Ημερομηνία Τερματισμού : <%out.print(item_set.getString("end_date"));%></label>
+							<br/>
+
+			        </section>
+			        <br/>
+			        <br/>
+			        <br/>
+
+					<div class="container2">
+			          <div class="accordion">
+			            <dl>
+			              <dt>
+			                <a href="#accordion1" aria-expanded="false" aria-controls="accordion1" class="accordion-title accordionTitle js-accordionTrigger">Περιγραφή</a>
+			              </dt>
+			              <dd class="accordion-content accordionItem is-collapsed" id="accordion1" aria-hidden="true">
+			                <p><%out.print(item_set.getString("description"));%></p>
+			              </dd>
+			              <dt>
+			                <a href="#accordion2" aria-expanded="false" aria-controls="accordion2" class="accordion-title accordionTitle js-accordionTrigger">
+			                  Τοποθεσία</a>
+			              </dt>
+			              <dd class="accordion-content accordionItem is-collapsed" id="accordion2" aria-hidden="true">
+			                <p><label>Location : <%out.print(item_set.getString("location"));%></label></p>
+			                <br/>
+			                <p><label>Χώρα : <%out.print(item_set.getString("country"));%></label></p>
+			                <br/>
+			              </dd>
+			            </dl>
+			          </div>
+			        </div>
+
+
+			       </div>
+<%
 		}
 	}
 	else
@@ -98,5 +197,73 @@
 		out.println("<center><h1> Guest Mode Permission Denied</h1></center>");
 	}
 %>
+<jsp:include page="../../jsp_scripts/footer.jsp"/>
+
+<script>
+
+		//uses classList, setAttribute, and querySelectorAll
+//if you want this to work in IE8/9 youll need to polyfill these
+(function(){
+	var d = document,
+	accordionToggles = d.querySelectorAll('.js-accordionTrigger'),
+	setAria,
+	setAccordionAria,
+	switchAccordion,
+  touchSupported = ('ontouchstart' in window),
+  pointerSupported = ('pointerdown' in window);
+
+  skipClickDelay = function(e){
+    e.preventDefault();
+    e.target.click();
+  }
+
+		setAriaAttr = function(el, ariaType, newProperty){
+		el.setAttribute(ariaType, newProperty);
+	};
+	setAccordionAria = function(el1, el2, expanded){
+		switch(expanded) {
+      case "true":
+      	setAriaAttr(el1, 'aria-expanded', 'true');
+      	setAriaAttr(el2, 'aria-hidden', 'false');
+      	break;
+      case "false":
+      	setAriaAttr(el1, 'aria-expanded', 'false');
+      	setAriaAttr(el2, 'aria-hidden', 'true');
+      	break;
+      default:
+				break;
+		}
+	};
+//function
+switchAccordion = function(e) {
+	e.preventDefault();
+	var thisAnswer = e.target.parentNode.nextElementSibling;
+	var thisQuestion = e.target;
+	if(thisAnswer.classList.contains('is-collapsed')) {
+		setAccordionAria(thisQuestion, thisAnswer, 'true');
+	} else {
+		setAccordionAria(thisQuestion, thisAnswer, 'false');
+	}
+  	thisQuestion.classList.toggle('is-collapsed');
+  	thisQuestion.classList.toggle('is-expanded');
+		thisAnswer.classList.toggle('is-collapsed');
+		thisAnswer.classList.toggle('is-expanded');
+
+  	thisAnswer.classList.toggle('animateIn');
+	};
+	for (var i=0,len=accordionToggles.length; i<len; i++) {
+		if(touchSupported) {
+      accordionToggles[i].addEventListener('touchstart', skipClickDelay, false);
+    }
+    if(pointerSupported){
+      accordionToggles[i].addEventListener('pointerdown', skipClickDelay, false);
+    }
+    accordionToggles[i].addEventListener('click', switchAccordion, false);
+  }
+})();
+
+</script>
+
+
 </body>
 </html>

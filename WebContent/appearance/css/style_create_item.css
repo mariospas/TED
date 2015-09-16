@@ -17,7 +17,7 @@ input
         outline: 0;
         border: solid #565555;
 		border-width: 2px 2px;
-        width:250px;
+        width:30%;
         background: #ffffff;
         border-radius:5px;
 }
@@ -36,7 +36,27 @@ input[type=submit]
 		margin-left:45%;
 }
 
+input[type=button]
+{
+        width:auto;
+        padding: 5px 18px;
+        line-height:25px;
+        text-shadow:none;
+        cursor:pointer;
+        box-shadow: none;
+        background: #ffffff;
+        color: #bbbbbb;
+		margin-bottom:10px;
+		margin-left:45%;
+}
+
+
 input[type=submit]:hover
+{
+        background: #52CAE0;;
+}
+
+input[type=button]:hover
 {
         background: #52CAE0;;
 }
@@ -94,6 +114,9 @@ header
 		padding: 30px 0px 30px 0px;
         /*max-width:900px;*/
        /* margin: 0 auto 0 auto;*/
+       -webkit-box-shadow: 0px 3px 5px rgba(100, 100, 100, 0.69);
+        -moz-box-shadow:    0px 3px 5px rgba(100, 100, 100, 0.69);
+        box-shadow:         0px 3px 5px rgba(100, 100, 100, 0.69);
 }
 
 header h1
@@ -783,19 +806,55 @@ footer .wrapper .column h4
 
 .main_form form p label
 {
-	font-size:20px;
-	font-weight:600;
+	font-size:16px;
+	font-weight:400;
 
 }
 
 .main_form form hr
 {
-	background-color:#4B4B4B;
+	background-color:#52CAE0;
 	height:2px;
 	width:40%;
 	margin-bottom:10px;
 	margin-top:10px;
 }
+
+#box_item
+{
+	width:60%;
+	margin-left:20%;
+	-webkit-box-shadow: 0px 4px 4px #4D4D59;
+    -moz-box-shadow: 0px 4px 4px #4D4D59;
+    box-shadow: 0px 4px 4px #4D4D59;
+    padding-left:20px;
+    padding-right:20px;
+    padding-top:10px;
+    padding-bottom:10px;
+    margin-bottom:40px;
+}
+
+#image_product
+{
+	float:left;
+}
+
+#specs
+{
+	font-size:20px;
+	margin-left:30%;
+	width:auto;
+}
+
+#descr
+{
+	margin-top:100px;
+	font-size:20px;
+	margin-left:auto;
+	width:auto;
+}
+
+
 
 
 /* MEDIA QUERIES FOR A RESPONSIVE LAYOUT */
@@ -856,6 +915,7 @@ footer .wrapper .column h4
         {
                 padding:4px;
                 font-size:14px;
+                width:60%;
         }
         input[type="submit"]
         {
@@ -891,6 +951,43 @@ footer .wrapper .column h4
                 font-size: 12px;
                 width: 230px;
         }
+
+        .main_form form p label
+		{
+			font-size:14px;
+			font-weight:350;
+
+		}
+
+		.main_form form hr
+		{
+			width:60%;
+
+		}
+
+		#box_item
+		{
+			width:70%;
+			margin-left:10%;
+		    padding-left:10px;
+		    padding-right:10px;
+		    padding-top:10px;
+		    padding-bottom:10px;
+		    margin-bottom:40px;
+		}
+
+		#image_product
+		{
+			float:none;
+			margin-left:25%;
+		}
+
+		#specs
+		{
+			font-size:16px;
+			margin-left:0%;
+			width:auto;
+		}
 }
 
 @media (max-width: 765px)
@@ -1024,6 +1121,44 @@ footer .wrapper .column h4
         {
                 display:none;
         }
+
+        .main_form form p label
+		{
+			font-size:14px;
+			font-weight:350;
+
+		}
+
+		.main_form form hr
+		{
+			width:80%;
+
+		}
+
+		#box_item
+		{
+			width:80%;
+			margin-left:5%;
+		    padding-left:5px;
+		    padding-right:5px;
+		    padding-top:10px;
+		    padding-bottom:10px;
+		    margin-bottom:40px;
+		}
+
+		#image_product
+		{
+			float:none;
+			margin-left:20%;
+		}
+
+
+		#specs
+		{
+			font-size:16px;
+			margin-left:0%;
+			width:auto;
+		}
 }
 
 @media (max-width: 500px)
@@ -1068,7 +1203,7 @@ footer .wrapper .column h4
         }
         input
         {
-                width:auto;
+                width:95%;
         }
         select
 		{
@@ -1153,6 +1288,44 @@ footer .wrapper .column h4
                 margin-left: 60px;
                 font-size:14px;
         }
+
+        .main_form form p label
+		{
+			font-size:14px;
+			font-weight:350;
+
+		}
+
+		.main_form form hr
+		{
+			width:95%;
+
+		}
+
+		#box_item
+		{
+			width:100%;
+			margin-left:0%;
+		    padding-left:1px;
+		    padding-right:1px;
+		    padding-top:10px;
+		    padding-bottom:10px;
+		    margin-bottom:40px;
+		}
+
+		#image_product
+		{
+			float:none;
+			margin-left:15%;
+		}
+
+
+		#specs
+		{
+			font-size:16px;
+			margin-left:0%;
+			width:auto;
+		}
 }
 
 /* KEYFRAMES */

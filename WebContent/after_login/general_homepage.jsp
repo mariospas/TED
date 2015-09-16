@@ -90,7 +90,7 @@
 								<option value="0">Επέλεξε την κατηγορία σου</option>
 							   <%
 							   int i=0;
-					        while (set.next())
+					        while (set.previous())
 							{
 					        	i++;
 							%>
@@ -98,8 +98,8 @@
 					       <%}
 							   %>
 							</select>
-							&nbsp;<input type="text" name="text">
-							<input type="submit" name="start_search" class="button" value="Search"/>
+							&nbsp;&nbsp;<input type="text" name="text">
+							&nbsp;<input type="submit" name="start_search" class="button" value="Search"/>
 					</form>
 				</div>
 

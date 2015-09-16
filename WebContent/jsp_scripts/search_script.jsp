@@ -38,7 +38,7 @@
 							<option value="0">Επέλεξε την κατηγορία σου</option>
 						   <%
 						    i=0;
-				        while (set.next())
+				        while (set.previous())
 						{
 				        	i++;
 						%>

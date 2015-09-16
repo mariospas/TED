@@ -71,7 +71,7 @@ class UserScore implements Comparator<UserScore>
 
 	@Override
 	public int compare(UserScore o1, UserScore o2) {
-		System.out.println(o1.username+" "+o1.score+"      "+o2.username+" "+o2.score);
+		//System.out.println(o1.username+" "+o1.score+"      "+o2.username+" "+o2.score);
         if(o1.score < o2.score) return -1;
         else if(o1.score > o2.score) return 1;
         return 0;
@@ -132,7 +132,7 @@ public class Item extends HttpServlet{
 		if(photo_url == null) Photo_Url = null;
 		else Photo_Url = new String(photo_url);
 
-		System.out.println(Started + "  " + Ends);
+		//System.out.println(Started + "  " + Ends);
 	    try
 	    {
 	        link = new ConnectionDB();
@@ -204,7 +204,7 @@ public class Item extends HttpServlet{
 
 		try
 		{
-			System.out.println("~~ 1 ~~");
+			//System.out.println("~~ 1 ~~");
 			state = link.GetState();
 			state = (link.GetCon()).prepareStatement(
 	        		"select * "
@@ -216,7 +216,7 @@ public class Item extends HttpServlet{
 
 			while(set.next())
 			{
-				System.out.println("~~ 2 ~~");
+				//System.out.println("~~ 2 ~~");
 
 				itemid = set.getLong("item_id");
 				name = set.getString("name");
@@ -225,7 +225,7 @@ public class Item extends HttpServlet{
 				buy_price = set.getFloat("buy_price");
 				first_bid = set.getFloat("first_bid");
 
-				System.out.println("~~ 3 ~~");
+				//System.out.println("~~ 3 ~~");
 				state = (link.GetCon()).prepareStatement(
 		        		"SELECT * "
 		        		+"FROM ted.item_bids "
@@ -235,7 +235,7 @@ public class Item extends HttpServlet{
 		        ResultSet set_row = state.executeQuery();
 		        set_row.first();
 		        num_of_bids = set_row.getRow();
-		        System.out.println("~~ 4 ~~");
+		        //System.out.println("~~ 4 ~~");
 
 				location = set.getString("location");
 				country = set.getString("country");
@@ -248,7 +248,7 @@ public class Item extends HttpServlet{
 				date = stamp;
 				ends = date.toString();
 
-				System.out.println("~~ 5 ~~");
+				//System.out.println("~~ 5 ~~");
 				if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 
 				state = (link.GetCon()).prepareStatement(
@@ -260,18 +260,18 @@ public class Item extends HttpServlet{
 		        ResultSet set_usr = state.executeQuery();
 		        set_usr.first();
 				seller_userid = this.createSeller(itemid);
-				System.out.println("~~ 6 ~~");
+				//System.out.println("~~ 6 ~~");
 
 				description = set.getString("description");
 				photo_url = set.getString("photo_url");
-				System.out.println("~~ 7 ~~");
+				//System.out.println("~~ 7 ~~");
 				bid = this.create_bids(itemid);
-				System.out.println("~~ 8 ~~");
+				//System.out.println("~~ 8 ~~");
 
 				ItemXML itemxml = new ItemXML(name, category, currently, buy_price, first_bid, num_of_bids, location, country, photo_url, started, ends, seller_userid, description, bid, itemid);
-				System.out.println("~~ 9 ~~");
+				//System.out.println("~~ 9 ~~");
 				items.add(itemxml);
-				System.out.println("~~ 10 ~~");
+				//System.out.println("~~ 10 ~~");
 
 		        //if (set_usr != null) try { set_usr.close(); } catch (SQLException logOrIgnore) {}
 		        //if (set_row != null) try { set_row.close(); } catch (SQLException logOrIgnore) {}
@@ -282,7 +282,7 @@ public class Item extends HttpServlet{
 
 	        //Creating items object for marshaling into XML document
 			ItemsXML itemsXML = new ItemsXML(items);
-			System.out.println("~~ 11 ~~");
+			//System.out.println("~~ 11 ~~");
 
 	        JAXBContext jaxbCtx = null;
 	        StringWriter xmlWriter = null;
@@ -294,21 +294,21 @@ public class Item extends HttpServlet{
 	            jaxbCtx.createMarshaller().marshal(itemsXML, xmlWriter);
 	            //System.out.println("XML Marshal example in Java");
 	            //System.out.println(xmlWriter);
-	            System.out.println("~~ 12 ~~");
+	            //System.out.println("~~ 12 ~~");
 
 
 
-	            System.out.println("~~ current ~~");
+	            //System.out.println("~~ current ~~");
 		        File dir = new File(current+"xml_files");
 		        dir.mkdir();
 		        current += "xml_files"+File.separator;
 		        String url = new String("xml_files"+File.separator);
 			    File targetFile = new File(current+"xml_all_files.xml");
-			    System.out.println("~~ 13 ~~");
+			    //System.out.println("~~ 13 ~~");
 
 			    download_url = new String(ted+File.separator+url+"xml_all_files.xml");
 	            FileUtils.writeStringToFile(targetFile, xmlWriter.toString());
-	            System.out.println("~~ 14 ~~");
+	            //System.out.println("~~ 14 ~~");
 	        }
 	        catch (JAXBException ex) {
 	            Logger.getLogger(Item.class.getName()).log(Level.SEVERE,
@@ -332,7 +332,7 @@ public class Item extends HttpServlet{
 			{
 				jaxbCtx = JAXBContext.newInstance(ItemsXML.class);
 				File targetFile = new File(xml);
-			    System.out.println("~~ 13 222 ~~");
+			    //System.out.println("~~ 13 222 ~~");
 
 
 
@@ -343,7 +343,7 @@ public class Item extends HttpServlet{
 		        List<ItemXML> Items = b.getItemsXML();
 		        for(ItemXML itemElem : Items)
 		        {
-		        	System.out.println("Item ID = "+itemElem.getItemID());
+		        	//System.out.println("Item ID = "+itemElem.getItemID());
 		        	ItemID = itemElem.getItemID();
 					Name = itemElem.getName();
 					String string = itemElem.getCurrently();
@@ -500,7 +500,7 @@ public class Item extends HttpServlet{
 	        {
 	        	if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 
-				System.out.println("import Item "+ItemID);
+				//System.out.println("import Item "+ItemID);
 				state = link.GetState();
 				state = (link.GetCon()).prepareStatement(
 		        		"INSERT INTO ted.items "
@@ -533,7 +533,7 @@ public class Item extends HttpServlet{
 	        if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 	        //if (conn != null) try { conn.close(); } catch (SQLException logOrIgnore) {}
 		}
-		System.out.println("out import Item "+ItemID);
+		//System.out.println("out import Item "+ItemID);
 	}
 
 
@@ -615,7 +615,7 @@ public class Item extends HttpServlet{
 
 		try
 	    {
-			System.out.println("InsertCategories");
+			//System.out.println("InsertCategories");
 			String categ = null;
 			Iterator<String> iter = Category.iterator();
 			while (iter.hasNext())
@@ -644,7 +644,7 @@ public class Item extends HttpServlet{
 				}
 				if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 			}
-			System.out.println("OUT InsertCategories");
+			//System.out.println("OUT InsertCategories");
 	    }
 		catch(SQLException ex)
 	    {
@@ -665,7 +665,7 @@ public class Item extends HttpServlet{
 
 		try
 	    {
-			System.out.println("1 UpdateCategories");
+			//System.out.println("1 UpdateCategories");
 			state = link.GetState();
 			state = (link.GetCon()).prepareStatement(
 	        		"DELETE FROM item_category "
@@ -675,7 +675,7 @@ public class Item extends HttpServlet{
 			state.executeUpdate();
 			if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 
-			System.out.println("2 UpdateCategories");
+			//System.out.println("2 UpdateCategories");
 			String categ = null;
 			Iterator<String> iter = Category.iterator();
 			while (iter.hasNext())
@@ -690,10 +690,10 @@ public class Item extends HttpServlet{
 				state.setString(1, categ);
 				set = state.executeQuery();
 				//if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
-				System.out.println("3 UpdateCategories");
+				//System.out.println("3 UpdateCategories");
 				while (set.next())
 				{
-					System.out.println("4 UpdateCategories");
+					//System.out.println("4 UpdateCategories");
 					state = link.GetState();
 					state = (link.GetCon()).prepareStatement(
 			        		"INSERT INTO ted.item_category "
@@ -703,11 +703,11 @@ public class Item extends HttpServlet{
 					state.setLong(2, set.getLong("category_id"));
 					state.executeUpdate();
 					if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
-					System.out.println("5 UpdateCategories");
+					//System.out.println("5 UpdateCategories");
 				}
 				if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 			}
-			System.out.println("OUT UpdateCategories");
+			//System.out.println("OUT UpdateCategories");
 	    }
 		catch(SQLException ex)
 	    {
@@ -985,7 +985,7 @@ public class Item extends HttpServlet{
 
 	        for(String cat_value : Category)
 	        {
-	        	System.out.println(" 1 Insert new category for loop "+cat_value);
+	        	//System.out.println(" 1 Insert new category for loop "+cat_value);
 		        state = link.GetState();
 		        state = (link.GetCon()).prepareStatement(
 		        		"SELECT * "+
@@ -996,20 +996,20 @@ public class Item extends HttpServlet{
 		        set1 = state.executeQuery();
 		        //if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
 
-		        System.out.println(" 2 Insert new category for loop "+cat_value);
+		        //System.out.println(" 2 Insert new category for loop "+cat_value);
 		        //set1.first();
-		        System.out.println(" 3 Insert new category for loop "+cat_value);
+		        //System.out.println(" 3 Insert new category for loop "+cat_value);
 		        if(set1.next())
 		        {
 		        	if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
-		        	System.out.println(" 3.1 Insert new category for loop "+cat_value);
+		        	//System.out.println(" 3.1 Insert new category for loop "+cat_value);
 		        	continue;
 		        }
 		        else
 		        {
 		        	if (state != null) try { state.close();  } catch (SQLException logOrIgnore) {}
-		        	System.out.println(" 3.2 Insert new category for loop "+cat_value);
-		        	System.out.println("import Item");
+		        	//System.out.println(" 3.2 Insert new category for loop "+cat_value);
+		        	//System.out.println("import Item");
 					state = link.GetState();
 					state = (link.GetCon()).prepareStatement(
 			        		"INSERT INTO ted.category "
@@ -1039,13 +1039,13 @@ public class Item extends HttpServlet{
 	public void importNewBids(Bids bids)
 	{
 		List<Bid> bid_list = bids.getBids();
-		System.out.println("importNewBids");
+		//System.out.println("importNewBids");
 
 		if(bid_list != null)
 		{
 			for(Bid bidElem : bid_list)
 			{
-				System.out.println("FOR bidElem");
+				//System.out.println("FOR bidElem");
 
 				String count = null;
 				String loc = null;
@@ -1056,10 +1056,10 @@ public class Item extends HttpServlet{
 				int rate = bidder.getRating();
 				String user = new String(bidder.getUsername());
 
-				System.out.println("Import BIDS insertNewUser");
+				//System.out.println("Import BIDS insertNewUser");
 				this.insertNewUser(count, loc, user);
 
-				System.out.println("Import BIDS insertNewBidder");
+				//System.out.println("Import BIDS insertNewBidder");
 				this.insertNewBidder(user, rate);
 
 				java.sql.Timestamp time = this.splitterDateTime(bidElem.getTime());
@@ -1068,7 +1068,7 @@ public class Item extends HttpServlet{
 				String string = bidElem.getAmount();
 				if(string != null) price = Float.parseFloat(string.substring(1));
 
-				System.out.println("Import BIDS insertBid");
+				//System.out.println("Import BIDS insertBid");
 				this.insertBid(price, user, time);
 			}
 		}
@@ -1096,7 +1096,7 @@ public class Item extends HttpServlet{
 	        }
 	        else
 	        {
-	        	System.out.println("import New User");
+	        	//System.out.println("import New User");
 				state = link.GetState();
 				state = (link.GetCon()).prepareStatement("INSERT INTO ted.users VALUES (?,aes_encrypt('1', SHA2('134711Kk',512)),'demo','demo','demo','demo','demo','demo',?,?,'demo',1,'user')");
 
@@ -1137,7 +1137,7 @@ public class Item extends HttpServlet{
 	        if(set1.next()){}
 	        else
 	        {
-	        	System.out.println("import New User");
+	        	//System.out.println("import New User");
 				state = link.GetState();
 				state = (link.GetCon()).prepareStatement("INSERT INTO ted.users VALUES (?,aes_encrypt('1', SHA2('134711Kk',512)),'demo','demo','demo','demo','demo','demo','demo','demo','demo',1,'user')");
 
@@ -1188,7 +1188,7 @@ public class Item extends HttpServlet{
 	        else
 	        {
 
-		        System.out.println("import New Bidder");
+		        //System.out.println("import New Bidder");
 				state = link.GetState();
 				state = (link.GetCon()).prepareStatement("INSERT INTO ted.bidders VALUES (?,?)");
 
@@ -1216,7 +1216,7 @@ public class Item extends HttpServlet{
 		ResultSet set1 = null;
 		try
 	    {
-			System.out.println("import New Bidder");
+			//System.out.println("import New Bidder");
 			state = link.GetState();
 			state = (link.GetCon()).prepareStatement("INSERT INTO ted.item_bids VALUES (?,?,?,?)");
 
@@ -1280,7 +1280,7 @@ public class Item extends HttpServlet{
 	        }
 	        else
 	        {
-	        	System.out.println("import New Seller");
+	        	//System.out.println("import New Seller");
 				state = link.GetState();
 				state = (link.GetCon()).prepareStatement("INSERT INTO ted.sellers VALUES (?,?)");
 
@@ -1335,7 +1335,7 @@ public class Item extends HttpServlet{
 					//System.out.println(j+" cat : " + value.getKey()+" "+value.getValue());
 				}
 				double square = Math.sqrt(sum);
-				System.out.println(i+" user : " + entry.getKey()+" in common points = "+square+" with user = "+username);
+				//System.out.println(i+" user : " + entry.getKey()+" in common points = "+square+" with user = "+username);
 
 				UserScore user_score = new UserScore(entry.getKey(), square);
 				if(size != 0)

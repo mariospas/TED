@@ -4,32 +4,77 @@
 <%@ page import="login_logout_process.*"%>
 <%@ page import="xml_mars_unmars.*"%>
 <%@ page import="category.*"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML>
 <html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Επεξεργασία Δημοπρασίας</title>
-<link rel="stylesheet" type="text/css" href="../../css/after_login/auction/create_auction.css">
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
-<script src="../../scripts/checkFileSize.js"></script>
-<script src="../../scripts/saveDataAndFill.js"></script>
-<script>
-    var expanded = false;
-    function showCheckboxes() {
-        var checkboxes = document.getElementById("checkboxes");
-        if (!expanded) {
-            checkboxes.style.display = "block";
-            expanded = true;
-        } else {
-            checkboxes.style.display = "none";
-            expanded = false;
-        }
-    }
-</script>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>General HomePage</title>
+        <link rel="stylesheet" href="/TED/appearance/css/reset.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="/TED/appearance/css/style_create_item.css" type="text/css" media="screen" />
+        <link href="/TED/appearance/css/lightbox.css" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="../../css/after_login/auction/create_auction.css">
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans|Baumans' rel='stylesheet' type='text/css'/>
+        <script src="/TED/appearance/scripts/modernizr.custom.04512.js"></script>
+        <script src="/TED/appearance/scripts/respond.js"></script>
+
+        <!-- include extern jQuery file but fall back to local file if extern one fails to load !-->
+        <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript">window.jQuery || document.write('<script type="text\/javascript" src="js\/1.7.2.jquery.min"><\/script>')</script>
+
+        <script async src="/TED/appearance/scripts/lightbox.js"></script>
+        <script src="/TED/appearance/scripts/prefixfree.min.js"></script>
+        <script src="/TED/appearance/scripts/jquery.slides.min.js"></script>
+        <script src="../../scripts/checkFileSize.js"></script>
+		<script src="../../scripts/saveDataAndFill.js"></script>
+
+
+        <script>
+			(function ($, window, document, undefined)
+			{
+				'use strict';
+				$(function ()
+				{
+					$("#mobileMenu").hide();
+					$(".toggleMobile").click(function()
+					{
+						$(this).toggleClass("active");
+						$("#mobileMenu").slideToggle(500);
+					});
+				});
+				$(window).on("resize", function()
+				{
+
+					if($(this).width() > 700)
+					{
+						$("#mobileMenu").hide();
+						$(".toggleMobile").removeClass("active");
+					}
+
+				});
+			})(jQuery, window, document);
+		</script>
+
+		<script>
+		    var expanded = false;
+		    function showCheckboxes() {
+		        var checkboxes = document.getElementById("checkboxes");
+		        if (!expanded) {
+		            checkboxes.style.display = "block";
+		            expanded = true;
+		        } else {
+		            checkboxes.style.display = "none";
+		            expanded = false;
+		        }
+		    }
+		</script>
+
+
+
 </head>
+
 <body>
-<jsp:include page="../../logout.html"/>
-<jsp:include page="../profile_button.html"/>
+<jsp:include page="../../jsp_scripts/header_nav.jsp"/>
 <%
 	LoginSession log = (LoginSession) session.getAttribute("log");
 	if(log != null)
@@ -57,15 +102,17 @@
 %>
 				<div id="all_form">
 			    	<div id="form_title">
-			        	Επεξεργασία Δημοπρασίας!
+			        	<h2 align="center" style="font-size:24px;">Επεξεργασία Δημοπρασίας!</h2>
 			        </div>
 
 			        <div id="main_form">
 			        	<form method="post" action="save_auction.jsp" ENCTYPE="multipart/form-data" >
-			            	<p><label>Όνομα :</label>
-							<input type="text" id="name" name="name" style="width: 300px;" value="<%out.print(item_set.getString("name"));%>" required/></p>
+			            	<p><label>Όνομα :</label></p>
+			            	<hr>
+							<input type="text" id="name" name="name" value="<%out.print(item_set.getString("name"));%>" required/>
 			                <br/>
 			                <p><label>Κατηγορίες :</label></p>
+			                <hr>
 			                <div class="multiselect">
 						        <div class="selectBox" onclick="showCheckboxes()">
 						            <select required>
@@ -108,38 +155,47 @@
 						        </div>
 						    </div>
 							<br/>
-			                <p><label>Αρχική Προσφορά :</label>
-			           		<input type="text" id="first_bid" name="first_bid" value="<%out.print(item_set.getString("first_bid"));%>" required/></p>
+			                <p><label>Αρχική Προσφορά :</label></p>
+			                <hr>
+			           		<input type="text" id="first_bid" name="first_bid" value="<%out.print(item_set.getString("first_bid"));%>" required/>
 			                <br/>
-			                <p><label>*Τιμή Αγοράς :</label>
-							<input type="text" id="buy_price" name="buy_price" value="<%out.print(item_set.getString("buy_price"));%>" /></p>
+			                <p><label>*Τιμή Αγοράς :</label></p>
+			                <hr>
+							<input type="text" id="buy_price" name="buy_price" value="<%out.print(item_set.getString("buy_price"));%>" />
 			                <br/>
 			                <p><label>Location : (latitude;longtitude e.g 2.458;3.589)</label></p>
-							<input type="text" id="latlong" name="latlong" value="<%out.print(item_set.getString("location"));%>" required/></p>
+			                <hr>
+							<input type="text" id="latlong" name="latlong" value="<%out.print(item_set.getString("location"));%>" required/>
 			                <br/>
-			                <p><label>Χώρα :</label>
-							<input type="text" id="country" name="country" value="<%out.print(item_set.getString("country"));%>" required/></p>
+			                <p><label>Χώρα :</label></p>
+			                <hr>
+							<input type="text" id="country" name="country" value="<%out.print(item_set.getString("country"));%>" required/>
 			                <br/>
-			                <p><label>Ημερομηνία Έναρξης :</label>
-							<input type="date" id="start_date" name="start_date" value="<%out.print(item_set.getString("start_date"));%>" required /></p>
+			                <p><label>Ημερομηνία Έναρξης :</label></p>
+			                <hr>
+							<input type="date" id="start_date" name="start_date" value="<%out.print(item_set.getString("start_date"));%>" required />
 							<br/>
-			                <p><label>Ημερομηνία Τερματισμού :  :</label>
-							<input type="date" id="end_date" name="end_date" value="<%out.print(item_set.getString("end_date"));%>" required /></p>
+			                <p><label>Ημερομηνία Τερματισμού : </label></p>
+			                <hr>
+							<input type="date" id="end_date" name="end_date" value="<%out.print(item_set.getString("end_date"));%>" required />
 							<br/>
-			                <p><label>* Φωτογραφία :</label>
+			                <p><label>* Φωτογραφία :</label></p>
+			                <hr>
 			                <input type="hidden" name="size" value="1048576">
-			                <input type="file" name="photo" id="i_file" value="<%out.print(item_set.getString("photo_url"));%>"> </p>
+			                <input type="file" name="photo" id="i_file" value="<%out.print(item_set.getString("photo_url"));%>">
 			                </br>
-			                <p><label>Περιγραφή  :</label>
-			                </br>
-							<input type="text" id="description" name="description" style="width: 300px; height: 300px;" value="<%out.print(item_set.getString("description"));%>" required /></p>
+			                <p><label>Περιγραφή  :</label></p>
+			                <hr>
+							<input type="text" id="description" name="description" style="width: 98%; height: 300px;" value="<%out.print(item_set.getString("description"));%>" required />
+			                <br/>
 			                <br/>
 			                <input TYPE="submit" name="sub_button" id="sub_button" title="Add data to the Database" value="Αποθήκευση Επεξεργασίας"/>
 			            </form>
-						<form method="post" action="https://snf-674750.vm.okeanos.grnet.gr:8443/TED/after_login/auction/edit_auction.jsp">
-				            <p><input type="radio" name="item" value="<%out.print(item_set.getLong("item_id"));%>" id="item">Συμφωνώ να διαγραφή το προϊόν</p>
-							<input align="center" TYPE="submit" name="sub" id="sub" value="Διαγραφή"/>
-							 <input type="button" onclick="history.go(-1);" value="Άκυρο">
+						<form method="post" action="edit_auction.jsp">
+				            <p align="center"><input type="radio" name="item" value="<%out.print(item_set.getLong("item_id"));%>" id="item">Συμφωνώ να διαγραφή το προϊόν</p>
+							<input TYPE="submit" name="sub" id="sub" class="sub_del" value="Διαγραφή"/>
+							<br/>
+							<input type="button" onclick="history.go(-1);" value="Άκυρο">
 						</form>
 			       </div>
 			    </div>
@@ -173,5 +229,6 @@
 		out.println("<center><h1> Guest Mode Permission Denied</h1></center>");
 	}
 %>
+<jsp:include page="../../jsp_scripts/footer.jsp"/>
 </body>
 </html>
