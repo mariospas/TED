@@ -11,8 +11,8 @@
 %>
 
 		<section id="spacer2">
-			<div class="search" id="slider_content1">
-				<form name="search" action="../getsearch" method="get">
+			<div class="search" >
+				<form name="search" action="/TED/getsearch" method="get">
 						<select name="category">
 							<option value="0">Επέλεξε την κατηγορία σου</option>
 						   <%
@@ -33,7 +33,7 @@
         <section>
 
 	        <div class="search2" id="search2">
-				<form name="search" action="../getsearch" method="get">
+				<form name="search" action="/TED/getsearch" method="get">
 						<p align="center"><select name="category">
 							<option value="0">Επέλεξε την κατηγορία σου</option>
 						   <%

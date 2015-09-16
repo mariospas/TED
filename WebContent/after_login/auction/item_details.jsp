@@ -4,6 +4,7 @@
 <%@ page import="login_logout_process.*"%>
 <%@ page import="xml_mars_unmars.*"%>
 <%@ page import="category.*"%>
+<%@ page import="maps.*"%>
 <!DOCTYPE HTML>
 <html>
     <head>
@@ -70,12 +71,37 @@
 		    }
 		</script>
 
+		<script>
+		function jqUpdateSize(){
+		    // Get the dimensions of the viewport
+		    var width = $(window).width();
+		    var height = $(window).height();
+
+		    $('#jqWidth').html(width);      // Display the width
+		    $('#jqHeight').html(height);    // Display the height
+
+	    	if(width < 700)
+	    	{
+	    		$(".search2").show();
+	    		$(".search").hide();
+	    	}
+	    	else if(width > 700)
+    		{
+	    		$(".search2").hide();
+	    		$(".search").show();
+    		}
+
+		};
+		$(document).ready(jqUpdateSize);    // When the page first loads
+		$(window).resize(jqUpdateSize);
+		</script>
 
 
 </head>
 
 <body>
 <jsp:include page="../../jsp_scripts/header_nav.jsp"/>
+<jsp:include page="../../jsp_scripts/search_script.jsp"/>
 <%
 	LoginSession log = (LoginSession) session.getAttribute("log");
 	if(log != null)
@@ -97,14 +123,17 @@
 		{
 
 %>
-			<div id="form_title">
-			        	<h2 align="center" style="font-size:24px;">Επισκόπηση Δημοπρασίας!</h2>
-			        </div>
 
 			        <div id="box_item">
 
+			        <div id="form_title">
+			        	<h2 align="center" style="font-size:24px;">Επισκόπηση Δημοπρασίας!</h2>
+			        </div>
+
 			        <section id="image_product">
-			        	<img src="<%out.print(item_set.getString("photo_url"));%>" width="300" height="450">
+			        	<img src="<%if(item_set.getString("photo_url") != null) out.print(item_set.getString("photo_url"));
+			        				else out.print("/TED/img/item3.png");
+			        			  %>">
 
 			        </section>
 
@@ -131,7 +160,7 @@
 						        %>
 						   	</label></p>
 							<br/>
-			                <p><label>Τωρινή Τιμή : <%out.print(item_set.getString("currently_price"));%></label></p>
+			                <p><label>Τωρινή Τιμή : <%out.print(item_set.getString("currently_price"));%> €</label></p>
 			                <%
 			if(b == false)
 			{
@@ -178,10 +207,25 @@
 			                  Τοποθεσία</a>
 			              </dt>
 			              <dd class="accordion-content accordionItem is-collapsed" id="accordion2" aria-hidden="true">
-			                <p><label>Location : <%out.print(item_set.getString("location"));%></label></p>
-			                <br/>
+
 			                <p><label>Χώρα : <%out.print(item_set.getString("country"));%></label></p>
 			                <br/>
+			                <%
+							double latitude = 0;
+							double longitude = 0;
+							GetLocation2 locations = new GetLocation2(item_id);
+							latitude = locations.getLatitude();
+							longitude = locations.getLongitude();
+							%>
+							<iframe
+								src="https://www.google.com/maps/embed?pb=!1m17!1m8!1m3!1d
+								54734965.0652637!2d
+								54.40544131376551!3d
+								33.14174419163847!3m2!1i1024!2i768!4f13.1!4m6!3e6!4m0!4m3!3m2!1d
+								<%=latitude%>!2d
+								<%=longitude%>!5e0!3m2!1sel!2sgr!4v1442404950774"
+								width="600" height="450" frameborder="0" style="border:0" allowfullscreen>
+							</iframe>
 			              </dd>
 			            </dl>
 			          </div>

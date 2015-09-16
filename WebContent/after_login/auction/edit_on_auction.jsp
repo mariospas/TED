@@ -229,11 +229,13 @@
 			{
 %>
 
-			    	<div id="form_title">
-			        	<h2 align="center" style="font-size:24px;">Επισκόπηση Δημοπρασίας!</h2>
-			        </div>
+
 
 			        <div id="box_item">
+
+			        <div id="form_title">
+			        	<h2 align="center" style="font-size:24px;">Επισκόπηση Δημοπρασίας!</h2>
+			        </div>
 
 			        <section id="image_product">
 			        	<img src="<%out.print(item_set.getString("photo_url"));%>" width="300" height="450">
@@ -263,9 +265,9 @@
 						        %>
 						   	</label></p>
 							<br/>
-			                <p><label>Αρχική Προσφορά : <%out.print(item_set.getString("first_bid"));%></label></p>
+			                <p><label>Αρχική Προσφορά : <%out.print(item_set.getString("first_bid"));%> €</label></p>
 			                <br/>
-			                <p><label>*Τιμή Αγοράς : <%out.print(item_set.getString("buy_price"));%></label></p>
+			                <p><label>*Τιμή Αγοράς : <%out.print(item_set.getString("buy_price"));%> €</label></p>
 							<br/>
 			                <p><label>Location : <%out.print(item_set.getString("location"));%></label></p>
 			                <br/>
@@ -301,7 +303,7 @@
 				                <article>
 					                <h3>Προσφορα No<%out.print(z); %></h3>
 					                  <p>Όνομα Χρήστη : <%out.print(bid_set.getString("username"));%></p>
-									  <p>Τιμή Προσφοράς : <%out.print(bid_set.getFloat("price"));%></p>
+									  <p>Τιμή Προσφοράς : <%out.print(bid_set.getFloat("price"));%> €</p>
 									  <p>Ημερομηνία Προσφοράς : <%out.print(bid_set.getString("date_time"));%></p>
 					            </article>
 

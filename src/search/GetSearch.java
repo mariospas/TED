@@ -27,10 +27,10 @@ public class GetSearch extends HttpServlet {
 		int category = 0;
 		int minPrice = -100;
 		int maxPrice = 10000;
-        int recordsPerPage = 2;
+        int recordsPerPage = 8;
         String country = "";
         ResultSet result = null;
-        
+
         if (request.getParameter("country") != null) {
         	country = request.getParameter("country");
         }
@@ -40,29 +40,29 @@ public class GetSearch extends HttpServlet {
         	minPrice = Integer.parseInt(request.getParameter("min"));
         	System.out.println("INSIDE THE PARAM MIN " +minPrice);
         }
-        
+
         if (request.getParameter("max") != null) {
         	maxPrice = Integer.parseInt(request.getParameter("max"));
         	System.out.println("INSIDE THE PARAM MIN " +maxPrice);
         }
-        
+
 		if(request.getParameter("page") != null)
             page = Integer.parseInt(request.getParameter("page"));
 		//Maybe an if statement
 		request.setAttribute("match", 0);
-		
+
 		String search = request.getParameter("text");
 		String categ = request.getParameter("category");
 		category = Integer.parseInt(categ);
 		System.out.println(category);
-		
+
 		System.out.println("OOOOOOOOKKKKKK");
-		
+
 		FindItem items = new FindItem();
 		if (category != 0) {
 			result = items.LikeItem(search, category, (page-1)*recordsPerPage, recordsPerPage, country, minPrice, maxPrice);
 			try {
-			  if (!result.isBeforeFirst() ) {    
+			  if (!result.isBeforeFirst() ) {
 			    System.out.println("Item not found in normal search");
 				result = items.matchItem(search, category, (page-1)*recordsPerPage, recordsPerPage);
 				request.setAttribute("match", 1);
@@ -72,7 +72,7 @@ public class GetSearch extends HttpServlet {
 		} else {
 			result = items.LikeItem(search, (page-1)*recordsPerPage, recordsPerPage, country, minPrice, maxPrice);
 			try {
-			  if (!result.isBeforeFirst() ) {    
+			  if (!result.isBeforeFirst() ) {
 			    System.out.println("Item not found in normal search");
 				result = items.matchItem(search, (page-1)*recordsPerPage, recordsPerPage);
 				request.setAttribute("match", 1);
@@ -80,17 +80,17 @@ public class GetSearch extends HttpServlet {
 			} catch (SQLException e) {
 			    e.printStackTrace(); }
 		}
-		
+
 		int noOfRecords = items.getNoOfRecords();
         int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
-		
+
         request.setAttribute("items", result);
         request.setAttribute("noOfPages", noOfPages);
         request.setAttribute("currentPage", page);
         request.setAttribute("min", minPrice);
         request.setAttribute("max", maxPrice);
         request.setAttribute("country", country);
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/search/DisplayItems.jsp");
+        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/search/searchresults.jsp");
 		dispatcher.forward(request,response);
 	}
 

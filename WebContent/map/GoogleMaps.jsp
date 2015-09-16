@@ -8,21 +8,21 @@
 		<title>Google Maps</title>
 	</head>
 	<body>
-		<% 
-		double latitude = 0; 
-		double longitude = 0; 
+		<%
+		double latitude = 0;
+		double longitude = 0;
 		GetLocation2 locations = new GetLocation2("mariospassaris");
 		latitude = locations.getLatitude();
 		longitude = locations.getLongitude();
 		%>
-		<iframe 
+		<iframe
 			src="https://www.google.com/maps/embed?pb=!1m17!1m8!1m3!1d
-			3178877.868245887!2d
-			22.781871051269!3d
-			38.91545309195277!3m2!1i1024!2i768!4f13.1!4m6!3e6!4m0!4m3!3m2!1d
+			54734965.0652637!2d
+			54.40544131376551!3d
+			33.14174419163847!3m2!1i1024!2i768!4f13.1!4m6!3e6!4m0!4m3!3m2!1d
 			<%=latitude%>!2d
-			<%=longitude%>!5e0!3m2!1sel!2sgr!4v1440257243539" 
-			width="600" height="450" frameborder="0" style="border:0">
+			<%=longitude%>!5e0!3m2!1sel!2sgr!4v1442404950774"
+			width="600" height="450" frameborder="0" style="border:0" allowfullscreen>
 		</iframe>
 	</body>
 </html>

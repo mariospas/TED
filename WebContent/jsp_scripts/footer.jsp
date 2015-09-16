@@ -31,7 +31,7 @@
                     <h4>SiteMap</h4>
                     <ul>
                         <li><a href="/TED/after_login/general_homepage.jsp">Αρχική Σελίδα</a></li>
-                        <li><a href="javascript:void(0)">Κατηγορίες</a></li>
+                        <li><a href="/TED/categories.jsp">Κατηγορίες</a></li>
                         <li><a href="javascript:void(0)">Γενικά</a></li>
                     </ul>
                 </article>

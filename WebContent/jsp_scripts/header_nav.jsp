@@ -16,7 +16,7 @@
 		if(log != null)
 		{
 	%>
-			<p align="right" style="margin:0 20px 0 0;"><a href="auction/live_auctions.jsp">ΔΙΑΧΕΙΡΙΣΗ ΔΗΜΟΠΡΑΣΙΩΝ</a>
+			<p align="right" style="margin:0 20px 0 0;"><a href="/TED/after_login/auction/live_auctions.jsp">ΔΙΑΧΕΙΡΙΣΗ ΔΗΜΟΠΡΑΣΙΩΝ</a>
 			&nbsp;&nbsp;&nbsp;<a href="/TED/logout_process.jsp">ΑΠΟΣΥΝΔΕΣΗ</a>
             &nbsp;&nbsp;&nbsp;<a href="/TED/after_login/profile_page.jsp">ΠΡΟΦΙΛ</a></p>
 	<%
@@ -29,20 +29,20 @@
             </div>
             <div id="mobileMenu">
                 <ul>
-                    <li><a href="javascript:void(0)">Αρχικη Σελιδα</a></li>
-                    <li><a href="javascript:void(0)">Κατηγοριες</a></li>
+                    <li><a href="/TED/after_login/general_homepage.jsp">Αρχικη Σελιδα</a></li>
+                    <li><a href="/TED/categories.jsp">Κατηγοριες</a></li>
                     <li><a href="javascript:void(0)">Γενικα</a></li>
                     <li><a href="javascript:void(0)">Επικοινωνια</a></li>
                </ul>
             </div>
-            <h1> TED Store</h1>
+            <h1><a href="/TED/after_login/general_homepage.jsp"> TED Store</a></h1>
             <p>A DIT project</p>
 
             <div id="wrapper">
             <nav id="nav">
                 <ul id="navigation">
-                    <li><a href="javascript:void(0)">ΑΡΧΙΚΗ ΣΕΛΙΔΑ</a></li>
-                    <li><a href="#">ΚΑΤΗΓΟΡΙΕΣ</a>
+                    <li><a href="/TED/after_login/general_homepage.jsp">ΑΡΧΙΚΗ ΣΕΛΙΔΑ</a></li>
+                    <li><a href="/TED/categories.jsp">ΚΑΤΗΓΟΡΙΕΣ</a>
                         <ul>
                         	<table width="500">
                         	<%

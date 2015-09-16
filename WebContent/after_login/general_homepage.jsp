@@ -90,7 +90,7 @@
 								<option value="0">Επέλεξε την κατηγορία σου</option>
 							   <%
 							   int i=0;
-					        while (set.previous())
+					        while (set.next())
 							{
 					        	i++;
 							%>
@@ -118,7 +118,7 @@
 							<option value="0">Επέλεξε την κατηγορία σου</option>
 						   <%
 						    i=0;
-				        while (set.next())
+				        while (set.previous())
 						{
 				        	i++;
 						%>

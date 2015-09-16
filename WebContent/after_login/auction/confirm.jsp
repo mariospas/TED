@@ -121,7 +121,7 @@
 			//session.setAttribute("bid", bid);
 	%>
 			<form method="post" action="confirm.jsp?item=<%out.print(item_id);%>&bid=<%out.print(bid);%>" >
-			    <p align="center" style="font-size:20px; margin-top:20px;"><label>Είστε σίγουρος για την προσφορά σας <%out.print(bid+"$");%> στο
+			    <p align="center" style="font-size:20px; margin-top:20px;"><label>Είστε σίγουρος για την προσφορά σας <%out.print(bid+"€");%> στο
 			    <a href="item_details.jsp?item=<%out.print(item_id);%>"><%out.print(item_id);%></a> ?
 			    		 <br/> Πιέστε Ναι για συνέχεια ή Άκυρο για επιστροφή </label></p>
 		        <br/>
