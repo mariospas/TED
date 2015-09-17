@@ -1,0 +1,116 @@
+
+table#miyazaki caption {
+	font-size: 22px;
+	font-weight: 100;
+	color: #444;
+	margin: 1rem;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center left, center right;
+}
+table#miyazaki {
+
+	font-family: 'Open Sans', sans-serif;;
+	font-weight: 100;
+	background: #eee;
+	color: #444;
+	text-rendering: optimizeLegibility;
+	border: 2px solid #52CAE0;
+	border-radius: 10px;
+
+}
+table#miyazaki thead th {
+	font-weight: 600;
+}
+table#miyazaki thead th,
+	table#miyazaki tbody td {
+	padding: .8rem;
+	font-size: 1.4rem;
+}
+table#miyazaki tbody td {
+	padding: .8rem;
+	font-size: 1.4rem;
+	color: #444;
+	background: #eee;
+}
+table#miyazaki tbody tr:not(:last-child) {
+	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+}
+
+
+
+@media screen and (max-width: 1500px) {
+	table#miyazaki caption {
+		background-image: none;
+	}
+	table#miyazaki thead {
+		display: none;
+	}
+	table#miyazaki tbody td {
+		display: block;
+		padding: .6rem;
+	}
+	table#miyazaki tbody tr td:first-child {
+		background: #eee;
+		color: #444;
+	}
+	table#miyazaki tbody td:before {
+		content: attr(data-th);
+		font-weight: bold;
+		display: inline-block;
+		width: 6rem;
+		margin-right:100px;
+	}
+}
+
+
+@media screen and (max-width: 800px) {
+	table#miyazaki caption {
+		background-image: none;
+	}
+	table#miyazaki thead {
+		display: none;
+	}
+	table#miyazaki tbody td {
+		display: block;
+		padding: .6rem;
+	}
+	table#miyazaki tbody tr td:first-child {
+		background: #eee;
+		color: #444;
+	}
+	table#miyazaki tbody td:before {
+		content: attr(data-th);
+		font-weight: bold;
+		display: inline-block;
+		width: 6rem;
+		margin-right:100px;
+	}
+}
+
+
+
+@media screen and (max-width: 600px) {
+	table#miyazaki caption {
+		background-image: none;
+	}
+	table#miyazaki thead {
+		display: none;
+	}
+	table#miyazaki tbody td {
+		display: block;
+		padding: .6rem;
+	}
+	table#miyazaki tbody tr td:first-child {
+		background: #eee;
+		color: #444;
+	}
+	table#miyazaki tbody td:before {
+		content: attr(data-th);
+		font-weight: bold;
+		display: inline-block;
+		width: 6rem;
+		margin-right:100px;
+	}
+}

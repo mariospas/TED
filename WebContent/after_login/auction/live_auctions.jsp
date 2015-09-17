@@ -4,22 +4,67 @@
 <%@ page import="login_logout_process.*"%>
 <%@ page import="xml_mars_unmars.*"%>
 <%@ page import="check_uti.*"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML>
 <html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Ζωντανές Δημοπρασίες</title>
-</head>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>General HomePage</title>
+        <link rel="stylesheet" href="/TED/appearance/css/reset.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="/TED/appearance/css/style_live_auctions.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="/TED/appearance/css/style_table.css" type="text/css" media="screen" />
+        <link href="/TED/appearance/css/lightbox.css" rel="stylesheet" />
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans|Baumans' rel='stylesheet' type='text/css'/>
+        <script src="/TED/appearance/scripts/modernizr.custom.04512.js"></script>
+        <script src="/TED/appearance/scripts/respond.js"></script>
+
+        <!-- include extern jQuery file but fall back to local file if extern one fails to load !-->
+        <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript">window.jQuery || document.write('<script type="text\/javascript" src="js\/1.7.2.jquery.min"><\/script>')</script>
+
+        <script async src="/TED/appearance/scripts/lightbox.js"></script>
+        <script src="/TED/appearance/scripts/prefixfree.min.js"></script>
+        <script src="/TED/appearance/scripts/jquery.slides.min.js"></script>
+
+
+        <script>
+			(function ($, window, document, undefined)
+			{
+				'use strict';
+				$(function ()
+				{
+					$("#mobileMenu").hide();
+					$(".toggleMobile").click(function()
+					{
+						$(this).toggleClass("active");
+						$("#mobileMenu").slideToggle(500);
+					});
+				});
+				$(window).on("resize", function()
+				{
+
+					if($(this).width() > 700)
+					{
+						$("#mobileMenu").hide();
+						$(".toggleMobile").removeClass("active");
+					}
+
+				});
+			})(jQuery, window, document);
+		</script>
+
+
+
+    </head>
 <body>
-<jsp:include page="../../logout.html"/>
-<jsp:include page="../profile_button.html"/>
+<jsp:include page="../../jsp_scripts/header_nav.jsp"/>
 <%
 	LoginSession log = (LoginSession) session.getAttribute("log");
 	if(log != null)
 	{
 		DataCheck data_check = new DataCheck();
 %>
-		<p align="center"><b><a href="create_auction.jsp">Δημιουργία Δημοπρασίας</a></b></p>
+		<p id="create_auct" align="center" ><b><a href="create_auction.jsp">Δημιουργία Δημοπρασίας</a></b></p>
 		</br>
 
 <%
@@ -28,20 +73,22 @@
 		long item = -1;
 		ResultSet item_set = null;
 %>
-		<p align="center"><b>Δημοπρασίες σε Εξέλιξη</b></p>
+		<!-- <p align="center"><b>Δημοπρασίες σε Εξέλιξη</b></p>-->
 		<form method="post" action="edit_on_auction.jsp">
-			<table align="center" width="700" border="1">
-			<tr>
-			  <td>Φωτογραφία</td>
-			  <td>Κωδικός Προϊόντος</td>
-			  <td>Όνομα</td>
-			  <td>Τωρινή Τιμή</td>
-			  <td>Τιμή Αγοράς</td>
-			  <td>Αρχικό bid</td>
-			  <td>Εκκίνηση</td>
-			  <td>Τερματισμός</td>
-			  <td>Επιλογή</td>
-			</tr>
+			<table id="miyazaki" align="center">
+            <caption>Δημοπρασίες σε Εξέλιξη</caption>
+            <thead>
+                <tr>
+				  <th>Φωτογραφία
+                  <th>Κωδικός Προϊόντος
+                  <th>Όνομα
+                  <th>Τωρινή Τιμή
+                  <th>Τιμή Αγοράς
+                  <th>Αρχικό bid
+                  <th>Εκκίνηση
+                  <th>Τερματισμός
+                  <th>Επιλογή
+			<tbody>
 <%
 			while (set.next())
 			{
@@ -52,16 +99,16 @@
 %>
 
 					<tr>
-					  <td id="photo_url" name="photo_url"><img src="<%out.print(item_set.getString("photo_url"));%>" width="60" height="60"></td>
-					  <td id="item_id" name="item_id"><%out.print(item_set.getLong("item_id"));%></td>
-					  <td id="name" name="name"><%out.print(item_set.getString("name"));%>;</td>
-					  <td id="currently_price" name="currently_price"><%out.print(item_set.getFloat("currently_price"));%></td>
-					  <td id="buy_price" name="buy_price"><%out.print(item_set.getFloat("buy_price"));%></td>
-					  <td id="first_bid" name="first_bid"><%out.print(item_set.getFloat("first_bid"));%>;</td>
-					  <td id="start_date" name="start_date"><%out.print(item_set.getDate("start_date"));%></td>
-					  <td id="end_date" name="end_date"><%out.print(item_set.getDate("end_date"));%></td>
-					  <td><input type="radio" name="item" value="<%out.print(item_set.getLong("item_id"));%>" id="item"></td>
-					</tr>
+					  <td id="photo_url" name="photo_url"><img src="<%out.print(item_set.getString("photo_url"));%>" width="60" height="60">
+					  <td id="item_id" name="item_id"><%out.print(item_set.getLong("item_id"));%>
+					  <td id="name" name="name"><%out.print(item_set.getString("name"));%>
+					  <td id="currently_price" name="currently_price"><%out.print(item_set.getFloat("currently_price"));%>
+					  <td id="buy_price" name="buy_price"><%out.print(item_set.getFloat("buy_price"));%>
+					  <td id="first_bid" name="first_bid"><%out.print(item_set.getFloat("first_bid"));%>
+					  <td id="start_date" name="start_date"><%out.print(item_set.getDate("start_date"));%>
+					  <td id="end_date" name="end_date"><%out.print(item_set.getDate("end_date"));%>
+					  <td><input type="radio" name="item" value="<%out.print(item_set.getLong("item_id"));%>" id="item">
+
 
 <%
 				}
@@ -81,20 +128,22 @@
 		item = -1;
 		item_set = null;
 %>
-		<p align="center"><b>Απενεργοποιημένες Δημοπρασίες</b></p>
+		<!-- <p align="center"><b>Απενεργοποιημένες Δημοπρασίες</b></p>-->
 		<form method="post" action="edit_auction.jsp">
-			<table align="center" width="700" border="1">
-			<tr>
-			  <td>Φωτογραφία</td>
-			  <td>Κωδικός Προϊόντος</td>
-			  <td>Όνομα</td>
-			  <td>Τωρινή Τιμή</td>
-			  <td>Τιμή Αγοράς</td>
-			  <td>Αρχικό bid</td>
-			  <td>Εκκίνηση</td>
-			  <td>Τερματισμός</td>
-			  <td>Επιλογή</td>
-			</tr>
+			<table id="miyazaki" align="center">
+            <caption>Απενεργοποιημένες Δημοπρασίες</caption>
+            <thead>
+				<tr>
+			  		<th>Φωτογραφία
+	                <th>Κωδικός Προϊόντος
+	                <th>Όνομα
+	                <th>Τωρινή Τιμή
+	                <th>Τιμή Αγοράς
+	                <th>Αρχικό bid
+	                <th>Εκκίνηση
+	                <th>Τερματισμός
+	                <th>Επιλογή
+			<tbody>
 <%
 			while (set.next())
 			{
@@ -104,16 +153,16 @@
 				{
 %>
 					<tr>
-					  <td id="photo_url" name="photo_url"><img src="<%out.print(item_set.getString("photo_url"));%>" width="60" height="60"></td>
-					  <td id="item_id" name="item_id"><%out.print(item_set.getLong("item_id"));%></td>
-					  <td id="name" name="name"><%out.print(item_set.getString("name"));%>;</td>
-					  <td id="currently_price" name="currently_price"><%out.print(item_set.getFloat("currently_price"));%></td>
-					  <td id="buy_price" name="buy_price"><%out.print(item_set.getFloat("buy_price"));%></td>
-					  <td id="first_bid" name="first_bid"><%out.print(item_set.getFloat("first_bid"));%>;</td>
-					  <td id="start_date" name="start_date"><%out.print(item_set.getString("start_date"));%></td>
-					  <td id="end_date" name="end_date"><%out.print(item_set.getString("end_date"));%></td>
-					  <td><input type="radio" name="item" value="<%out.print(item_set.getLong("item_id"));%>" id="item"></td>
-					</tr>
+					  <td id="photo_url" name="photo_url"><img src="<%out.print(item_set.getString("photo_url"));%>" width="60" height="60">
+					  <td id="item_id" name="item_id"><%out.print(item_set.getLong("item_id"));%>
+					  <td id="name" name="name"><%out.print(item_set.getString("name"));%>
+					  <td id="currently_price" name="currently_price"><%out.print(item_set.getFloat("currently_price"));%>
+					  <td id="buy_price" name="buy_price"><%out.print(item_set.getFloat("buy_price"));%>
+					  <td id="first_bid" name="first_bid"><%out.print(item_set.getFloat("first_bid"));%>
+					  <td id="start_date" name="start_date"><%out.print(item_set.getString("start_date"));%>
+					  <td id="end_date" name="end_date"><%out.print(item_set.getString("end_date"));%>
+					  <td><input type="radio" name="item" value="<%out.print(item_set.getLong("item_id"));%>" id="item">
+
 
 <%
 				}
@@ -139,5 +188,21 @@
 		out.println("<center><h1> Guest Mode Permission Denied</h1></center>");
 	}
 %>
+	<jsp:include page="../../jsp_scripts/footer.jsp"/>
 </body>
+	<script>
+			var headertext = [];
+			var headers = document.querySelectorAll("#miyazaki th"),
+			tablerows = document.querySelectorAll("#miyazaki th"),
+			tablebody = document.querySelector("#miyazaki tbody");
+			for(var i = 0; i < headers.length; i++) {
+				var current = headers[i];
+				headertext.push( current.textContent.replace( /\r?\n|\r/,"") );
+			}
+			for (var i = 0, row; row = tablebody.rows[i]; i++) {
+				for (var j = 0, col; col = row.cells[j]; j++) {
+					col.setAttribute("data-th", headertext[j]);
+				}
+			}
+	 </script>
 </html>

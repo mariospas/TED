@@ -101,38 +101,42 @@
 			  	   <h4 align="center" class="searchtitle">Μήπως εννοείτε..</h4>
 			<% } %>
 
-			<article id="filters">
-				<h4>Φίλτρα</h4>
-				<form name="filter" action="getsearch" method="get">
-					<hr>
-					<p>Ελάχιστη τιμή</p>
-					<select name="min">
-						<option value="-100">Όλες</option>
-						<option value="5">5 €</option>
-						<option value="20">20 €</option>
-						<option value="50">50 €</option>
-					</select>
-					<p>Μέγιστη Τιμή</p>
-					<select name="max">
-						<option value="1000">Όλες</option>
-						<option value="50">50 €</option>
-						<option value="200">200 €</option>
-						<option value="500">500 €</option>
-					</select>
-					<hr>
-					<p>Χώρα</p>
-					<select name="country">
-						<option value="">Όλες</option>
-						<option value="Greece">Ελλάδα</option>
-						<option value="Greece">Αγγλία</option>
-						<option value="Greece">Γαλλία</option>
-					</select>
-					<br/>
-					<input type="hidden" name="category" value="<%= request.getParameter("category") %>">
-					<input type="hidden" name="text" value="<%= request.getParameter("text") %>">
-					<input type="submit" value="Υποβολή">
-				</form>
-			</article>
+			<section id=upper_filter>
+				<article id="filters">
+					<h4>Φίλτρα</h4>
+					<form name="filter" action="getsearch" method="get">
+						<hr>
+						<p>Ελάχιστη τιμή</p>
+						<select name="min">
+							<option value="-100">Όλες</option>
+							<option value="5">5 €</option>
+							<option value="20">20 €</option>
+							<option value="50">50 €</option>
+						</select>
+						<p>Μέγιστη Τιμή</p>
+						<select name="max">
+							<option value="1000">Όλες</option>
+							<option value="50">50 €</option>
+							<option value="200">200 €</option>
+							<option value="500">500 €</option>
+						</select>
+						<hr>
+						<p>Χώρα</p>
+						<select name="country">
+							<option value="">Όλες</option>
+							<option value="Greece">Ελλάδα</option>
+							<option value="Greece">Αγγλία</option>
+							<option value="Greece">Γαλλία</option>
+						</select>
+						<br/>
+						<input type="hidden" name="category" value="<%= request.getParameter("category") %>">
+						<input type="hidden" name="text" value="<%= request.getParameter("text") %>">
+						<input type="submit" value="Υποβολή">
+					</form>
+				</article>
+			</section>
+
+			<section id=upper_article>
 				<%
 				while (results.next()) {
 					if(i%2 == 0) {
@@ -164,8 +168,10 @@
 						-->
 					</article>
 
+
 					<% } %>
 				<% ++i; } %>
+				</section>
 			<div class="pages">
 			<%
 			int pg = (int) request.getAttribute("currentPage");
