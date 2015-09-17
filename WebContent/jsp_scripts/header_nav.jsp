@@ -47,8 +47,10 @@
                         	<table width="500">
                         	<%
 	                          int w=0;
-	                          while(set1.next())
+                        	  int p=0;
+	                          while(set1.next() && p<45)
 	                          {
+	                        	  p++;
 	                        	  if(w==5)
 	                        	  {
 	                        		  w=0;
@@ -56,10 +58,11 @@
 	                        	  }
 	                        	  if(w==0) out.print("<tr>");
 	                          %>
-	                            <td><li><a href="#"><%out.print(set1.getString("value"));%></a></li></td>
+	                            <td><li><a href="/TED/getsearch?category=<%=set1.getString("category_id") %>&text="><%out.print(set1.getString("value"));%></a></li></td>
 							  <%
 								w++;
 								} %>
+								<tr><td><a align="center" href="/TED/categories.jsp">ΠΕΡΙΣΣΟΤΕΡΕΣ ΚΑΤΗΓΟΡΙΕΣ</a></td></tr>
                             </table>
                         </ul>
                     </li>

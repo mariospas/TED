@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="java.sql.ResultSet"%>
+<%@ page import="search.*" %>
+<%@ page import="java.util.List" %>
+
 <!DOCTYPE HTML>
 <html>
     <head>
@@ -87,6 +90,10 @@
 
 			<%
 			ResultSet results = (ResultSet) request.getAttribute("items");
+			Filter_max_count filter = new Filter_max_count(results);
+			List<String> countries = filter.countries();
+			float[] price = filter.max_minPrice();   //0 max 1 min
+			results.beforeFirst();
 			int i=0;
 
 			//Check if there are any search results
@@ -109,24 +116,47 @@
 						<p>Ελάχιστη τιμή</p>
 						<select name="min">
 							<option value="-100">Όλες</option>
-							<option value="5">5 €</option>
-							<option value="20">20 €</option>
-							<option value="50">50 €</option>
+						<%
+							int count=0;
+							int w = 0;
+							while(count < price[0] && w < 3)
+							{
+								w++;
+						%>
+							<option value="<%out.print(count);%>"><%out.print(count);%> €</option>
+						<%
+								count = count+10;
+							}
+						%>
 						</select>
 						<p>Μέγιστη Τιμή</p>
 						<select name="max">
 							<option value="1000">Όλες</option>
-							<option value="50">50 €</option>
-							<option value="200">200 €</option>
-							<option value="500">500 €</option>
+						<%
+							w = 0;
+							while(count <= price[0] && w < 3)
+							{
+								w++;
+						%>
+							<option value="<%out.print(count);%>"><%out.print(count);%> €</option>
+						<%
+								count = count + 10;
+							}
+						%>
+							<option value="<%out.print(Math.round(price[0]));%>"><%out.print(Math.round(price[0]));%> €</option>
 						</select>
 						<hr>
 						<p>Χώρα</p>
 						<select name="country">
 							<option value="">Όλες</option>
-							<option value="Greece">Ελλάδα</option>
-							<option value="Greece">Αγγλία</option>
-							<option value="Greece">Γαλλία</option>
+						<%
+							for(String elem : countries)
+							{
+						%>
+							<option value="<%out.print(elem);%>"><%out.print(elem);%></option>
+						<%
+							}
+						%>
 						</select>
 						<br/>
 						<input type="hidden" name="category" value="<%= request.getParameter("category") %>">

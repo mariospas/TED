@@ -33,9 +33,17 @@ table#miyazaki tbody td {
 	color: #444;
 	background: #eee;
 }
+
+
 table#miyazaki tbody tr:not(:last-child) {
 	border-top: 1px solid #ddd;
 	border-bottom: 1px solid #ddd;
+}
+
+
+table#miyazaki tbody tr {
+	background:#52CAE0;
+	border-bottom: 2px solid #52CAE0;
 }
 
 
@@ -62,6 +70,14 @@ table#miyazaki tbody tr:not(:last-child) {
 		width: 6rem;
 		margin-right:100px;
 	}
+
+	table#miyazaki tbody td:last-child {
+	padding: .8rem;
+	font-size: 1.4rem;
+	color: #444;
+	background: #eee;
+	border-bottom: 2px solid #52CAE0;
+}
 }
 
 
@@ -87,6 +103,14 @@ table#miyazaki tbody tr:not(:last-child) {
 		width: 6rem;
 		margin-right:100px;
 	}
+
+	table#miyazaki tbody td:last-child {
+	padding: .8rem;
+	font-size: 1.4rem;
+	color: #444;
+	background: #eee;
+	border-bottom: 2px solid #52CAE0;
+}
 }
 
 
@@ -113,4 +137,12 @@ table#miyazaki tbody tr:not(:last-child) {
 		width: 6rem;
 		margin-right:100px;
 	}
+
+	table#miyazaki tbody td:last-child {
+	padding: .8rem;
+	font-size: 1.4rem;
+	color: #444;
+	background: #eee;
+	border-bottom: 2px solid #52CAE0;
+}
 }

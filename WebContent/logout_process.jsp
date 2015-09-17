@@ -11,6 +11,9 @@
 
 <%
 	session.invalidate();
+	String site = new String("/TED/welcome.jsp");
+	response.setStatus(response.SC_MOVED_TEMPORARILY);
+	response.setHeader("Location", site);
 %>
 	<h1><font color="Red">You are Successfully logged out...</font></h1>
 	<p>If auto redirect fails then click to this <a href="after_login/general_homepage.jsp"> link</a></p>

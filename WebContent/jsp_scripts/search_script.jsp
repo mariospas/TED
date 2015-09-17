@@ -21,7 +21,7 @@
 						{
 				        	i++;
 						%>
-				            <option value="<%out.print(i);%>" name="<%out.print(set.getString("value"));%>" id="<%out.print(set.getString("value"));%>"><%out.print(set.getString("value"));%></option>
+				            <option value="<%out.print(set.getString("category_id"));%>" name="<%out.print(set.getString("value"));%>" id="<%out.print(set.getString("value"));%>"><%out.print(set.getString("value"));%></option>
 				       <%}
 						   %>
 						</select>
@@ -42,7 +42,7 @@
 						{
 				        	i++;
 						%>
-				            <option value="<%out.print(i);%>" name="<%out.print(set.getString("value"));%>" id="<%out.print(set.getString("value"));%>"><%out.print(set.getString("value"));%></option>
+				            <option value="<%out.print(set.getString("category_id"));%>" name="<%out.print(set.getString("value"));%>" id="<%out.print(set.getString("value"));%>"><%out.print(set.getString("value"));%></option>
 				       <%}
 						   %>
 						</select>

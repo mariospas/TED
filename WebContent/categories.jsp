@@ -71,18 +71,18 @@
             <hr class="lowerhr"/>
             <section id="categories">
                 <span class="teaser">
-                    <% for (i=1;i<=3;i++) {
+                    <% for (i=1;i<=27;i++) {
                         categnames.next();
                     %>
                         <article>
-                            <h3><a href="javascript:void(0)"><%=categnames.getString("value") %></a></h3>
+                            <h3><a href="/TED/getsearch?category=<%=categnames.getString("category_id") %>&text="><%=categnames.getString("value") %></a></h3>
                         </article>
                     <% } %>
                 </span>
                 <span class="complete">
                     <% while(categnames.next()) { %>
                         <article>
-                            <h3><a href="javascript:void(0)"><%=categnames.getString("value") %></a></h3>
+                            <h3><a href="/TED/getsearch?category=<%=categnames.getString("category_id") %>&text="><%=categnames.getString("value") %></a></h3>
                         </article>
                     <% } %>
                 </span>
