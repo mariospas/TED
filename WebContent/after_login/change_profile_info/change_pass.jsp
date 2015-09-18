@@ -1,13 +1,69 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML>
 <html>
-<head>
-<title>Αλλαγή Κωδικού</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
-<script src="../../scripts/checkTwoPass.js"></script>
-<script src="../../scripts/saveDataAndFill.js"></script>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>General HomePage</title>
+        <link rel="stylesheet" href="/TED/appearance/css/reset.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="/TED/appearance/css/style_create_item.css" type="text/css" media="screen" />
+        <link href="/TED/appearance/css/lightbox.css" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="../../css/after_login/auction/create_auction.css">
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans|Baumans' rel='stylesheet' type='text/css'/>
+        <script src="/TED/appearance/scripts/modernizr.custom.04512.js"></script>
+        <script src="/TED/appearance/scripts/respond.js"></script>
+
+        <!-- include extern jQuery file but fall back to local file if extern one fails to load !-->
+        <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript">window.jQuery || document.write('<script type="text\/javascript" src="js\/1.7.2.jquery.min"><\/script>')</script>
+
+        <script async src="/TED/appearance/scripts/lightbox.js"></script>
+        <script src="/TED/appearance/scripts/prefixfree.min.js"></script>
+        <script src="/TED/appearance/scripts/jquery.slides.min.js"></script>
+        <script src="../../scripts/checkFileSize.js"></script>
+		<script src="../../scripts/saveDataAndFill.js"></script>
+
+
+        <script>
+			(function ($, window, document, undefined)
+			{
+				'use strict';
+				$(function ()
+				{
+					$("#mobileMenu").hide();
+					$(".toggleMobile").click(function()
+					{
+						$(this).toggleClass("active");
+						$("#mobileMenu").slideToggle(500);
+					});
+				});
+				$(window).on("resize", function()
+				{
+
+					if($(this).width() > 700)
+					{
+						$("#mobileMenu").hide();
+						$(".toggleMobile").removeClass("active");
+					}
+
+				});
+			})(jQuery, window, document);
+		</script>
+
+		<script>
+		    var expanded = false;
+		    function showCheckboxes() {
+		        var checkboxes = document.getElementById("checkboxes");
+		        if (!expanded) {
+		            checkboxes.style.display = "block";
+		            expanded = true;
+		        } else {
+		            checkboxes.style.display = "none";
+		            expanded = false;
+		        }
+		    }
+		</script>
 
 <script type="text/javascript">
 
@@ -34,23 +90,30 @@ function checkForm(form)
 </script>
 </head>
 <body>
+<jsp:include page="../../jsp_scripts/header_nav.jsp"/>
 
 <div id="all_form">
     	<div id="form_title">
-        	 Αλλαγή Κωδικού
+        	 <h2 align="center" style="font-size:24px;">Αλλαγή Κωδικού</h2>
         </div>
 
         <div id="main_form">
         	<form method="post" action="change_pass_process.jsp" onsubmit="return checkForm(this);">
-            	<p><label>Παλίος Κωδικός πρόσβασης :</label></p>
-				<input type="password" id="passwordold" name="passwordold" required/></p>
+            	<p style="font-size:20px;"><label>Παλίος Κωδικός πρόσβασης :</label></p>
+            	<hr>
+				<input type="password" id="passwordold" name="passwordold" required/>
                 <br/>
-                <p><label>Νέος Κωδικός πρόσβασης :<b>(από 6-20 χαρακτήρες και να περιέχει αριθμούς, πεζά και κεφαλαία καθώς και ειδικούς χαρακτήρες!)</b>:</p></label></p>
-				<input type="password" id="password" name="password" required/></p>
+                <br>
+                <p style="font-size:20px;"><label>Νέος Κωδικός πρόσβασης :<b>(από 6-20 χαρακτήρες και να περιέχει αριθμούς, πεζά και κεφαλαία καθώς και ειδικούς χαρακτήρες!)</b>:</label></p>
+				<hr>
+				<input type="password" id="password" name="password" required/>
                 <br/>
-                <p><label>Επιβεβαίωση κωδικού πρόσβασης :</label>
-				<input type="password" id="passwordconf" name="passwordconf" oninput="check(this)"  required/></p>
+                <br>
+                <p style="font-size:20px;"><label>Επιβεβαίωση κωδικού πρόσβασης :</label></p>
+				<hr>
+				<input type="password" id="passwordconf" name="passwordconf" oninput="check(this)"  required/>
                 <br/>
+                <br>
                  <input TYPE="submit" name="upload" id="sub_button" title="Add data to the Database" value="Αλλαγή Κωδικού"/>
                  <input type="button" onclick="history.go(-1);" value="Άκυρο">
             </form>
@@ -67,5 +130,6 @@ function checkForm(form)
 	</script>
 
 
+<jsp:include page="../../jsp_scripts/footer.jsp"/>
 </body>
 </html>

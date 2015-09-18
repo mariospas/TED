@@ -166,42 +166,48 @@
 				</article>
 			</section>
 
-			<section id=upper_article>
+			<div id="da-thumbs" class="da-thumbs">
 				<%
 				while (results.next()) {
 					if(i%2 == 0) {
 				%>
 
 					<article class="results1">
-						<% if (results.getString("photo_url") == null) { %>
-							<img src="/TED/img/item3.png" alt="My Image" style="width:240px;height:240px;">
-						<% } else { %>
-							<img src="<%= results.getString("photo_url") %>" alt="My Image" style="width:240px;height:240px;">
-						<% } %>
-						<p class="mainame"><%= results.getString("name") %></p>
-						<p>Τιμή: <%= results.getString("buy_price") %> €</p>
-						<!--  Auto einai to kanoniko code gia na pairnei apo th vash
-						<img src="<%= results.getString("photo_url") %>" alt="My Image" style="width:304px;height:228px;"></p>
-						-->
+						<a href="/TED/after_login/auction/item_details.jsp?item=<%=results.getString("item_id") %>">
+							<% if (results.getString("photo_url") == null) { %>
+								<img src="/TED/img/item3.png" alt="My Image" style="width:240px;height:240px;">
+							<% } else { %>
+								<img src="<%= results.getString("photo_url") %>" alt="My Image" style="width:240px;height:240px;">
+							<% } %>
+							<div>
+								<span>
+									<p class="mainame"><%= results.getString("name") %></p>
+									<p>Τιμή: <%= results.getString("buy_price") %> €</p>
+								</span>
+							</div>
+						</a>
 					</article>
 					<% } else { %>
 					<article class="results2">
-						<% if (results.getString("photo_url") == null) { %>
-							<img src="/TED/img/item3.png" alt="My Image" style="width:240px;height:240px;">
-						<% } else { %>
-							<img src="<%= results.getString("photo_url") %>" alt="My Image" style="width:240px;height:240px;">
-						<% } %>
-						<p class="mainame"><%= results.getString("name") %></p>
-						<p>Τιμή: <%= results.getString("buy_price") %> €</p>
-						<!--  Auto einai to kanoniko code gia na pairnei apo th vash
-						<img src="<%= results.getString("photo_url") %>" alt="My Image" style="width:304px;height:228px;"></p>
-						-->
+						<a href="/TED/after_login/auction/item_details.jsp?item=<%=results.getString("item_id") %>">
+							<% if (results.getString("photo_url") == null) { %>
+								<img src="/TED/img/item3.png" alt="My Image" style="width:240px;height:240px;">
+							<% } else { %>
+								<img src="<%= results.getString("photo_url") %>" alt="My Image" style="width:240px;height:240px;">
+							<% } %>
+							<div>
+								<span>
+									<p class="mainame"><%= results.getString("name") %></p>
+									<p>Τιμή: <%= results.getString("buy_price") %> €</p>
+								</span>
+							</div>
+						</a>
 					</article>
 
 
 					<% } %>
 				<% ++i; } %>
-				</section>
+				</div>
 			<div class="pages">
 			<%
 			int pg = (int) request.getAttribute("currentPage");
@@ -230,6 +236,15 @@
 			</div>
 		</section>
 		<jsp:include page="/jsp_scripts/footer.jsp"/>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+		<script type="text/javascript" src="/TED/appearance/scripts/jquery.hoverdir.js"></script>
+		<script type="text/javascript">
+			$(function() {
+
+				$(' #da-thumbs > article ').each( function() { $(this).hoverdir(); } );
+
+			});
+		</script>
 
 	</body>
 </html>

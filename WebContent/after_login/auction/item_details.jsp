@@ -238,7 +238,123 @@
 	}
 	else
 	{
-		out.println("<center><h1> Guest Mode Permission Denied</h1></center>");
+		request.setCharacterEncoding("UTF-8");
+
+		String item_name = request.getParameter("item");
+		//out.println("<p><b>"+item_name+"</b></p>");
+		long item_id = Long.parseLong(item_name);
+		Auctions auction = new Auctions("cool",item_id);
+		boolean b = true;
+
+		Category cat = new Category();
+		ResultSet set = cat.get_categories();
+		ResultSet item_set = auction.requested_item(item_id);
+		ResultSet item_cat = cat.get_item_categories(item_id);
+		while (item_set.next())
+		{
+
+%>
+
+			        <div id="box_item">
+
+			        <div id="form_title">
+			        	<h2 align="center" style="font-size:24px;">Επισκόπηση Δημοπρασίας!</h2>
+			        </div>
+
+			        <section id="image_product">
+			        	<img src="<%if(item_set.getString("photo_url") != null) out.print(item_set.getString("photo_url"));
+			        				else out.print("/TED/img/item3.png");
+			        			  %>">
+
+			        </section>
+
+			        <section id="specs">
+
+			        		<p style="font-variant:small-caps; font-family: 'Open Sans', sans-serif;"><label><%out.print(item_set.getString("name"));%>" </label></p>
+			                <br/>
+			                <p><label>Κατηγορίες :
+						        <%
+						        while (set.next())
+								{
+						        	item_cat.beforeFirst();
+						        	while (item_cat.next())
+									{
+
+						        		if(set.getInt("category_id") == item_cat.getInt("category_id"))
+						        		{
+						        			out.print(set.getString("value")+", ");
+						        		}
+
+									}
+
+						         }
+						        %>
+						   	</label></p>
+							<br/>
+			                <p><label>Τωρινή Τιμή : <%out.print(item_set.getString("currently_price"));%> €</label></p>
+			                <%
+							if(b)
+							{
+				%>
+							<p style="color:rgba(255,0,4,1.00);">Δεν μπορείτε να κάνετε προσφορά γιατί είστε επισκέπτης παρακαλώ συνδεθείτε!</p>
+				<%
+							}
+				%>
+			                <br/>
+			                <p><label>*Τιμή Αγοράς : <%out.print(item_set.getString("buy_price"));%></label></p>
+							<br/>
+			                <p><label>Ημερομηνία Έναρξης : <%out.print(item_set.getString("start_date"));%></label></p>
+							<br/>
+			                <p><label>Ημερομηνία Τερματισμού : <%out.print(item_set.getString("end_date"));%></label>
+							<br/>
+
+			        </section>
+			        <br/>
+			        <br/>
+			        <br/>
+
+					<div class="container2">
+			          <div class="accordion">
+			            <dl>
+			              <dt>
+			                <a href="#accordion1" aria-expanded="false" aria-controls="accordion1" class="accordion-title accordionTitle js-accordionTrigger">Περιγραφή</a>
+			              </dt>
+			              <dd class="accordion-content accordionItem is-collapsed" id="accordion1" aria-hidden="true">
+			                <p><%out.print(item_set.getString("description"));%></p>
+			              </dd>
+			              <dt>
+			                <a href="#accordion2" aria-expanded="false" aria-controls="accordion2" class="accordion-title accordionTitle js-accordionTrigger">
+			                  Τοποθεσία</a>
+			              </dt>
+			              <dd class="accordion-content accordionItem is-collapsed" id="accordion2" aria-hidden="true">
+
+			                <p><label>Χώρα : <%out.print(item_set.getString("country"));%></label></p>
+			                <br/>
+			                <%
+							double latitude = 0;
+							double longitude = 0;
+							GetLocation2 locations = new GetLocation2(item_id);
+							latitude = locations.getLatitude();
+							longitude = locations.getLongitude();
+							%>
+							<iframe
+								src="https://www.google.com/maps/embed?pb=!1m17!1m8!1m3!1d
+								54734965.0652637!2d
+								54.40544131376551!3d
+								33.14174419163847!3m2!1i1024!2i768!4f13.1!4m6!3e6!4m0!4m3!3m2!1d
+								<%=latitude%>!2d
+								<%=longitude%>!5e0!3m2!1sel!2sgr!4v1442404950774"
+								width="600" height="450" frameborder="0" style="border:0" allowfullscreen>
+							</iframe>
+			              </dd>
+			            </dl>
+			          </div>
+			        </div>
+
+
+			       </div>
+<%
+		}
 	}
 %>
 <jsp:include page="../../jsp_scripts/footer.jsp"/>

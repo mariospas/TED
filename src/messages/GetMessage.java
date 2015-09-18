@@ -1,11 +1,14 @@
 package messages;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import login_logout_process.*;
 
 /**
  * Servlet implementation class GetMessage
@@ -18,16 +21,18 @@ public class GetMessage extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		String recipient, subject, message;
+
+		String recipient, message;
 		boolean delivered;
-		
+
+		System.out.println("mphka kariolaki");
+
 		recipient = request.getParameter("recipient");
-		subject = request.getParameter("subject");
 		message = request.getParameter("message");
-		
-		ManageMessage msg = new ManageMessage(recipient, subject, message);
-		
+		String username = request.getParameter("username");
+
+		ManageMessage msg = new ManageMessage(recipient, message, username);
+
 		delivered = msg.deliver();
 		if (delivered) {
 			System.out.println("GetMessage delivered");
@@ -35,6 +40,9 @@ public class GetMessage extends HttpServlet {
 		else {
 			System.out.println("GetMessage error");
 		}
+
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/messages/newInbox.jsp?user="+request.getParameter("recipient"));
+		dispatcher.forward(request,response);
 	}
 
 }

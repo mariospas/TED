@@ -48,6 +48,63 @@ table#miyazaki tbody tr {
 
 
 
+
+
+
+
+table#miyazaki2 caption {
+	font-size: 22px;
+	font-weight: 100;
+	color: #444;
+	margin: 1rem;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center left, center right;
+}
+table#miyazaki2 {
+
+	font-family: 'Open Sans', sans-serif;;
+	font-weight: 100;
+	background: #eee;
+	color: #444;
+	text-rendering: optimizeLegibility;
+	border: 2px solid #52CAE0;
+	border-radius: 10px;
+
+}
+table#miyazaki2 thead th {
+	font-weight: 600;
+}
+table#miyazaki2 thead th,
+	table#miyazaki2 tbody td {
+	padding: .8rem;
+	font-size: 1.4rem;
+}
+table#miyazaki2 tbody td {
+	padding: .8rem;
+	font-size: 1.4rem;
+	color: #444;
+	background: #eee;
+}
+
+
+table#miyazaki2 tbody tr:not(:last-child) {
+	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+}
+
+
+table#miyazaki2 tbody tr {
+	background:#52CAE0;
+	border-bottom: 2px solid #52CAE0;
+}
+
+
+
+
+
+
+
 @media screen and (max-width: 1500px) {
 	table#miyazaki caption {
 		background-image: none;
@@ -78,6 +135,43 @@ table#miyazaki tbody tr {
 	background: #eee;
 	border-bottom: 2px solid #52CAE0;
 }
+
+
+
+
+table#miyazaki2 caption {
+		background-image: none;
+	}
+	table#miyazaki2 thead {
+		display: none;
+	}
+	table#miyazaki2 tbody td {
+		display: block;
+		padding: .6rem;
+	}
+	table#miyazaki2 tbody tr td:first-child {
+		background: #eee;
+		color: #444;
+	}
+	table#miyazaki2 tbody td:before {
+		content: attr(data-th);
+		font-weight: bold;
+		display: inline-block;
+		width: 6rem;
+		margin-right:100px;
+	}
+
+	table#miyazaki2 tbody td:last-child {
+	padding: .8rem;
+	font-size: 1.4rem;
+	color: #444;
+	background: #eee;
+	border-bottom: 2px solid #52CAE0;
+}
+
+
+
+
 }
 
 
@@ -111,6 +205,41 @@ table#miyazaki tbody tr {
 	background: #eee;
 	border-bottom: 2px solid #52CAE0;
 }
+
+
+
+
+table#miyazaki2 caption {
+		background-image: none;
+	}
+	table#miyazaki2 thead {
+		display: none;
+	}
+	table#miyazaki2 tbody td {
+		display: block;
+		padding: .6rem;
+	}
+	table#miyazaki2 tbody tr td:first-child {
+		background: #eee;
+		color: #444;
+	}
+	table#miyazaki2 tbody td:before {
+		content: attr(data-th);
+		font-weight: bold;
+		display: inline-block;
+		width: 6rem;
+		margin-right:100px;
+	}
+
+	table#miyazaki2 tbody td:last-child {
+	padding: .8rem;
+	font-size: 1.4rem;
+	color: #444;
+	background: #eee;
+	border-bottom: 2px solid #52CAE0;
+}
+
+
 }
 
 
@@ -145,4 +274,37 @@ table#miyazaki tbody tr {
 	background: #eee;
 	border-bottom: 2px solid #52CAE0;
 }
+
+
+
+table#miyazaki2 caption {
+		background-image: none;
+	}
+	table#miyazaki2 thead {
+		display: none;
+	}
+	table#miyazaki2 tbody td {
+		display: block;
+		padding: .6rem;
+	}
+	table#miyazaki2 tbody tr td:first-child {
+		background: #eee;
+		color: #444;
+	}
+	table#miyazaki2 tbody td:before {
+		content: attr(data-th);
+		font-weight: bold;
+		display: inline-block;
+		width: 6rem;
+		margin-right:100px;
+	}
+
+	table#miyazaki2 tbody td:last-child {
+	padding: .8rem;
+	font-size: 1.4rem;
+	color: #444;
+	background: #eee;
+	border-bottom: 2px solid #52CAE0;
+}
+
 }

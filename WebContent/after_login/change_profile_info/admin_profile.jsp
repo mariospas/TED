@@ -3,14 +3,60 @@
     pageEncoding="UTF-8"%>
 <%@ page import="login_logout_process.*"%>
 <%@ page import="check_uti.*"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML>
 <html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Profile Info</title>
-</head>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>General HomePage</title>
+        <link rel="stylesheet" href="/TED/appearance/css/reset.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="/TED/appearance/css/style_live_auctions.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="/TED/appearance/css/style_table_profil.css" type="text/css" media="screen" />
+        <link href="/TED/appearance/css/lightbox.css" rel="stylesheet" />
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans|Baumans' rel='stylesheet' type='text/css'/>
+        <script src="/TED/appearance/scripts/modernizr.custom.04512.js"></script>
+        <script src="/TED/appearance/scripts/respond.js"></script>
+
+        <!-- include extern jQuery file but fall back to local file if extern one fails to load !-->
+        <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript">window.jQuery || document.write('<script type="text\/javascript" src="js\/1.7.2.jquery.min"><\/script>')</script>
+
+        <script async src="/TED/appearance/scripts/lightbox.js"></script>
+        <script src="/TED/appearance/scripts/prefixfree.min.js"></script>
+        <script src="/TED/appearance/scripts/jquery.slides.min.js"></script>
+
+
+        <script>
+			(function ($, window, document, undefined)
+			{
+				'use strict';
+				$(function ()
+				{
+					$("#mobileMenu").hide();
+					$(".toggleMobile").click(function()
+					{
+						$(this).toggleClass("active");
+						$("#mobileMenu").slideToggle(500);
+					});
+				});
+				$(window).on("resize", function()
+				{
+
+					if($(this).width() > 700)
+					{
+						$("#mobileMenu").hide();
+						$(".toggleMobile").removeClass("active");
+					}
+
+				});
+			})(jQuery, window, document);
+		</script>
+
+
+
+    </head>
 <body>
-<jsp:include page="../../logout.html"/>
+<jsp:include page="../../jsp_scripts/header_nav.jsp"/>
 <%
 	LoginSession log = (LoginSession) session.getAttribute("log");
 	if(log.getType().equals("admin"))
@@ -23,48 +69,54 @@
 		while (set.next())
 		{
 %>
-				<table align="center" width="300" border="1">
-				  <tr>
-				    <td>Όνομα Χρήστη</td>
-				    <td><%out.print(set.getString("username"));%></td>
-				  </tr>
-				  <tr>
-				    <td>Όνομα</td>
-				    <td><%out.print(set.getString("firstname"));%></td>
-				  </tr>
-				  <tr>
-				    <td>Επώνυμο</td>
-				    <td><%out.print(set.getString("lastname"));%></td>
-				  </tr>
-				  <tr>
-				    <td>Email</td>
-				    <td><%out.print(set.getString("email"));%></td>
-				  </tr>
-				  <tr>
-				    <td>Τηλεφωνικός Αριθμός</td>
-				    <td><%out.print(set.getString("phone_number"));%></td>
-				  </tr>
-				  <tr>
-				    <td>Χώρα</td>
-				    <td><%out.print(set.getString("country"));%></td>
-				  </tr>
-				  <tr>
-				    <td>Πόλη</td>
-				    <td><%out.print(set.getString("city"));%></td>
-				  </tr>
-				  <tr>
-				    <td>Διεύθυνση</td>
-				    <td><%out.print(set.getString("address"));%></td>
-				  </tr>
-				  <tr>
-				    <td>Τ.Κ</td>
-				    <td><%out.print(set.getString("postal_code"));%></td>
-				  </tr>
-				  <tr>
-				    <td>Α.Φ.Μ</td>
-				    <td><%out.print(set.getString("afm"));%></td>
-				  </tr>
-				</table>
+			<br>
+			<br>
+			<table id="miyazaki" align="center">
+			<thead>
+			<tbody>
+			  <tr>
+			    <th>Όνομα Χρήστη
+			    <td><%out.print(set.getString("username"));%>
+
+			  <tr>
+			    <th>Όνομα
+			    <td><%out.print(set.getString("firstname"));%>
+
+			  <tr>
+			    <th>Επώνυμο
+			    <td><%out.print(set.getString("lastname"));%>
+
+			  <tr>
+			    <th>Email
+			    <td><%out.print(set.getString("email"));%>
+
+			  <tr>
+			    <th>Τηλεφωνικός Αριθμός
+			    <td><%out.print(set.getString("phone_number"));%>
+
+			  <tr>
+			    <th>Χώρα
+			    <td><%out.print(set.getString("country"));%>
+
+			  <tr>
+			    <th>Πόλη
+			    <td><%out.print(set.getString("city"));%>
+
+			  <tr>
+			    <th>Διεύθυνση
+			    <td><%out.print(set.getString("address"));%>
+
+			  <tr>
+			    <th>Τ.Κ
+			    <td><%out.print(set.getString("postal_code"));%>
+
+			  <tr>
+			    <th>Α.Φ.Μ
+			    <td><%out.print(set.getString("afm"));%>
+
+			</table>
+			<br>
+			<br>
 <%
 			if(set.getInt("ready")==0)
 			{
@@ -72,6 +124,8 @@
 				<div>
 					<p align="center"><a href="confirmation.jsp">Επιβεβαίωση Χρήστη</a></p>
 				</div>
+				<br>
+				<br>
 
 <%
 			}
@@ -83,5 +137,7 @@
 	}
 
 %>
+<jsp:include page="../../jsp_scripts/footer.jsp"/>
 </body>
+
 </html>

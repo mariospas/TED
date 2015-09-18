@@ -170,7 +170,9 @@
 %>
 							<h2 class="hidden">Adipiscing</h2>
 				            <article>
-				                <a href="auction/item_details.jsp?item=<%out.print(elem.getItemID());%>"><img src="<%out.print(elem.getPhotoURL());%>" width="80" height="80"></a>
+				                <a href="auction/item_details.jsp?item=<%out.print(elem.getItemID());%>"><img src="<%if(elem.getPhotoURL() != null) out.print(elem.getPhotoURL());
+			        				else out.print("/TED/img/item3.png");
+			        			  %>" width="80" height="80"></a>
 				                <h3><a href="auction/item_details.jsp?item=<%out.print(elem.getItemID());%>"><%out.print(elem.getName());%></a></p></h3>
 				                <p>
 				                <%out.print(elem.getCurrentPrice()+"$");%></p>

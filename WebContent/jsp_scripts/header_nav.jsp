@@ -19,7 +19,14 @@
 			<p align="right" style="margin:0 20px 0 0;"><a href="/TED/after_login/auction/live_auctions.jsp">ΔΙΑΧΕΙΡΙΣΗ ΔΗΜΟΠΡΑΣΙΩΝ</a>
 			&nbsp;&nbsp;&nbsp;<a href="/TED/logout_process.jsp">ΑΠΟΣΥΝΔΕΣΗ</a>
             &nbsp;&nbsp;&nbsp;<a href="/TED/after_login/profile_page.jsp">ΠΡΟΦΙΛ</a></p>
+            <p align="right" style="margin:0 10% 0 0;"><a href="/TED/messages/newInbox.jsp?user=">ΜΥΝΗΜΑΤΑ</a></p>
 	<%
+		}
+		else
+		{
+%>
+			<p align="right" style="margin:0 20px 0 0;"><a href="/TED/welcome.jsp">ΣΥΝΔΕΣΗ</a>
+<%
 		}
 	%>
             <div class="toggleMobile">

@@ -8,38 +8,33 @@ import connection.ConnectionDB;
 
 public class RetrieveMessages {
 	
-/*    
-    public RetrieveMessages() {
-    	
-    	try {
-			ConnectionDB link = new ConnectionDB();
-			state = link.GetState();
-	        state = (link.GetCon()).prepareStatement(
-	        		"SELECT * "
-	        		+"FROM messages "
-	        		+"WHERE userID = 'mariospassaris' "
-	        		+"OR recipient = 'mariospassaris'"
-	        		); 
-	        System.out.println("*****Finish Login Session Constr ");
-		} catch (SQLException ex) {
-	  		ex.printStackTrace();
-		}
-    	
-    }
-*/   
-    public ResultSet getInbox() {
+	String recipient = null;
+	String sender = null;
+	
+    public ResultSet getInbox(String rec, String sen) {
     	
     	PreparedStatement state = null;
         ResultSet inboxset = null;
+        recipient = new String(rec);
+        sender = new String(sen);
         
     	try {
 			ConnectionDB link = new ConnectionDB();
 			state = link.GetState();
 	        state = (link.GetCon()).prepareStatement(
 	        		"SELECT * "
-	        		+"FROM messages "
-	        		+"WHERE recipient = 'takis2'"
+	        		+"FROM messages m1 "
+	        		+"WHERE m1.userID=? AND m1.recipient=? "
+	        		+"UNION "
+	        		+"SELECT * "
+	        		+"FROM messages m2 "
+	        		+"WHERE m2.userID=? AND m2.recipient=? "
+	        		+"ORDER BY date_time ASC"
 	        		); 
+	        state.setString(1, sender);
+	        state.setString(2, recipient);
+	        state.setString(3, recipient);
+	        state.setString(4, sender);
 	        System.out.println("*****Inbox messages delivered ");
 	        inboxset = state.executeQuery();
 		} catch (SQLException ex) {
@@ -49,10 +44,12 @@ public class RetrieveMessages {
     	return inboxset;
     }
     
-    public ResultSet getSent() {
+    /*
+    public ResultSet getSent(String username) {
     	
     	PreparedStatement state = null;
         ResultSet sentset = null;
+        user = new String(username);
         
     	try {
 			ConnectionDB link = new ConnectionDB();
@@ -60,9 +57,10 @@ public class RetrieveMessages {
 	        state = (link.GetCon()).prepareStatement(
 	        		"SELECT * "
 	        		+"FROM messages "
-	        		+"WHERE userID = 'mariospassaris'"
+	        		+"WHERE userID =?"
 	        		); 
 	        System.out.println("*****Sent messages delivered ");
+	        state.setString(1, user);
 	        sentset = state.executeQuery();
 		} catch (SQLException ex) {
 	  		ex.printStackTrace();
@@ -70,6 +68,7 @@ public class RetrieveMessages {
     	
     	return sentset;
     }
+    */
     
     public void delSent(int ID) {
     	
@@ -115,5 +114,57 @@ public class RetrieveMessages {
 	  		ex.printStackTrace();
 		}
     }
+    
+    public ResultSet getMessage(int ID) {
+    	
+    	PreparedStatement state = null;
+        ResultSet msg = null;
+        int msgID = ID;
+        
+    	try {
+			ConnectionDB link = new ConnectionDB();
+			state = link.GetState();
+	        state = (link.GetCon()).prepareStatement(
+	        		"SELECT * "
+	        		+"FROM messages "
+	        		+"WHERE msgID =?"
+	        		); 
+	        state.setInt(1, msgID);
+	        msg = state.executeQuery();
+		} catch (SQLException ex) {
+	  		ex.printStackTrace();
+		}
+    	
+    	return msg;
+    }
+    
+    public boolean isRead(int ID) {
+    	
+    	PreparedStatement state = null;
+    	int set = 0;
+    	int msgID = ID;
+    	
+    	try {
+    		ConnectionDB apply = new ConnectionDB();
+			state = apply.GetState();
+	        state = (apply.GetCon()).prepareStatement(
+	        		"UPDATE messages "
+	        		+"SET msgRead=1 "
+	        		+"WHERE msgID=?"
+	        		);
+	        state.setInt(1, msgID);
+			set = state.executeUpdate();
+		} catch(SQLException ex) {
+	    	ex.printStackTrace();
+	    }
+    	
+    	if (set == 1)
+    		return true;    		
+    	else
+    		return false;
+
+    }
    
 }
+
+

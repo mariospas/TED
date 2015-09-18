@@ -122,6 +122,22 @@
 			</div>
 		</form>
 
+		<script>
+			var headertext = [];
+			var headers = document.querySelectorAll("#miyazaki th"),
+			tablerows = document.querySelectorAll("#miyazaki th"),
+			tablebody = document.querySelector("#miyazaki tbody");
+			for(var i = 0; i < headers.length; i++) {
+				var current = headers[i];
+				headertext.push( current.textContent.replace( /\r?\n|\r/,"") );
+			}
+			for (var i = 0, row; row = tablebody.rows[i]; i++) {
+				for (var j = 0, col; col = row.cells[j]; j++) {
+					col.setAttribute("data-th", headertext[j]);
+				}
+			}
+	 </script>
+
 <%
 		auctions = new Auctions(log.getName());
 		set = auctions.offline_auctions();
@@ -130,7 +146,7 @@
 %>
 		<!-- <p align="center"><b>Απενεργοποιημένες Δημοπρασίες</b></p>-->
 		<form method="post" action="edit_auction.jsp">
-			<table id="miyazaki" align="center">
+			<table id="miyazaki2" align="center">
             <caption>Απενεργοποιημένες Δημοπρασίες</caption>
             <thead>
 				<tr>
@@ -178,6 +194,22 @@
 			</div>
 		</form>
 
+		<script>
+			var headertext = [];
+			var headers = document.querySelectorAll("#miyazaki2 th"),
+			tablerows = document.querySelectorAll("#miyazaki2 th"),
+			tablebody = document.querySelector("#miyazaki2 tbody");
+			for(var i = 0; i < headers.length; i++) {
+				var current = headers[i];
+				headertext.push( current.textContent.replace( /\r?\n|\r/,"") );
+			}
+			for (var i = 0, row; row = tablebody.rows[i]; i++) {
+				for (var j = 0, col; col = row.cells[j]; j++) {
+					col.setAttribute("data-th", headertext[j]);
+				}
+			}
+	 </script>
+
 
 <%
 
@@ -190,19 +222,5 @@
 %>
 	<jsp:include page="../../jsp_scripts/footer.jsp"/>
 </body>
-	<script>
-			var headertext = [];
-			var headers = document.querySelectorAll("#miyazaki th"),
-			tablerows = document.querySelectorAll("#miyazaki th"),
-			tablebody = document.querySelector("#miyazaki tbody");
-			for(var i = 0; i < headers.length; i++) {
-				var current = headers[i];
-				headertext.push( current.textContent.replace( /\r?\n|\r/,"") );
-			}
-			for (var i = 0, row; row = tablebody.rows[i]; i++) {
-				for (var j = 0, col; col = row.cells[j]; j++) {
-					col.setAttribute("data-th", headertext[j]);
-				}
-			}
-	 </script>
+
 </html>

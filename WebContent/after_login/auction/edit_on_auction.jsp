@@ -111,11 +111,12 @@
 
 			        <div id="main_form">
 			        	<form method="post" action="save_auction.jsp" ENCTYPE="multipart/form-data" >
-			            	<p><label>Όνομα :</label></p>
+			            	<p style="font-size:20px;"><label>Όνομα :</label></p>
 			            	<hr>
 							<input type="text" id="name" name="name" value="<%out.print(item_set.getString("name"));%>" required/>
 			                <br/>
-			                <p><label>Κατηγορίες :</label></p>
+			                <br>
+			                <p style="font-size:20px;"><label>Κατηγορίες :</label></p>
 			                <hr>
 			                <div class="multiselect">
 						        <div class="selectBox" onclick="showCheckboxes()">
@@ -159,36 +160,44 @@
 						        </div>
 						    </div>
 							<br/>
-			                <p><label>Αρχική Προσφορά :</label></p>
+							<br>
+			                <p style="font-size:20px;"><label>Αρχική Προσφορά :</label></p>
 			                <hr>
 			           		<input type="text" id="first_bid" name="first_bid" value="<%out.print(item_set.getString("first_bid"));%>" required/>
 			                <br/>
-			                <p><label>*Τιμή Αγοράς :</label></p>
+			                <br>
+			                <p style="font-size:20px;"><label>*Τιμή Αγοράς :</label></p>
 			                <hr>
 							<input type="text" id="buy_price" name="buy_price" value="<%out.print(item_set.getString("buy_price"));%>" />
 			                <br/>
-			                <p><label>Location : (latitude;longtitude e.g 2.458;3.589)</label></p>
+			                <br>
+			                <p style="font-size:20px;"><label>Location : (latitude;longtitude e.g 2.458;3.589)</label></p>
 			                <hr>
 							<input type="text" id="latlong" name="latlong" value="<%out.print(item_set.getString("location"));%>" required/>
 			                <br/>
-			                <p><label>Χώρα :</label></p>
+			                <br>
+			                <p style="font-size:20px;"><label>Χώρα :</label></p>
 			                <hr>
 							<input type="text" id="country" name="country" value="<%out.print(item_set.getString("country"));%>" required/>
 			                <br/>
-			                <p><label>Ημερομηνία Έναρξης :</label></p>
+			                <br>
+			                <p style="font-size:20px;"><label>Ημερομηνία Έναρξης :</label></p>
 			                <hr>
 							<input type="date" id="start_date" name="start_date" value="<%out.print(item_set.getString("start_date"));%>" required />
 							<br/>
-			                <p><label>Ημερομηνία Τερματισμού : </label></p>
+							<br>
+			                <p style="font-size:20px;"><label>Ημερομηνία Τερματισμού : </label></p>
 			                <hr>
 							<input type="date" id="end_date" name="end_date" value="<%out.print(item_set.getString("end_date"));%>" required />
 							<br/>
-			                <p><label>* Φωτογραφία :</label></p>
+							<br>
+			                <p style="font-size:20px;"><label>* Φωτογραφία :</label></p>
 			                <hr>
 			                <input type="hidden" name="size" value="1048576">
 			                <input type="file" name="photo" id="i_file" value="<%out.print(item_set.getString("photo_url"));%>">
 			                </br>
-			                <p><label>Περιγραφή  :</label></p>
+			                <br>
+			                <p style="font-size:20px;"><label>Περιγραφή  :</label></p>
 			                <hr>
 							<input type="text" id="description" name="description" style="width: 98%; height: 300px;" value="<%out.print(item_set.getString("description"));%>" required />
 			                <br/>
