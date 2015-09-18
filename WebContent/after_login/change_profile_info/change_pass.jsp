@@ -131,5 +131,8 @@ function checkForm(form)
 
 
 <jsp:include page="../../jsp_scripts/footer.jsp"/>
+
+
+
 </body>
 </html>

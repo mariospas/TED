@@ -117,12 +117,14 @@
 
 				<div class="Reply">
 					<form name="message" action="../getmessage" method="post">
-						<input class="Answer" type="text" name="message" placeholder="Απάντηση..">
+						<input id="inputmessage" class="Answer" type="text" name="message" placeholder="Απάντηση..">
 						<input type="hidden" name="recipient" value="<%=request.getParameter("user") %>">
 						<input type="hidden" name="username" value="<%=log.getName() %>">
-						<input type="submit" value="Αποστολή">
+						<input type="submit" value="Αποστολή" onclick="send()">
 					</form>
 				</div>
+
+
 
 			</div>
 
