@@ -32,7 +32,7 @@
 	    };
 
 	    webSocket.onopen = function(event) {
-	      webSocket.send("<%=log.getName()%>");
+	      webSocket.send("takis2 edooo");
 	      onOpen(event)
 	    };
 
@@ -42,12 +42,12 @@
 
 	    function onMessage(event) {
 	      document.getElementById('messages').innerHTML
-	        = '<a style=\"color:red;\" href=\"/TED/messages/newInbox.jsp?user=\">ΜΥΝΗΜΑΤΑ</a>';
+	        += '<br />Received message: ' + event.data;
 	    }
 
 	    function onOpen(event) {
-	      /*document.getElementById('messages').innerHTML
-	        = 'Connection established';*/
+	      document.getElementById('messages').innerHTML
+	        = 'Connection established';
 	    }
 
 	    function onError(event) {

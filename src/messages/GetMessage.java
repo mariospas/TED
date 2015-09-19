@@ -25,7 +25,7 @@ public class GetMessage extends HttpServlet {
 		String recipient, message;
 		boolean delivered;
 
-		System.out.println("mphka kariolaki");
+
 
 		recipient = request.getParameter("recipient");
 		message = request.getParameter("message");
@@ -41,8 +41,12 @@ public class GetMessage extends HttpServlet {
 			System.out.println("GetMessage error");
 		}
 
-		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/messages/newInbox.jsp?user="+request.getParameter("recipient"));
-		dispatcher.forward(request,response);
+		/*RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/messages/newInbox.jsp?user="+request.getParameter("recipient"));
+		dispatcher.forward(request,response);*/
+
+		String site2 = new String("/TED/messages/newInbox.jsp?user="+request.getParameter("recipient"));
+		response.setStatus(response.SC_MOVED_TEMPORARILY);
+		response.setHeader("Location", site2);
 	}
 
 }

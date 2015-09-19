@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="login_logout_process.*"%>
+<%@ page import="check_uti.*"%>
+<%@ page import="xml_mars_unmars.*"%>
+<%@ page import="category.*" %>
+<%@page import="java.sql.ResultSet"%>
 	<footer>
             <h2 class="hidden">footer</h2>
             <section id="copyright">
@@ -37,3 +42,55 @@
                 </article>
             </section>
         </footer>
+
+        <%
+        LoginSession log = (LoginSession) session.getAttribute("log");
+		if(log != null)
+		{
+        %>
+
+        		<script type="text/javascript">
+					    var webSocket = new WebSocket('wss://snf-674750.vm.okeanos.grnet.gr:8443/TED/websocket?user=takis2'); //topika localhost:8080
+
+
+					    webSocket.onerror = function(event) {
+					      onError(event)
+					    };
+
+					    webSocket.onopen = function(event) {
+					      webSocket.send("<%=log.getName()%>");
+					      onOpen(event)
+					    };
+
+					    webSocket.onmessage = function(event) {
+					      onMessage(event)
+					    };
+
+					    function onMessage(event) {
+					    	document.getElementById('messages').innerHTML
+					        = '<a style=\"color:red;\" href=\"/TED/messages/newInbox.jsp?user=\">ΜΥΝΗΜΑΤΑ</a>';
+
+					        var res = (event.data).split(" ");
+					        document.getElementById('receiver').innerHTML
+					    	+= '<p><a title=\"Διαγραφή\" href=\"\">'+res[1]+'</a></p>';
+					    }
+
+					    function onOpen(event) {
+					      /*document.getElementById('messages').innerHTML
+					        = 'Connection established';*/
+					    }
+
+					    function onError(event) {
+					      alert(event.data);
+					    }
+
+					    function send() {
+					      var txt = '<%=log.getName()%> '+document.getElementById('inputmessage').value+' <%=request.getParameter("user")%>';
+					      webSocket.send(txt);
+					      return false;
+					    }
+
+				  </script>
+<%
+			}
+%>

@@ -104,9 +104,9 @@
 				</div>
 
 	            <div id="slides">
-	                <img src="/TED/img/slide1.jpg" alt="Some alt text">
-	                <img src="/TED/img/slide2.jpg" alt="Some alt text">
-	                <img src="/TED/img/slide3.jpg" alt="Some alt text">
+	                <img src="/TED/img/1.png" alt="Some alt text">
+	                <img src="/TED/img/2.jpg" alt="Some alt text">
+	                <img src="/TED/img/3.png" alt="Some alt text">
 	            </div>
 	        </section>
         </section>
@@ -136,7 +136,6 @@
 	LoginSession log = (LoginSession) session.getAttribute("log");
 	if(log != null)
 	{
-		DataCheck data_check = new DataCheck();
 		Item item = new Item(log.getName(),3);
 		LinkedList<String> usernames = item.getListNeighUsers();
 

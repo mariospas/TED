@@ -399,6 +399,22 @@ ul#navigation li a.last {
         border-radius: 5px;
 }
 
+.pagination
+{
+        display: inline-block;
+        float: right;
+        margin: 0 10px 5px 0;
+        background-color: #52CAE0;
+        color: #ffffff;
+        border-radius: 5px;
+        padding: 5px;
+}
+
+.crrnt
+{
+        color: #444444;
+}
+
 
 /* BUTTONS */
 
@@ -413,7 +429,7 @@ ul#navigation li a.last {
         text-shadow: 1px 1px 0px #52CAE0;
         text-decoration:none;
         border-radius:5px;
-        box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.3);*/
+        box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.3);
 }
 
 .button:hover

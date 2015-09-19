@@ -109,14 +109,17 @@
 									<p><a title="Διαγραφή" href="../delmessage?user=<%= request.getParameter("user") %>&del=1&ID=<%= inbox.getInt("msgID") %>"><%= inbox.getString("msgText") %></a></p>
 									</div><br>
 							<% } else { %>
-									<div class="receiver"><p><a title="Διαγραφή" href="../delmessage?user=<%= request.getParameter("user") %>&del=0&ID=<%= inbox.getInt("msgID") %>"><%= inbox.getString("msgText") %></a></p></div><br>
+									<div class="receiver" ><p><a title="Διαγραφή" href="../delmessage?user=<%= request.getParameter("user") %>&del=0&ID=<%= inbox.getInt("msgID") %>"><%= inbox.getString("msgText") %></a></p></div><br>
 							<% } %>
 
-					<% } } %>
+					<% } }
+					inbox.beforeFirst();
+					%>
+						<%if(inbox.next()){%><div class="receiver" id="receiver"></div><%} %>
 				</div>
 
 				<div class="Reply">
-					<form name="message" action="../getmessage" method="post">
+					<form name="message" action="/TED/getmessage" method="post">
 						<input id="inputmessage" class="Answer" type="text" name="message" placeholder="Απάντηση..">
 						<input type="hidden" name="recipient" value="<%=request.getParameter("user") %>">
 						<input type="hidden" name="username" value="<%=log.getName() %>">

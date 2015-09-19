@@ -65,9 +65,21 @@
 	}
 	else
 	{
+		int pagin = 1;
+		int recordsPerPage = 10;
+		if(request.getParameter("pagin") != null) {
+    	pagin = Integer.parseInt(request.getParameter("pagin"));
+		}
 		DataCheck data_check = new DataCheck();
 		Users users = new Users();
-		ResultSet set = users.all_users();
+		ResultSet set = users.all_users((pagin-1)*recordsPerPage, recordsPerPage);
+
+		int noOfRecords = users.getNoOfRecords();
+    int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
+
+    request.setAttribute("noOfPages", noOfPages);
+    request.setAttribute("currentPage", pagin);
+
 %>
 		<p id="create_auct" align="center" ><b><a href="auction/create_xml.jsp">Δημιουργία XML</a></b></p>
 		<p id="create_auct" align="center" ><b><a href="import_xml.jsp">Εισαγωγή XML</a></b></p>
@@ -114,6 +126,33 @@
 <%
 	}
 %>
+	<div class="pagination">
+		<%
+		int pg = (int) request.getAttribute("currentPage");
+		if (pg != 1){
+		%>
+			<a href="admin_page.jsp?pagin=<%= pg - 1 %>">Προηγούμενη</a>
+		<% } %>
+
+		<%
+		int k = 1;
+		int num = (int) request.getAttribute("noOfPages");
+		System.out.println("number of pages = " +num);
+		for (k = 1; k <= num; k++){
+			if (pg == k) { %>
+				<span class="crrnt"><%= k %></span>
+			<% } else if (pg==(k-1)){%>
+				<a href="admin_page.jsp?pagin=<%= pg + 1 %>"><%= k %></a>
+			<% } %>
+		<% } %>
+
+		<%
+		if (pg < num) {
+		%>
+			<a href="admin_page.jsp?pagin=<%= pg + 1 %>">Επόμενη</a>
+		<% } %>
+	</div>
+
 	<jsp:include page="../jsp_scripts/footer.jsp"/>
 </body>
 	<script>

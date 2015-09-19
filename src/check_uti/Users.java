@@ -10,8 +10,10 @@ public class Users {
 
 	PreparedStatement state = null;
     ResultSet set = null;
+    ResultSet set2 = null;
     String name = null;
     ConnectionDB link;
+    private int noOfRecords;
 
 	public Users() {
 		try
@@ -25,15 +27,24 @@ public class Users {
 	    }
 	}
 
-	public ResultSet all_users()
+	public ResultSet all_users(int offset, int noOfRecords)
 	{
 		try
 		{
 			state = (link.GetCon()).prepareStatement(
-	        		"SELECT username,password,firstname,lastname,ready "
+	        		"SELECT SQL_CALC_FOUND_ROWS username,password,firstname,lastname,ready "
 	        		+"FROM ted.users "
+	        		+"LIMIT ? OFFSET ?"
 	        		);
+			state.setInt(1, noOfRecords);
+	        state.setInt(2, offset);
 			set = state.executeQuery();
+			state = (link.GetCon()).prepareStatement("SELECT FOUND_ROWS()");
+            set2 = state.executeQuery();
+            if (set2.next()){
+              	 this.noOfRecords = set2.getInt(1);
+              	 System.out.println("number of pages PAGING= " +this.noOfRecords);
+            }
 		}
 		catch(SQLException ex)
 	    {
@@ -58,5 +69,9 @@ public class Users {
 	    }
 
 	}
+	
+	public int getNoOfRecords() {
+        return noOfRecords;
+    }
 
 }
