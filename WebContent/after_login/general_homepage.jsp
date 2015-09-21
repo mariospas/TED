@@ -151,7 +151,7 @@
 
 		if(usernames != null)
 		{
-			NeighItems neighItems = new NeighItems(usernames);
+			NeighItems neighItems = new NeighItems(usernames,log.getName());
 			LinkedList<FriendItems> friendItems = neighItems.getFriendList();
 
 

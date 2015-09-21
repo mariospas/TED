@@ -21,7 +21,7 @@ public class NeighItems {
 	PreparedStatement state = null;
     ResultSet set = null;
 
-	public NeighItems(LinkedList<String> neigh_user)
+	public NeighItems(LinkedList<String> neigh_user,String user)
 	{
 		neigh_username = neigh_user;
 		try
@@ -34,16 +34,21 @@ public class NeighItems {
 	        	//System.out.println(username+" NeighItems");
 	        	state = link.GetState();
 		        state = (link.GetCon()).prepareStatement(
-		        		"SELECT item_id "+
+		        		"SELECT u.item_id "+
 		        		"FROM ted.user_item u "+
 		        	    "WHERE u.live=1 AND u.item_id IN "+
-				        		"(SELECT item_id "+
-				        		"FROM ted.item_bids "+
-				        		"WHERE username=? "+
+				        		"(SELECT b.item_id "+
+				        		"FROM ted.item_bids b "+
+				        		"WHERE b.username=? AND b.item_id NOT IN "
+				        		+ "(SELECT item_id "
+				        		+ "FROM ted.item_bids z "
+				        		+ "WHERE z.username=? ) "+
 				        		"ORDER BY date_time DESC "+
-				        		")"
+				        		") "
+				        + "LIMIT 1"
 		        		);
 		        state.setString(1, username);
+		        state.setString(2, user);
 		        set = state.executeQuery();
 		        if(set.next())
 		        {
